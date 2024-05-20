@@ -1,19 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-
+<!--    <uses-feature android:name="android.hardware.camera" />-->
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
+<!--    <uses-permission android:name="android.permission.RECORD_AUDIO" />-->
+<!--    <uses-permission android:name="android.permission.VIBRATE"/>-->
+<!--    <uses-permission android:name="android.permission.GALLERY"/>-->
 
 
     <application
-        android:label="Doc Scan"
+        android:label="doc_scanner"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -42,7 +39,7 @@
             android:value="2" />
     </application>
     <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package="com.documentscannerpdfscanner_">
+         https://developer.android.com/training/package-visibility?hl=en and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
