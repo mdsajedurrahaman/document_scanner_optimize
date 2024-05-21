@@ -272,3 +272,44 @@ Future<void> flutterGenralDialogue({
     },
   );
 }
+
+
+Future<void>  showQrAndBarCodeViewDialogue({required BuildContext context,required String text})async{
+
+  showDialog(context: context, builder: (context) {
+    return Dialog(
+      alignment: Alignment.center,
+      child: Container(
+          height: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.shade200,
+          ),
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(""),
+                  const Text("Content",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                  IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: const Icon(Icons.close))
+                ],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(text,textAlign: TextAlign.start,),
+                ),
+              ),
+            ],
+          )
+      ),
+    );
+  },);
+
+}
