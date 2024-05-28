@@ -193,7 +193,13 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
     final homeProvider = Provider.of<HomePageProvider>(context);
     final suggestionList = homeProvider.searchPaths(query);
-    return GridView.builder(
+    return homeProvider.allFileLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        :
+
+      GridView.builder(
       itemCount: suggestionList.length,
       gridDelegate:
           const SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
