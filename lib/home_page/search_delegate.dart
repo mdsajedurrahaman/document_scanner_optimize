@@ -15,6 +15,9 @@ import 'fixed_size_delegate_grid.dart';
 
 
 class CustomSearchDelegate extends SearchDelegate<String> {
+  final Size size;
+  CustomSearchDelegate({required this.size});
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -189,7 +192,6 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    log("buildSuggestions called");
 
     final homeProvider = Provider.of<HomePageProvider>(context);
     final suggestionList = homeProvider.searchPaths(query);
@@ -202,9 +204,9 @@ class CustomSearchDelegate extends SearchDelegate<String> {
       GridView.builder(
       itemCount: suggestionList.length,
       gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
-        crossAxisCount: 3,
-        height: 100,
+           SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
+        crossAxisCount: size.width>=600?4: 3,
+             height:size.width>=600? 110:100,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
@@ -233,7 +235,13 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Icon(Icons.folder,size: 50,color: AppColor.primaryColor,),
-                  Text(filePath.split('/').last),
+                  Text(filePath.split('/').last,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+
+                  ),
                 ],
               ),
             ),
@@ -273,6 +281,9 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                   ),
                   Text(
                     filePath.split('/').last,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   )
                 ],
@@ -304,6 +315,11 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           snapshot.data.toString(),
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     );
