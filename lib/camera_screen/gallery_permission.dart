@@ -68,8 +68,10 @@ class _GalleryPermissionState extends State<GalleryPermission>
   }
 
   Future<bool> checkPermission() async {
+    print("jbdcshbd");
     AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
     if (Platform.isAndroid) {
+      print("android");
       if (build.version.sdkInt <= 32) {
         storage = await Permission.storage.status;
       } else {
@@ -86,9 +88,17 @@ class _GalleryPermissionState extends State<GalleryPermission>
         return false;
       }
     } else {
-      // this for ios implementation
-      // for avoiding return type error i used by default false
-      return false;
+      print("Ios");
+      storage = await Permission.photos.status;
+      if (storage.isDenied) {
+        return false;
+      } else if (storage.isPermanentlyDenied) {
+        return false;
+      } else if (storage.isGranted) {
+        return true;
+      } else {
+        return true;
+      }
     }
   }
 
@@ -100,8 +110,8 @@ class _GalleryPermissionState extends State<GalleryPermission>
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
             if (Platform.isAndroid) {
+              AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
               if (build.version.sdkInt <= 32) {
                 storageStatus = await Permission.storage.request();
               } else {
@@ -136,8 +146,6 @@ class _GalleryPermissionState extends State<GalleryPermission>
                   );
                 }
               }
-
-
               else if (storageStatus.isPermanentlyDenied) {
                 showDialog(
                   context: context,
@@ -248,8 +256,149 @@ class _GalleryPermissionState extends State<GalleryPermission>
                   );
                 }
               }
-            } else {
+            }
+
+
+            else {
               // this for ios implementation
+                storageStatus = await Permission.photos.request();
+
+              if (storageStatus.isGranted) {
+                final ImagePicker _picker = ImagePicker();
+                final List<XFile?> image = await _picker.pickMultiImage(
+                    imageQuality: 50);
+                if (image.isNotEmpty) {
+                  for (int i = 0; i < image.length; i++) {
+                    String documentName = DateFormat('yyyyMMdd_SSSS').format(
+                        DateTime.now());
+                    if (image[i] != null) {
+                      cameraProvider.addImage(
+                        ImageModel(
+                          imageByte:
+                          await image[i]!.readAsBytes(),
+                          name: 'Doc-$documentName',
+                          docType: 'Document',
+                        ),
+                      );
+                    }
+                  }
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      const ImagePreviewScreen(),
+                    ),
+                        (route) => false,
+                  );
+                }
+              }
+              else if (storageStatus.isPermanentlyDenied) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                          translation(context)
+                              .permissionDenied),
+                      content: Text(translation(
+                          context)
+                          .pleaseAllowStoragePermissionToAccessGallery),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(
+                                context);
+                          },
+                          child: Text(
+                              translation(context)
+                                  .cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(
+                                context);
+                            await openAppSettings();
+                          },
+                          child: Text(
+                              translation(context)
+                                  .openSettings),
+                        )
+                      ],
+                    );
+                  },
+                );
+              }
+              else {
+                  storageStatus1 = await Permission.photos.request();
+                if (storageStatus1.isGranted) {
+                  Navigator.pop(context);
+                  final ImagePicker _picker = ImagePicker();
+                  final List<XFile?> image = await _picker.pickMultiImage(
+                      limit: 5, imageQuality: 50);
+                  if (image.isNotEmpty) {
+                    for (int i = 0; i < image.length; i++) {
+                      String documentName =
+                      DateFormat('yyyyMMdd_SSSS')
+                          .format(DateTime.now());
+                      if (image[i] != null) {
+                        cameraProvider.addImage(
+                          ImageModel(
+                            imageByte:
+                            await image[i]!.readAsBytes(),
+                            name: 'Doc-$documentName',
+                            docType: 'Document',
+                          ),
+                        );
+                      }
+                    }
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                        const ImagePreviewScreen(),
+                      ),
+                          (route) => false,
+                    );
+                  }
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(translation(
+                            context)
+                            .permissionDenied),
+                        content: Text(translation(
+                            context)
+                            .pleaseAllowStoragePermissionToAccessGallery),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(
+                                  context);
+                            },
+                            child: Text(
+                                translation(
+                                    context)
+                                    .cancel),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(
+                                  context);
+                              await openAppSettings();
+                            },
+                            child: Text(
+                                translation(
+                                    context)
+                                    .openSettings),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                }
+              }
             }
           },
           child: Text(translation(context).allowStoragePermission),

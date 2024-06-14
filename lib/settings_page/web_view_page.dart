@@ -57,7 +57,7 @@ class _WebViewPageState extends State<WebViewPage> {
             }
           },
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://')) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;

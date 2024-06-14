@@ -41,8 +41,8 @@ class _BottomBarState extends State<BottomBar> {
   late PermissionStatus storage;
 
   Future<bool> checkPermission() async {
-    AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
     if (Platform.isAndroid) {
+      AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
       if (build.version.sdkInt <= 32) {
         storage = await Permission.storage.status;
       } else {
@@ -59,10 +59,20 @@ class _BottomBarState extends State<BottomBar> {
         return false;
       }
     } else {
-      // this for ios implementation
-      // for avoiding return type error i used by default false
-      return false;
+
+      print("Ios");
+        storage = await Permission.photos.status;
+      if (storage.isDenied) {
+        return false;
+      } else if (storage.isPermanentlyDenied) {
+        return false;
+      } else if (storage.isGranted) {
+        return true;
+      } else {
+        return false;
+      }
     }
+
   }
 
   @override
