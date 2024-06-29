@@ -419,9 +419,9 @@ class _CameraScreenState extends State<CameraScreen>
                                     result = event;
                                   });
                                   if (result != null && activePage == 3 && barCodeList.contains(result!.format.formatName)) {
-                                    if (beepValue) {
-                                      await audioPlayer.play(AssetSource('audio/beep_sound.mp3'));
-                                    }
+                                    // if (beepValue) {
+                                    //   await audioPlayer.play(AssetSource('audio/beep_sound.mp3'));
+                                    // }
                                     if (vibrationValue) {
                                       Vibration.vibrate(duration: 100);
                                     }
@@ -474,11 +474,11 @@ class _CameraScreenState extends State<CameraScreen>
                                       !barCodeList.contains(
                                           result!.format
                                               .formatName)) {
-                                    if (beepValue) {
-                                      await audioPlayer.play(
-                                          AssetSource(
-                                              'audio/beep_sound.mp3'));
-                                    }
+                                    // if (beepValue) {
+                                    //   await audioPlayer.play(
+                                    //       AssetSource(
+                                    //           'audio/beep_sound.mp3'));
+                                    // }
                                     if (vibrationValue) {
                                       Vibration.vibrate(
                                           duration: 100);
@@ -725,9 +725,9 @@ class _CameraScreenState extends State<CameraScreen>
                                       
 
                                     } else if (widget.isComeFromAdd == true) {
-                                      if (beepValue) {
-                                        await audioPlayer.play(AssetSource("audio/sound.mp3"));
-                                      }
+                                      // if (beepValue) {
+                                      //   await audioPlayer.play(AssetSource("audio/sound.mp3"));
+                                      // }
                                       XFile documentCapture = await cameraController.takePicture();
 
                                       String imageName = DateFormat(
@@ -743,16 +743,16 @@ class _CameraScreenState extends State<CameraScreen>
                                       );
                                       Navigator.pop(context);
                                     } else {
-                                      if (beepValue) {
-                                        await audioPlayer.play(
-                                            AssetSource("audio/sound.mp3"));
-                                      }
+                                      // if (beepValue) {
+                                      //   await audioPlayer.play(
+                                      //       AssetSource("audio/sound.mp3"));
+                                      // }
                                       XFile documentCapture = await cameraController
                                           .takePicture();
-                                      if (beepValue) {
-                                        await audioPlayer.play(
-                                            AssetSource("audio/sound.mp3"));
-                                      }
+                                      // if (beepValue) {
+                                      //   await audioPlayer.play(
+                                      //       AssetSource("audio/sound.mp3"));
+                                      // }
                                       String imageName = DateFormat(
                                           'yyyyMMdd_SSSS').format(
                                           DateTime.now());
@@ -767,9 +767,9 @@ class _CameraScreenState extends State<CameraScreen>
                                     }
                                   }
                                   else if (activePage == 1) {
-                                    if (beepValue) {
-                                      await audioPlayer.play(AssetSource("audio/sound.mp3"));
-                                    }
+                                    // if (beepValue) {
+                                    //   await audioPlayer.play(AssetSource("audio/sound.mp3"));
+                                    // }
 
                                     XFile idCardCapture = await cameraController.takePicture();
 

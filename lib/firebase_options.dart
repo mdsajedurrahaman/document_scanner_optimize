@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '275740105691',
     projectId: 'doc-scanner-cf033',
     storageBucket: 'doc-scanner-cf033.appspot.com',
-    iosBundleId: 'com.example.docScanner',
+    iosBundleId: 'com.documentscannerpdfscanner',
   );
 }
