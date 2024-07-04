@@ -1,4 +1,4 @@
-
+import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -37,6 +37,7 @@ class _BottomBarState extends State<BottomBar> {
       _currentIndex = page;
     });
   }
+
   GlobalKey _scaffoldKey = GlobalKey();
   late PermissionStatus storage;
 
@@ -59,9 +60,8 @@ class _BottomBarState extends State<BottomBar> {
         return false;
       }
     } else {
-
       print("Ios");
-        storage = await Permission.photos.status;
+      storage = await Permission.photos.status;
       if (storage.isDenied) {
         return false;
       } else if (storage.isPermanentlyDenied) {
@@ -72,7 +72,6 @@ class _BottomBarState extends State<BottomBar> {
         return false;
       }
     }
-
   }
 
   @override
@@ -144,7 +143,7 @@ class _BottomBarState extends State<BottomBar> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(""),
-                                   Text(
+                                  Text(
                                     translation(context).chooseAnAction,
                                     style: const TextStyle(
                                         color: Colors.black,
@@ -178,7 +177,8 @@ class _BottomBarState extends State<BottomBar> {
                             ),
                             const Divider(),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10).copyWith(
+                              padding: const EdgeInsets.symmetric(vertical: 10)
+                                  .copyWith(
                                 bottom: 30,
                               ),
                               child: Row(
@@ -238,38 +238,39 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
-                                        await checkPermission()
-                                            .then((value) async {
+                                        await checkPermission().then((value) async {
                                           if (value) {
                                             final ImagePicker _picker = ImagePicker();
-                                            final List<XFile?> image = await _picker.pickMultiImage();
-                                            if (image.isNotEmpty) {
-                                              for (int i = 0;
-                                                  i < image.length;
-                                                  i++) {
-                                                String documentName =
-                                                    DateFormat('yyyyMMdd_SSSS')
-                                                        .format(DateTime.now());
-                                                if (image[i] != null) {
-                                                  cameraProvider.addImage(
-                                                    ImageModel(
-                                                      imageByte: await image[i]!
-                                                          .readAsBytes(),
-                                                      name: 'Doc-$documentName',
-                                                      docType: 'Document',
-                                                    ),
-                                                  );
+                                            await _picker.pickMultiImage()
+                                                .then((image) async {
+                                              if (image.isNotEmpty) {
+                                                for (int i = 0; i < image.length; i++) {
+                                                  String documentName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                                                  if (image[i] != null) {
+                                                    cameraProvider.addImage(
+                                                      ImageModel(
+                                                        imageByte: await image[i].readAsBytes(),
+                                                        name: 'Doc-$documentName',
+                                                        docType: 'Document',
+                                                      ),
+                                                    );
+                                                  }
                                                 }
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ImagePreviewScreen(),
+                                                  ),
+                                                  (route) => false,
+                                                );
                                               }
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ImagePreviewScreen(),
-                                                ),
-                                                (route) => false,
-                                              );
-                                            }
+                                            });
+                                            //     .catchError(  (e){
+                                            //   Navigator.of(context).pop();
+                                            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This image is not Supported")));
+                                            // });
+
                                           } else {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -319,36 +320,44 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
-
                                         Navigator.pop(context);
-                                        FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                        FilePickerResult? result =
+                                            await FilePicker.platform.pickFiles(
                                           type: FileType.custom,
                                           allowedExtensions: ['pdf'],
                                         );
 
                                         if (result != null) {
                                           File file = File(result.paths.first!);
-                                          int fileSizeInBytes = await file.length();
-                                          double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                                          int fileSizeInBytes =
+                                              await file.length();
+                                          double fileSizeInMB =
+                                              fileSizeInBytes / (1024 * 1024);
                                           if (fileSizeInMB <= 5) {
-                                            cameraProvider.convertPdfToImage(file).then((value)  {
+                                            cameraProvider
+                                                .convertPdfToImage(file)
+                                                .then((value) {
                                               if (value) {
-                                                BuildContext context = _scaffoldKey.currentContext!;
+                                                BuildContext context =
+                                                    _scaffoldKey
+                                                        .currentContext!;
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                    const ImagePreviewScreen(),
+                                                        const ImagePreviewScreen(),
                                                   ),
-                                                      (route) => false,
+                                                  (route) => false,
                                                 );
                                               }
                                             });
-                                          }
-                                          else {
-                                            BuildContext context = _scaffoldKey.currentContext!;
-                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                              content: Text('File size exceeds 5 MB. Please select a smaller file.'),
+                                          } else {
+                                            BuildContext context =
+                                                _scaffoldKey.currentContext!;
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'File size exceeds 5 MB. Please select a smaller file.'),
                                             ));
                                           }
                                         }
@@ -375,7 +384,7 @@ class _BottomBarState extends State<BottomBar> {
                                               color: AppColor.primaryColor,
                                               size: size.width >= 600 ? 40 : 30,
                                             ),
-                                             Text(
+                                            Text(
                                               translation(context).doc,
                                               style: TextStyle(
                                                   color: AppColor.primaryColor,
