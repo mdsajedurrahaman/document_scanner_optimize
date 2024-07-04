@@ -175,5 +175,7 @@
   "noResultFound":"Aucun résultat trouvé",
   "drawAlert":"Avant de terminer, veuillez vous assurer que vous avez caché la boîte interactive de signature. Pour cacher la boîte interactive, il suffit de taper dessus.",
   "pleaseAddImageFirst": "Veuillez d'abord ajouter une image",
-  "thisLanguageNotSupported": "Cette langue n'est pas prise en charge"
+  "thisLanguageNotSupported": "Cette langue n'est pas prise en charge",
+  "imageSavedAtGallery": "Image enregistrée dans la galerie",
+  "deselectAll": "Tout désélectionner"
 }

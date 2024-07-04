@@ -175,5 +175,7 @@
   "noResultFound":"No se encontraron resultados",
   "drawAlert":"Antes de terminar, asegúrese de que ha ocultado el cuadro interactivo de firma. Para ocultar el cuadro interactivo, solo toque allí.",
   "pleaseAddImageFirst": "Por favor, agregue una imagen primero",
-  "thisLanguageNotSupported": "Este idioma no es compatible"
+  "thisLanguageNotSupported": "Este idioma no es compatible",
+  "imageSavedAtGallery": "Imagen guardada en la galería",
+  "deselectAll": "Deseleccionar todo"
 }

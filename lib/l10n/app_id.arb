@@ -175,6 +175,8 @@
   "noResultFound":"Tidak Ada Hasil Ditemukan",
   "drawAlert":"Sebelum selesai, pastikan Anda menyembunyikan Kotak Interaktif Tanda Tangan. Untuk menyembunyikan kotak interaktif, cukup ketuk di sana.",
   "pleaseAddImageFirst":"Silakan Tambahkan Gambar Pertama",
-  "thisLanguageNotSupported": "Bahasa ini tidak didukung"
+  "thisLanguageNotSupported": "Bahasa ini tidak didukung",
+    "imageSavedAtGallery": "Gambar Disimpan di Galeri",
+  "deselectAll": "Batal Pilih Semua"
 
 }

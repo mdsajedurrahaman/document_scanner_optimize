@@ -173,5 +173,7 @@
   "searchHere":"Search Here",
   "noResultFound":"No Result Found",
   "pleaseAddImageFirst":"Please add image first",
-  "thisLanguageNotSupported": "This language not supported"
+  "thisLanguageNotSupported": "This language not supported",
+  "imageSavedAtGallery": "Image Saved at Gallery",
+  "deselectAll": "Deselect All"
 }

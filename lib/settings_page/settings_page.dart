@@ -32,6 +32,9 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     vibration = LocalStorage().getBool(AppConstant.VIBRATION_KEY);
     beep = LocalStorage().getBool(AppConstant.BEEP_KEY);
+
+    log(vibration.toString());
+    log(beep.toString());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Locale _locale = await getLocale();
       _selectedLanguage = Language.languageList().firstWhere(
@@ -143,14 +146,15 @@ class _SettingsPageState extends State<SettingsPage> {
                       iconPath: AppAssets.vibration,
                       title: translation(context).vibration,
                       onChanged: (value) {
+                        log(value.toString());
                         setState(() {
                           vibration = value;
                         });
-                        LocalStorage()
-                            .setBool(AppConstant.VIBRATION_KEY, value);
+                        LocalStorage().setBool(AppConstant.VIBRATION_KEY, value);
                       },
-                      value: vibration),
-                  SizedBox(height: 10,),
+                      value: vibration,
+                  ),
+                  const SizedBox(height: 10,),
                   SwitchItem(
                       iconPath: AppAssets.beep,
                       title: translation(context).beep,

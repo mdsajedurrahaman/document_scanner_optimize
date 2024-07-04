@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
@@ -34,7 +33,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
   late Future<List<String>> allFiles;
   bool isDeleteLoading = false;
   bool isShareIng = false;
-
   late Directory rootDirectory;
 
   @override
@@ -206,7 +204,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             style: IconButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                             ),
-                                            child:  Text(
+                                            child: Text(
                                               translation(context).cancel,
                                               style: TextStyle(
                                                 color: Colors.black,
@@ -254,30 +252,48 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 _isLongPressed = true;
                                               });
                                             },
-                                            child:  Text(
+                                            child: Text(
                                               translation(context).select,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 16,
                                               ),
                                             ))
-                                        : TextButton(
-                                            style: IconButton.styleFrom(
-                                              padding: EdgeInsets.zero,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                _selectedItems.clear();
-                                                allFiles.then((value) {
-                                                  _selectedItems.addAll(value);
-                                                });
-                                              });
-                                            },
-                                            child:  Text(
-                                              translation(context).selectAll,
-                                              style: TextStyle(
-                                                fontSize: 16,
+                                        : _isLongPressed &&
+                                                _selectedItems.isNotEmpty
+                                            ? TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _selectedItems.clear();
+                                                  });
+                                                },
+                                                child: Text(
+                                                  translation(context)
+                                                      .deselectAll,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ))
+                                            : TextButton(
+                                                style: IconButton.styleFrom(
+                                                  padding: EdgeInsets.zero,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _selectedItems.clear();
+                                                    allFiles.then((value) {
+                                                      _selectedItems
+                                                          .addAll(value);
+                                                    });
+                                                  });
+                                                },
+                                                child: Text(
+                                                  translation(context)
+                                                      .selectAll,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
                                               ),
-                                            )),
                                   ],
                                 ),
                               ),
@@ -896,31 +912,55 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   ),
                                                                 ),
                                                                 Divider(
-                                                                  color: Colors.grey[200],
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      200],
                                                                   thickness: 1,
-                                                                  indent: MediaQuery.sizeOf(context).width * 0.15,
+                                                                  indent: MediaQuery.sizeOf(
+                                                                              context)
+                                                                          .width *
+                                                                      0.15,
                                                                 ),
                                                                 Material(
-                                                                  color: Colors.transparent,
-                                                                  child: InkWell(
-                                                                    onTap: () async {
-                                                                      await Gal.putImage(filePath, album: "Doc Scanner");
-                                                                      Navigator.pop(context);
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        () async {
+                                                                      await Gal.putImage(
+                                                                          filePath,
+                                                                          album:
+                                                                              "Doc Scanner");
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(content: Text(translation(context).saveAtGallery)));
                                                                     },
-                                                                    child:  Padding(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal: 20.0, vertical: 5),
-                                                                      child: Row(
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          horizontal:
+                                                                              20.0,
+                                                                          vertical:
+                                                                              5),
+                                                                      child:
+                                                                          Row(
                                                                         children: [
                                                                           Icon(
                                                                             Icons.ios_share_outlined,
-                                                                            color: Colors.black,
+                                                                            color:
+                                                                                Colors.black,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 20,
+                                                                            width:
+                                                                                20,
                                                                           ),
                                                                           Text(
-                                                                          translation(context).saveAtGallery,
+                                                                            translation(context).saveAtGallery,
                                                                             style:
                                                                                 TextStyle(
                                                                               color: Colors.black,
@@ -1035,10 +1075,13 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                               ),
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   SvgPicture.asset(
                                                     AppAssets.pdf,
@@ -1047,7 +1090,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                   ),
                                                   Text(
                                                     filePath.split('/').last,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   )
                                                 ],
                                               ),
@@ -1299,9 +1343,13 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   ),
                                                                 ),
                                                                 Divider(
-                                                                  color: Colors.grey[200],
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      200],
                                                                   thickness: 1,
-                                                                  indent: MediaQuery.sizeOf(context).width *
+                                                                  indent: MediaQuery.sizeOf(
+                                                                              context)
+                                                                          .width *
                                                                       0.15,
                                                                 ),
                                                                 Material(
@@ -1309,27 +1357,40 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       .transparent,
                                                                   child:
                                                                       InkWell(
-                                                                    onTap: () async {
-                                                                      Navigator.pop(context);
-                                                                      await DocumentFileSavePlus().saveFile(await File(filePath).readAsBytes(), path.basenameWithoutExtension(filePath), "application/pdf")
-                                                                          .then((value) => ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(translation(context).fileSavedDownloadFolder))));
+                                                                    onTap:
+                                                                        () async {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      await DocumentFileSavePlus()
+                                                                          .saveFile(
+                                                                              await File(filePath).readAsBytes(),
+                                                                              path.basenameWithoutExtension(filePath),
+                                                                              "application/pdf")
+                                                                          .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translation(context).fileSavedDownloadFolder))));
                                                                     },
-                                                                    child:  Padding(
+                                                                    child:
+                                                                        Padding(
                                                                       padding: EdgeInsets.symmetric(
-                                                                          horizontal: 20.0,
-                                                                          vertical: 5),
-                                                                      child: Row(
+                                                                          horizontal:
+                                                                              20.0,
+                                                                          vertical:
+                                                                              5),
+                                                                      child:
+                                                                          Row(
                                                                         children: [
                                                                           Icon(
                                                                             Icons.ios_share_outlined,
-                                                                            color: Colors.black,
+                                                                            color:
+                                                                                Colors.black,
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 20,
+                                                                            width:
+                                                                                20,
                                                                           ),
                                                                           Text(
-                                                                           translation(context).saveAtGallery,
-                                                                            style: TextStyle(
+                                                                            translation(context).saveAtGallery,
+                                                                            style:
+                                                                                TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1531,37 +1592,60 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                       onTap: () async {
                                         if (_selectedItems.isNotEmpty) {
                                           if (_selectedItems.every((element) =>
-                                              element.toLowerCase().endsWith('.jpg') ||
-                                              element.toLowerCase().endsWith('.pdf') ||
-                                              element.toLowerCase().endsWith('.jpeg') ||
-                                              element.toLowerCase().endsWith('.png'))) {
+                                              element
+                                                  .toLowerCase()
+                                                  .endsWith('.jpg') ||
+                                              element
+                                                  .toLowerCase()
+                                                  .endsWith('.pdf') ||
+                                              element
+                                                  .toLowerCase()
+                                                  .endsWith('.jpeg') ||
+                                              element
+                                                  .toLowerCase()
+                                                  .endsWith('.png'))) {
                                             if (isShareIng) {
                                               return;
                                             } else {
                                               isShareIng = true;
-                                              await Share.shareXFiles(_selectedItems.map((e) => XFile(e)).toList()).then((value) {
+                                              await Share.shareXFiles(
+                                                      _selectedItems
+                                                          .map((e) => XFile(e))
+                                                          .toList())
+                                                  .then((value) {
                                                 isShareIng = false;
                                                 setState(() {
                                                   _selectedItems.clear();
                                                   _isLongPressed = false;
-
                                                 });
                                               });
                                             }
-                                          } else if (_selectedItems.every((element) => element.toLowerCase().endsWith('.txt')) && _selectedItems.length == 1) {
-                                            String text = await File(_selectedItems.first).readAsString();
+                                          } else if (_selectedItems.every(
+                                                  (element) => element
+                                                      .toLowerCase()
+                                                      .endsWith('.txt')) &&
+                                              _selectedItems.length == 1) {
+                                            String text =
+                                                await File(_selectedItems.first)
+                                                    .readAsString();
                                             if (isShareIng) {
                                               return;
                                             } else {
                                               isShareIng = true;
-                                              await Share.share(text).then((value) {
+                                              await Share.share(text)
+                                                  .then((value) {
                                                 isShareIng = false;
                                               });
                                             }
                                           } else if (_selectedItems.every(
-                                                  (element) => element.toLowerCase().endsWith('.txt')) && _selectedItems.length > 1) {
-                                            ScaffoldMessenger.of(context).clearSnackBars();
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                  (element) => element
+                                                      .toLowerCase()
+                                                      .endsWith('.txt')) &&
+                                              _selectedItems.length > 1) {
+                                            ScaffoldMessenger.of(context)
+                                                .clearSnackBars();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               const SnackBar(
                                                 duration: Duration(seconds: 1),
                                                 content: Text(
@@ -1573,12 +1657,16 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                               ),
                                             );
                                           } else {
-                                            ScaffoldMessenger.of(context).clearSnackBars();
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                            ScaffoldMessenger.of(context)
+                                                .clearSnackBars();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
-                                                duration: const Duration(seconds: 1),
+                                                duration:
+                                                    const Duration(seconds: 1),
                                                 content: Text(
-                                                  translation(context).pleaseSelectFileOnly,
+                                                  translation(context)
+                                                      .pleaseSelectFileOnly,
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -1587,10 +1675,13 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             );
                                           }
                                         } else {
-                                          ScaffoldMessenger.of(context).clearSnackBars();
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(context)
+                                              .clearSnackBars();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             SnackBar(
-                                              duration: const Duration(seconds: 1),
+                                              duration:
+                                                  const Duration(seconds: 1),
                                               content: Text(
                                                 translation(context)
                                                     .pleaseSelectFirst,
@@ -1731,84 +1822,160 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         : GestureDetector(
                                             onTap: () async {
                                               if (_selectedItems.isNotEmpty) {
-                                                if (_selectedItems.length >= 2) {
-                                                  if (_selectedItems.every((element) =>
-                                                          element.toLowerCase().endsWith('.jpg') ||
-                                                          element.toLowerCase().endsWith('.jpeg') ||
-                                                          element.toLowerCase().endsWith('.png'))) {
+                                                if (_selectedItems.length >=
+                                                    2) {
+                                                  if (_selectedItems.every(
+                                                      (element) =>
+                                                          element
+                                                              .toLowerCase()
+                                                              .endsWith(
+                                                                  '.jpg') ||
+                                                          element
+                                                              .toLowerCase()
+                                                              .endsWith(
+                                                                  '.jpeg') ||
+                                                          element
+                                                              .toLowerCase()
+                                                              .endsWith(
+                                                                  '.png'))) {
                                                     await showDialog(
                                                       context: context,
                                                       builder: (context) {
-                                                        TextEditingController _renameController = TextEditingController();
+                                                        TextEditingController
+                                                            _renameController =
+                                                            TextEditingController();
                                                         return AlertDialog(
-                                                          title: const Text("PDF"),
-                                                          content: TextFormField(
-                                                            controller: _renameController,
-                                                            keyboardType: TextInputType.text,
-                                                            textInputAction: TextInputAction.done,
+                                                          title:
+                                                              const Text("PDF"),
+                                                          content:
+                                                              TextFormField(
+                                                            controller:
+                                                                _renameController,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .text,
+                                                            textInputAction:
+                                                                TextInputAction
+                                                                    .done,
                                                             autofocus: true,
                                                             validator: (value) {
-                                                              if (value!.isEmpty) {
-                                                                return translation(context).pleaseEnterFileName;
+                                                              if (value!
+                                                                  .isEmpty) {
+                                                                return translation(
+                                                                        context)
+                                                                    .pleaseEnterFileName;
                                                               }
                                                               return null;
                                                             },
-                                                            decoration: InputDecoration(
-                                                              hintText: translation(context).enterFileName,
-                                                              focusedBorder: const OutlineInputBorder(
+                                                            decoration:
+                                                                InputDecoration(
+                                                              hintText: translation(
+                                                                      context)
+                                                                  .enterFileName,
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
                                                                 borderSide: BorderSide(
                                                                     color: AppColor
                                                                         .primaryColor),
                                                               ),
-                                                              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10),
                                                             ),
                                                           ),
                                                           actions: [
                                                             TextButton(
                                                               onPressed: () {
-                                                                Navigator.pop(context);
+                                                                Navigator.pop(
+                                                                    context);
                                                               },
-                                                              child: Text(translation(context).cancel),
+                                                              child: Text(
+                                                                  translation(
+                                                                          context)
+                                                                      .cancel),
                                                             ),
                                                             TextButton(
                                                               onPressed:
                                                                   () async {
-                                                                if (_renameController.text.isNotEmpty) {
-                                                                  Navigator.pop(context);
-                                                                  homePageProvider.createPDFFromImages(
-                                                                    images: _selectedItems.map((e) => File(e)).toList(),
-                                                                    directoryPath: widget.directoryPath,
-                                                                    context: context,
-                                                                    fileName: _renameController.text,
-                                                                  ).then((value) {
-                                                                    allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                                    if (value != null && widget.directoryPath.split("/").last == "ID Card") {
-                                                                      homePageProvider.addIdCardImage(value);
-                                                                    } else if (value != null &&
-                                                                        widget.directoryPath.split("/").last == "Document") {
-                                                                      homePageProvider.addDocumentImage(value);
+                                                                if (_renameController
+                                                                    .text
+                                                                    .isNotEmpty) {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  homePageProvider
+                                                                      .createPDFFromImages(
+                                                                    images: _selectedItems
+                                                                        .map((e) =>
+                                                                            File(e))
+                                                                        .toList(),
+                                                                    directoryPath:
+                                                                        widget
+                                                                            .directoryPath,
+                                                                    context:
+                                                                        context,
+                                                                    fileName:
+                                                                        _renameController
+                                                                            .text,
+                                                                  )
+                                                                      .then(
+                                                                          (value) {
+                                                                    allFiles = homePageProvider
+                                                                        .getFileList(
+                                                                            widget.directoryPath);
+                                                                    if (value !=
+                                                                            null &&
+                                                                        widget.directoryPath.split("/").last ==
+                                                                            "ID Card") {
+                                                                      homePageProvider
+                                                                          .addIdCardImage(
+                                                                              value);
+                                                                    } else if (value !=
+                                                                            null &&
+                                                                        widget.directoryPath.split("/").last ==
+                                                                            "Document") {
+                                                                      homePageProvider
+                                                                          .addDocumentImage(
+                                                                              value);
                                                                     }
                                                                     setState(
                                                                         () {
-                                                                      _selectedItems.clear();
-                                                                      _isLongPressed = false;
+                                                                      _selectedItems
+                                                                          .clear();
+                                                                      _isLongPressed =
+                                                                          false;
                                                                     });
                                                                   });
                                                                 } else {
-                                                                  ScaffoldMessenger.of(context).clearSnackBars();
-                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                    SnackBar(duration: Duration(seconds: 1),
-                                                                      content: Text(
-                                                                        translation(context).pleaseEnterFileName,
-                                                                        style: const TextStyle(
-                                                                          color: Colors.white,
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .clearSnackBars();
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    SnackBar(
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                      content:
+                                                                          Text(
+                                                                        translation(context)
+                                                                            .pleaseEnterFileName,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              Colors.white,
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   );
                                                                 }
                                                               },
-                                                              child: Text(translation(context).ok),
+                                                              child: Text(
+                                                                  translation(
+                                                                          context)
+                                                                      .ok),
                                                             ),
                                                           ],
                                                         );
@@ -1966,23 +2133,49 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         .removeBarCode(item);
                                                   }
                                                   file.delete();
-                                                } else if (fileSystemEntity == FileSystemEntityType.directory) {
-                                                  Directory directory = Directory(item);
-                                                  List<FileSystemEntity>entities = directory.listSync();
+                                                } else if (fileSystemEntity ==
+                                                    FileSystemEntityType
+                                                        .directory) {
+                                                  Directory directory =
+                                                      Directory(item);
+                                                  List<FileSystemEntity>
+                                                      entities =
+                                                      directory.listSync();
                                                   if (entities.isEmpty) {
-                                                    await directory.delete(recursive: true);
-                                                  } else {for (var entity in entities) {
-                                                      if (entity.path.split("/").contains("Document")) {
-                                                        homePageProvider.removeDocumentImage(entity.path);
-                                                      } else if (entity.path.split("/").contains("ID Card")) {
-                                                        homePageProvider.removeIdCarImage(entity.path);
-                                                      } else if (entity.path.split("/").contains("QR Code")) {
-                                                        homePageProvider.removeQrCode(entity.path);
+                                                    await directory.delete(
+                                                        recursive: true);
+                                                  } else {
+                                                    for (var entity
+                                                        in entities) {
+                                                      if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "Document")) {
+                                                        homePageProvider
+                                                            .removeDocumentImage(
+                                                                entity.path);
+                                                      } else if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "ID Card")) {
+                                                        homePageProvider
+                                                            .removeIdCarImage(
+                                                                entity.path);
+                                                      } else if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "QR Code")) {
+                                                        homePageProvider
+                                                            .removeQrCode(
+                                                                entity.path);
                                                       } else {
-                                                        homePageProvider.removeBarCode(entity.path);
+                                                        homePageProvider
+                                                            .removeBarCode(
+                                                                entity.path);
                                                       }
                                                     }
-                                                    await directory.delete(recursive: true);
+                                                    await directory.delete(
+                                                        recursive: true);
                                                   }
                                                 }
                                               }

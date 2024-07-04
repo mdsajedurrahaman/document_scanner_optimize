@@ -136,7 +136,7 @@ class _BottomBarState extends State<BottomBar> {
                                   const Text(""),
                                    Text(
                                     translation(context).chooseAnAction,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
@@ -168,7 +168,9 @@ class _BottomBarState extends State<BottomBar> {
                             ),
                             const Divider(),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10).copyWith(
+                                bottom: 30,
+                              ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,

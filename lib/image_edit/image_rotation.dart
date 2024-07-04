@@ -86,7 +86,7 @@ class _ImageRotationState extends State<ImageRotation> {
         child: ExtendedImage.memory(
           cacheRawData: true,
           extendedImageEditorKey: editorKey,
-         widget.cameFromEdit==true?imageEditProvider.currentState:  widget.imageModel.imageByte,
+          widget.cameFromEdit==true?imageEditProvider.currentState:  widget.imageModel.imageByte,
           mode: ExtendedImageMode.editor,
           fit: BoxFit.contain,
           initEditorConfigHandler: (state) {

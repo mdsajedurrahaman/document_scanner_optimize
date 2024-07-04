@@ -28,6 +28,6 @@ class LocalStorage {
   }
 
  bool getBool(String key) {
-    return _prefs.getBool(key)?? false;
+    return _prefs.getBool(key)?? true;
   }
 }

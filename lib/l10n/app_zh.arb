@@ -175,5 +175,8 @@
   "noResultFound":"未找到结果",
   "drawAlert":"在完成之前，请确保您隐藏了签名交互框。要隐藏交互框，只需在那里轻触。",
   "pleaseAddImageFirst":"请先添加图像",
-  "thisLanguageNotSupported":"此语言不受支持"
+  "thisLanguageNotSupported":"此语言不受支持",
+  "imageSavedAtGallery":"图像已保存在相册中",
+  "deselectAll":"取消全选"
+
 }

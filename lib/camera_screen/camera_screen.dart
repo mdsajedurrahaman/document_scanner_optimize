@@ -427,7 +427,9 @@ class _CameraScreenState extends State<CameraScreen>
                                     }
                                     await qrController!.pauseCamera();
                                     if (activeDialog == false) {
-                                      activeDialog = true;
+                                      setState(() {
+                                        activeDialog = true;
+                                      });
                                       await showQrAndBarCodeDialogue(
                                         context: context,
                                         title:
@@ -484,7 +486,10 @@ class _CameraScreenState extends State<CameraScreen>
 
                                     await qrController!.pauseCamera();
                                     if (activeDialog == false) {
-                                      activeDialog = true;
+
+                                      setState(() {
+                                        activeDialog = true;
+                                      });
                                       await showQrAndBarCodeDialogue(
                                         context: context,
                                         title:
@@ -492,48 +497,28 @@ class _CameraScreenState extends State<CameraScreen>
                                         content:
                                         result!.code!,
                                         onCopy: () async {
-                                          Clipboard.setData(
-                                              ClipboardData(
-                                                  text: result!
-                                                      .code!));
-                                          ScaffoldMessenger
-                                              .of(context)
-                                              .clearSnackBars();
-                                          ScaffoldMessenger
-                                              .of(context)
-                                              .showSnackBar(
-                                              SnackBar(
-                                                  content:
-                                                  Text(translation(context)
-                                                      .copiedToClipboard,)));
-                                          Navigator.pop(
-                                              context);
-                                          await controller
-                                              .resumeCamera();
+                                          Clipboard.setData(ClipboardData(text: result!.code!));
+                                          ScaffoldMessenger.of(context).clearSnackBars();
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translation(context).copiedToClipboard,)));
+                                          Navigator.pop(context);
+                                          await controller.resumeCamera();
                                           setState(() {
-                                            activeDialog =
-                                            false;
+                                            activeDialog = false;
                                           });
                                         },
                                         onSave: () async {
-                                          cameraProvider
-                                              .saveQRCodeText(
-                                              result!
-                                                  .code!,
-                                              context);
+                                          cameraProvider.saveQRCodeText(result!.code!, context);
                                           Navigator.pop(
                                               context);
                                           await controller
                                               .resumeCamera();
                                           setState(() {
-                                            activeDialog =
-                                            false;
+                                            activeDialog = false;
                                           });
                                         },
                                         closeTap: () async {
                                           setState(() {
-                                            activeDialog =
-                                            false;
+                                            activeDialog = false;
                                           });
                                           Navigator.pop(
                                               context);
@@ -564,10 +549,10 @@ class _CameraScreenState extends State<CameraScreen>
                                   .width * 0.66 :  MediaQuery
                                   .sizeOf(context)
                                   .width * 0.72,
-                                                      ),
-                                                      onPermissionSet: (ctrl, p) {},
-                                                    ),
-                              Lottie.asset(
+                               ),
+                               onPermissionSet: (ctrl, p) {},
+                              ),
+                             !activeDialog? Lottie.asset(
                                 AppAssets.scanning,
                                 width:  activePage == 3 ? MediaQuery
                                     .sizeOf(context)
@@ -580,7 +565,7 @@ class _CameraScreenState extends State<CameraScreen>
                                     .sizeOf(context)
                                     .width * 0.72,
                                 fit: BoxFit.fill,
-                              ),
+                              ):const SizedBox.shrink(),
                             ],
                           )
                           : Container(

@@ -143,7 +143,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
                     },
                   ));
                 },
-                iconPath: AppAssets.reFrame,
+                iconPath: AppAssets.rotate,
               ),
               ImageEditButton(
                 title:  translation(context).undo,

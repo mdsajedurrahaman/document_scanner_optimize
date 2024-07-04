@@ -175,5 +175,7 @@
   "noResultFound":"결과를 찾을 수 없습니다",
   "drawAlert":"완료하기 전에 서명 대화 상자를 숨겼는지 확인하십시오. 대화 상자를 숨기려면 그곳을 탭하십시오.",
   "pleaseAddImageFirst":"먼저 이미지를 추가하세요",
-  "thisLanguageNotSupported":"이 언어는 지원되지 않습니다"
+  "thisLanguageNotSupported":"이 언어는 지원되지 않습니다",
+    "imageSavedAtGallery":"이미지가 갤러리에 저장됨",
+  "deselectAll":"모두 선택 취소"
 }

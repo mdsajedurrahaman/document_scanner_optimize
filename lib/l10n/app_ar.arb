@@ -175,5 +175,7 @@
   "fileSavedDownloadFolder": "تم حفظ الملف في مجلد التنزيلات",
   "noResultFound":"لم يتم العثور على نتائج",
   "thisLanguageNotSupported": "هذه اللغة غير مدعومة",
-  "docScanner": "ماسح الوثائق"
+  "docScanner": "ماسح الوثائق",
+  "imageSavedAtGallery": "تم حفظ الصورة في المعرض",
+  "deselectAll": "إلغاء تحديد الكل"
 }

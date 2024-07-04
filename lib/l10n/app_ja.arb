@@ -175,5 +175,7 @@
   "noResultFound":"結果が見つかりません",
   "drawAlert":"完了する前に、署名インタラクティブボックスを非表示にしていることを確認してください。 インタラクティブボックスを非表示にするには、そこをタップしてください。",
   "pleaseAddImageFirst":"最初に画像を追加してください",
-  "thisLanguageNotSupported":"この言語はサポートされていません"
+  "thisLanguageNotSupported":"この言語はサポートされていません",
+  "imageSavedAtGallery":"画像がギャラリーに保存されました",
+  "deselectAll":"すべての選択を解除"
 }
