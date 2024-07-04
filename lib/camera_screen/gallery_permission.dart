@@ -68,9 +68,9 @@ class _GalleryPermissionState extends State<GalleryPermission>
   }
 
   Future<bool> checkPermission() async {
-    print("jbdcshbd");
-    AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
+
     if (Platform.isAndroid) {
+      AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
       print("android");
       if (build.version.sdkInt <= 32) {
         storage = await Permission.storage.status;

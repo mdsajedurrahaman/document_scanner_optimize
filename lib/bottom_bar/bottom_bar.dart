@@ -241,11 +241,8 @@ class _BottomBarState extends State<BottomBar> {
                                         await checkPermission()
                                             .then((value) async {
                                           if (value) {
-                                            final ImagePicker _picker =
-                                                ImagePicker();
-                                            final List<XFile?> image =
-                                                await _picker.pickMultiImage(
-                                                    limit: 5, imageQuality: 50);
+                                            final ImagePicker _picker = ImagePicker();
+                                            final List<XFile?> image = await _picker.pickMultiImage();
                                             if (image.isNotEmpty) {
                                               for (int i = 0;
                                                   i < image.length;
