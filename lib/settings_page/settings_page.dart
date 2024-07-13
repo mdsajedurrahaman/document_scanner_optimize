@@ -187,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () {
                         Share.shareUri(
                           Uri.parse(
-                              'https://play.google.com/store/apps/details?id=com.qr_code_reader_qr_scanner'),
+                              'https://apps.apple.com/app/id6472610820'),
                         );
                       },
                       child: Padding(
@@ -220,24 +220,24 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () async {
-                        // try {
-                        //   if (Platform.isAndroid || Platform.isIOS) {
-                        //     final appId = Platform.isAndroid
-                        //         ? 'com.qr_code_reader_qr_scanner'
-                        //         : '';
-                        //     final url = Uri.parse(
-                        //       Platform.isAndroid
-                        //           ? "market://details?id=$appId"
-                        //           : "https://apps.apple.com/app/id$appId",
-                        //     );
-                        //     await launchUrl(
-                        //       url,
-                        //       mode: LaunchMode.externalApplication,
-                        //     );
-                        //   }
-                        // } catch (e) {
-                        //   developer.log(e.toString());
-                        // }
+                        try {
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            final appId = Platform.isAndroid
+                                ? ''
+                                : 'com.documentscannerpdfscanner';
+                            final url = Uri.parse(
+                              Platform.isAndroid
+                                  ? "market://details?id=$appId"
+                                  : "https://apps.apple.com/app/id6472610820",
+                            );
+                            await launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        } catch (e) {
+                          developer.log(e.toString());
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
