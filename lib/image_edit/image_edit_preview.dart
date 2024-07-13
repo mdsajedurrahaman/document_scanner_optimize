@@ -325,10 +325,8 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    final cameProvider =
-                                        context.watch<CameraProvider>();
-                                    TextEditingController _renameController =
-                                        TextEditingController();
+                                    final cameProvider = context.watch<CameraProvider>();
+                                    TextEditingController _renameController = TextEditingController();
                                     return StatefulBuilder(
                                       builder: (context, setState) {
                                         return AlertDialog(
@@ -355,16 +353,12 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                   autofocus: true,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
-                                                      return translation(
-                                                              context)
-                                                          .pleaseEnterFileName;
+                                                      return translation(context).pleaseEnterFileName;
                                                     }
                                                     return null;
                                                   },
                                                   decoration: InputDecoration(
-                                                    hintText:
-                                                        translation(context)
-                                                            .enterFileName,
+                                                    hintText: translation(context).enterFileName,
                                                     focusedBorder:
                                                         const OutlineInputBorder(
                                                       borderSide: BorderSide(

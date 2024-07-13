@@ -125,7 +125,7 @@ class _BottomBarState extends State<BottomBar> {
                 builder: (context) {
                   return IntrinsicHeight(
                     child: Container(
-                        // height: MediaQuery.of(context).size.height * 0.20,
+                         height: 220,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
@@ -138,17 +138,16 @@ class _BottomBarState extends State<BottomBar> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 10).copyWith(top: 10,bottom: 5),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(""),
                                   Text(
                                     translation(context).chooseAnAction,
                                     style: const TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Container(
@@ -176,15 +175,16 @@ class _BottomBarState extends State<BottomBar> {
                                 ],
                               ),
                             ),
-                            const Divider(),
+                             Divider(
+                              color: Colors.grey.withOpacity(0.3),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10)
                                   .copyWith(
                                 bottom: 30,
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Material(
@@ -201,13 +201,13 @@ class _BottomBarState extends State<BottomBar> {
                                         );
                                       },
                                       child: Container(
-                                        height: size.width >= 600 ? 150 : 60,
-                                        width: size.width >= 600 ? 210 : 90,
+                                        height: size.width >= 600 ? 150 : 110,
+                                        width: size.width >= 600 ? 210 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: AppColor.primaryColor,
+                                              color: Colors.black,
                                               width: 1),
                                         ),
                                         alignment: Alignment.center,
@@ -217,17 +217,19 @@ class _BottomBarState extends State<BottomBar> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.camera_alt_outlined,
-                                              color: AppColor.primaryColor,
-                                              size: size.width >= 600 ? 40 : 30,
-                                            ),
+
+                                            SvgPicture.asset(AppAssets.camera),
+                                            // Icon(
+                                            //   Icons.camera_alt_outlined,
+                                            //   color: AppColor.primaryColor,
+                                            //   size: size.width >= 600 ? 40 : 50,
+                                            // ),
                                             Text(
                                               translation(context).camera,
                                               style: const TextStyle(
-                                                  color: AppColor.primaryColor,
+                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16),
+                                                  fontSize: 20),
                                             )
                                           ],
                                         ),
@@ -283,13 +285,13 @@ class _BottomBarState extends State<BottomBar> {
                                         });
                                       },
                                       child: Container(
-                                        height: size.width >= 600 ? 150 : 60,
-                                        width: size.width >= 600 ? 210 : 90,
+                                        height: size.width >= 600 ? 150 : 110,
+                                        width: size.width >= 600 ? 210 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: AppColor.primaryColor,
+                                              color: Colors.black,
                                               width: 1),
                                         ),
                                         alignment: Alignment.center,
@@ -299,17 +301,18 @@ class _BottomBarState extends State<BottomBar> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.photo_outlined,
-                                              color: AppColor.primaryColor,
-                                              size: size.width >= 600 ? 40 : 30,
-                                            ),
+                                            SvgPicture.asset(AppAssets.gallery),
+                                           // Icon(
+                                            //   Icons.photo_outlined,
+                                            //   color: AppColor.primaryColor,
+                                            //   size: size.width >= 600 ? 40 : 50,
+                                            // ),
                                             Text(
                                               translation(context).gallery,
                                               style: const TextStyle(
-                                                  color: AppColor.primaryColor,
+                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16),
+                                                  fontSize: 20),
                                             )
                                           ],
                                         ),
@@ -364,13 +367,13 @@ class _BottomBarState extends State<BottomBar> {
                                         }
                                       },
                                       child: Container(
-                                        height: size.width >= 600 ? 150 : 60,
-                                        width: size.width >= 600 ? 210 : 90,
+                                        height: size.width >= 600 ? 150 : 110,
+                                        width: size.width >= 600 ? 210 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: AppColor.primaryColor,
+                                              color: Colors.black,
                                               width: 1),
                                         ),
                                         alignment: Alignment.center,
@@ -380,17 +383,19 @@ class _BottomBarState extends State<BottomBar> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.file_present_rounded,
-                                              color: AppColor.primaryColor,
-                                              size: size.width >= 600 ? 40 : 30,
-                                            ),
+
+                                            SvgPicture.asset(AppAssets.pdf),
+                                            // Icon(
+                                            //   Icons.file_present_rounded,
+                                            //   color: AppColor.primaryColor,
+                                            //   size: size.width >= 600 ? 40 : 50,
+                                            // ),
                                             Text(
-                                              translation(context).doc,
+                                              translation(context).pdf,
                                               style: TextStyle(
-                                                  color: AppColor.primaryColor,
+                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16),
+                                                  fontSize: 20),
                                             )
                                           ],
                                         ),

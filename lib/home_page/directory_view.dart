@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
@@ -1451,9 +1452,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                           await showModalBottomSheet(
                                             context: context,
                                             builder: (context) {
-                                              List<String> directories =
-                                                  getSubdirectoriesSync(
-                                                      widget.directoryPath);
+                                              List<String> directories = getSubdirectoriesSyncForIos(widget.directoryPath);
+                                              log(directories.toString());
+                                              log(widget.directoryPath.toString());
+
                                               return SizedBox(
                                                 height: MediaQuery.of(context)
                                                         .size
@@ -2314,7 +2316,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     );
   }
 
-  List<String> getSubdirectoriesSync(String directoryPath) {
+  List<String> getSubdirectoriesSyncForAndroid(String directoryPath) {
+    print("directory path->  $directoryPath");
     Directory directory;
     if (directoryPath.contains("Document")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Document");
@@ -2322,9 +2325,44 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
       directory = Directory("${rootDirectory.path}/Doc Scanner/ID Card");
     } else if (directoryPath.contains("QR Code")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/QR Code");
+    } else if(directoryPath.contains("Bar Code")) {
+      directory = Directory("${rootDirectory.path}/Doc Scanner/Bar Code");
+    }else{
+      directory=Directory("");
+    }
+    print("--- > ${directory.absolute.path}");
+    if (directory.existsSync()) {
+      try {
+        final subdirectories = [
+          directory.path
+        ]; // Start with the provided directory
+        final entities = directory.listSync();
+        subdirectories.addAll(
+          entities.whereType<Directory>().map((dir) => dir.path).toList(),
+        );
+        return subdirectories;
+      } catch (e) {
+        throw Exception("An error occurred while listing subdirectories: $e");
+      }
+    } else {
+      throw Exception("Directory does not exist");
+    }
+  }
+
+
+  List<String> getSubdirectoriesSyncForIos(String directoryPath) {
+    print("directory path->  $directoryPath");
+    Directory directory;
+    if (directoryPath.contains("Doc Scanner/Document")) {
+      directory = Directory("${rootDirectory.path}/Doc Scanner/Document");
+    } else if (directoryPath.contains("Doc Scanner/ID Card")) {
+      directory = Directory("${rootDirectory.path}/Doc Scanner/ID Card");
+    } else if (directoryPath.contains("Doc Scanner/QR Code")) {
+      directory = Directory("${rootDirectory.path}/Doc Scanner/QR Code");
     } else {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Bar Code");
     }
+    print("--- > ${directory.absolute.path}");
     if (directory.existsSync()) {
       try {
         final subdirectories = [

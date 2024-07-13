@@ -41,6 +41,8 @@ class AppAssets {
   static const String move = "assets/icons/move.svg";
   static const String merge = "assets/icons/merge.svg";
   static const String pdf = "assets/icons/pdf.svg";
+  static const String camera = "assets/icons/camera.svg";
+  static const String gallery = "assets/icons/gallery.svg";
   static const String size_preview = "assets/icons/size_preview.svg";
   static const String search_not_found = "assets/icons/search_not_found.svg";
   static const String image_not_found = "assets/icons/image_not_found.svg";

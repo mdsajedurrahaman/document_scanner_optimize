@@ -18,6 +18,8 @@ class HomePageProvider extends ChangeNotifier {
 
   Future<void> getDirectoriesForCreate() async {
     final Directory appDirectory = await getApplicationDocumentsDirectory();
+
+    print("getDirectoriesForCreate-> ${appDirectory.path}");
     final Directory pdfConverterDirectory =
         Directory('${appDirectory.path}/Doc Scanner');
     _directories =

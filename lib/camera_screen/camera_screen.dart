@@ -418,9 +418,9 @@ class _CameraScreenState extends State<CameraScreen> {
                                     result = event;
                                   });
                                   if (result != null && activePage == 3 && barCodeList.contains(result!.format.formatName)) {
-                                    // if (beepValue) {
-                                    //   await audioPlayer.play(AssetSource('audio/beep_sound.mp3'));
-                                    // }
+                                    if (beepValue) {
+                                      await audioPlayer.play(AssetSource('audio/beep_sound.mp3'));
+                                    }
                                     if (vibrationValue) {
                                       Vibration.vibrate(duration: 100);
                                     }
@@ -473,11 +473,11 @@ class _CameraScreenState extends State<CameraScreen> {
                                       !barCodeList.contains(
                                           result!.format
                                               .formatName)) {
-                                    // if (beepValue) {
-                                    //   await audioPlayer.play(
-                                    //       AssetSource(
-                                    //           'audio/beep_sound.mp3'));
-                                    // }
+                                    if (beepValue) {
+                                      await audioPlayer.play(
+                                          AssetSource(
+                                              'audio/beep_sound.mp3'));
+                                    }
                                     if (vibrationValue) {
                                       Vibration.vibrate(
                                           duration: 100);
