@@ -206,7 +206,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             ),
                                             child: Text(
                                               translation(context).cancel,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 16,
                                               ),

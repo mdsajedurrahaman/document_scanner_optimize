@@ -141,11 +141,13 @@ class _HomePageState extends State<HomePage> {
 
         ],
       ),
-      body: cameraProvider.pdfConverting
-          ? const Center(
-        child: CircularProgressIndicator(),
-      )
-          :
+      body:
+
+      // cameraProvider.pdfConverting
+      //     ? const Center(
+      //   child: CircularProgressIndicator(),
+      // )
+      //     :
       Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -250,7 +252,13 @@ class _HomePageState extends State<HomePage> {
 
             ),
             Expanded(
-              child: Row(
+              child: homePageProvider.isHistoryLoading?
+                  Center(child: CircularProgressIndicator(),)
+                  :
+
+
+
+              Row(
                 children: [
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width * 0.235,

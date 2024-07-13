@@ -53,8 +53,7 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen>
-    with WidgetsBindingObserver {
+class _CameraScreenState extends State<CameraScreen> {
   bool flash = false;
   bool gridview = false;
   int activePage = 0;
@@ -120,7 +119,7 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   void initState() {
     checkPermission();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     activePage = widget.initialPage;
 
     _pageController = PageController(initialPage: activePage, viewportFraction: 1 / 3);
@@ -145,7 +144,7 @@ class _CameraScreenState extends State<CameraScreen>
     cameraController.dispose();
     _pageController.dispose();
     qrController?.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
   //

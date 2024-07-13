@@ -38,7 +38,6 @@ class _ImageFiltersState extends State<ImageFilters> {
       PresetFilters.none,
       ...(presetFiltersList.sublist(1))
     ];
-
     super.initState();
   }
 
@@ -115,6 +114,7 @@ class _ImageFiltersState extends State<ImageFilters> {
                     GestureDetector(
                       onTap: () {
                         selectedFilter = filter;
+                        filterOpacity=1;
                         setState(() {});
                       },
                       child: Column(children: [

@@ -148,8 +148,15 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  bool _historyLoading=false;
+  bool get isHistoryLoading=>_historyLoading;
+
   Future<void> loadDocumentImage() async {
     try {
+      _historyLoading=true;
+      notifyListeners();
+
       Directory appDir = await getApplicationDocumentsDirectory();
       Directory documentDirectory =
           Directory('${appDir.path}/Doc Scanner/Document');
@@ -176,6 +183,7 @@ class HomePageProvider extends ChangeNotifier {
           }
         }
       }
+      _historyLoading=false;
       notifyListeners();
     } catch (e) {
       print(e);
@@ -184,6 +192,9 @@ class HomePageProvider extends ChangeNotifier {
 
   Future<void> loadIdCardImage() async {
     try {
+
+      _historyLoading=true;
+      notifyListeners();
       Directory appDir = await getApplicationDocumentsDirectory();
       Directory documentDirectory =
           Directory('${appDir.path}/Doc Scanner/ID Card');
@@ -211,6 +222,7 @@ class HomePageProvider extends ChangeNotifier {
         }
       }
 
+      _historyLoading=false;
       notifyListeners();
     } catch (e) {
       print(e.toString());
@@ -218,15 +230,22 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<void> loadQRCode() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    Directory textFilesDir = Directory('${appDir.path}/Doc Scanner/QR Code');
+
     try {
+      _historyLoading=true;
+      notifyListeners();
+
+
+      Directory appDir = await getApplicationDocumentsDirectory();
+      Directory textFilesDir = Directory('${appDir.path}/Doc Scanner/QR Code');
       await for (var entity
           in textFilesDir.list(recursive: true, followLinks: false)) {
         if (entity is File && entity.path.endsWith('.txt')) {
           _qrCodeFiles.add(entity.path);
         }
       }
+
+      _historyLoading=false;
       notifyListeners();
     } catch (e) {
       print('Error: $e');
@@ -234,15 +253,22 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<void> loadBarCode() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    Directory textFilesDir = Directory('${appDir.path}/Doc Scanner/Bar Code');
+
+
+
     try {
+      _historyLoading=true;
+      notifyListeners();
+
+      Directory appDir = await getApplicationDocumentsDirectory();
+      Directory textFilesDir = Directory('${appDir.path}/Doc Scanner/Bar Code');
       await for (var entity
           in textFilesDir.list(recursive: true, followLinks: false)) {
         if (entity is File && entity.path.endsWith('.txt')) {
           _barCodeFiles.add(entity.path);
         }
       }
+      _historyLoading=false;
       notifyListeners();
     } catch (e) {
       print('Error: $e');

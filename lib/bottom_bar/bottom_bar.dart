@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -107,11 +106,13 @@ class _BottomBarState extends State<BottomBar> {
         false;
       },
       child: Scaffold(
-        key: _scaffoldKey,
-        body: IndexedStack(
-          index: _currentIndex,
-          children: pages,
-        ),
+
+        body: pages[_currentIndex],
+        // key: _scaffoldKey,
+        // body: IndexedStack(
+        //   index: _currentIndex,
+        //   children: pages,
+        // ),
         floatingActionButton: CircleAvatar(
           radius: size.width >= 600 ? 40 : 30,
           backgroundColor: AppColor.primaryColor,

@@ -1,19 +1,14 @@
 import 'dart:developer';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/image_edit/widget/image_edit_button.dart';
 import 'package:doc_scanner/utils/app_color.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:interactive_box/interactive_box.dart';
 import 'package:provider/provider.dart';
-
 import '../camera_screen/provider/camera_provider.dart';
 import '../localaization/language_constant.dart';
 import '../utils/app_assets.dart';
