@@ -143,11 +143,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body:
 
-      // cameraProvider.pdfConverting
-      //     ? const Center(
-      //   child: CircularProgressIndicator(),
-      // )
-      //     :
+      cameraProvider.pdfConverting
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+          :
       Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

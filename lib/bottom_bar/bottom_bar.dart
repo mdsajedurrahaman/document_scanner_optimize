@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../camera_screen/camera_screen.dart';
@@ -325,46 +326,43 @@ class _BottomBarState extends State<BottomBar> {
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
                                         Navigator.pop(context);
-                                        FilePickerResult? result =
-                                            await FilePicker.platform.pickFiles(
+                                        FilePickerResult? result = await FilePicker.platform.pickFiles(
                                           type: FileType.custom,
                                           allowedExtensions: ['pdf'],
                                         );
 
-                                        if (result != null) {
-                                          File file = File(result.paths.first!);
-                                          int fileSizeInBytes =
-                                              await file.length();
-                                          double fileSizeInMB =
-                                              fileSizeInBytes / (1024 * 1024);
-                                          if (fileSizeInMB <= 5) {
-                                            cameraProvider
-                                                .convertPdfToImage(file)
-                                                .then((value) {
-                                              if (value) {
-                                                BuildContext context =
-                                                    _scaffoldKey
-                                                        .currentContext!;
-                                                Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const ImagePreviewScreen(),
-                                                  ),
-                                                  (route) => false,
-                                                );
-                                              }
-                                            });
-                                          } else {
-                                            BuildContext context =
-                                                _scaffoldKey.currentContext!;
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  'File size exceeds 5 MB. Please select a smaller file.'),
-                                            ));
-                                          }
-                                        }
+
+
+
+                                        
+                                        //
+                                        // if (result != null) {
+                                        //   File file = File(result.paths.first!);
+                                        //   int fileSizeInBytes = await file.length();
+                                        //   double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                                        //   if (fileSizeInMB <= 5) {
+                                        //     cameraProvider.convertPdfToImage(file).then((value) {
+                                        //       if (value) {
+                                        //         BuildContext context = _scaffoldKey.currentContext!;
+                                        //         Navigator.pushAndRemoveUntil(
+                                        //           context,
+                                        //           MaterialPageRoute(
+                                        //             builder: (context) =>
+                                        //                 const ImagePreviewScreen(),
+                                        //           ),
+                                        //           (route) => false,
+                                        //         );
+                                        //       }
+                                        //     });
+                                        //   } else {
+                                        //     BuildContext context = _scaffoldKey.currentContext!;
+                                        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        //       content: Text('File size exceeds 5 MB. Please select a smaller file.'),
+                                        //     ));
+                                        //   }
+                                        // }else{
+                                        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Something Went Wrong")));
+                                        // }
                                       },
                                       child: Container(
                                         height: size.width >= 600 ? 150 : 110,

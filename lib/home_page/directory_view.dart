@@ -1372,26 +1372,20 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     child:
                                                                         Padding(
                                                                       padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              20.0,
-                                                                          vertical:
-                                                                              5),
-                                                                      child:
-                                                                          Row(
+                                                                          horizontal: 20.0,
+                                                                          vertical: 5),
+                                                                      child: Row(
                                                                         children: [
                                                                           Icon(
                                                                             Icons.ios_share_outlined,
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                           ),
                                                                           SizedBox(
-                                                                            width:
-                                                                                20,
+                                                                            width: 20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).saveAtGallery,
-                                                                            style:
-                                                                                TextStyle(
+                                                                            style: TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,

@@ -27,12 +27,12 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
-     <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-        <key>NSAllowsArbitraryLoadsInWebContent</key>
-        <true/>
-     </dict>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -53,12 +53,14 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-    <string>We need access to your camera for scan documents.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>To edit document from the photo gallery, it needs to access the photo gallery.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string> To send voice text this app requires Mic's permission.</string>
-    <key>NSAppleMusicUsageDescription</key>
-    <string>Play beep for using  QR or Bar code scan sound </string>
+	<string>We need access to your camera for scan documents.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To edit document from the photo gallery, it needs to access the photo gallery.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string> To send voice text this app requires Mic&apos;s permission.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Play beep for using  QR or Bar code scan sound </string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
 </dict>
 </plist>
