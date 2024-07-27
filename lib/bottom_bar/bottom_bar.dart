@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -8,13 +7,11 @@ import 'package:doc_scanner/settings_page/settings_page.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../camera_screen/camera_screen.dart';
@@ -253,27 +250,20 @@ class _BottomBarState extends State<BottomBar> {
                                                 .pickMultiImage()
                                                 .then((image) async {
                                               if (image.isNotEmpty) {
-                                                for (int i = 0;
-                                                    i < image.length;
-                                                    i++) {
+                                                for (int i = 0; i < image.length; i++) {
                                                   String documentName =
-                                                      DateFormat(
-                                                              'yyyyMMdd_SSSS')
-                                                          .format(
-                                                              DateTime.now());
-                                                  if (image[i] != null) {
-                                                    cameraProvider.addImage(
-                                                      ImageModel(
-                                                        imageByte:
-                                                            await image[i]
-                                                                .readAsBytes(),
-                                                        name:
-                                                            'Doc-$documentName',
-                                                        docType: 'Document',
-                                                      ),
-                                                    );
-                                                  }
-                                                }
+                                                      DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                                                  cameraProvider.addImage(
+                                                    ImageModel(
+                                                      imageByte:
+                                                          await image[i]
+                                                              .readAsBytes(),
+                                                      name:
+                                                          'Doc-$documentName',
+                                                      docType: 'Document',
+                                                    ),
+                                                  );
+                                                                                                }
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(
@@ -289,7 +279,8 @@ class _BottomBarState extends State<BottomBar> {
                                             //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This image is not Supported")));
                                             // });
                                           } else {
-                                            Navigator.push(context,
+                                            Navigator.push(
+                                                context,
                                                 MaterialPageRoute(
                                               builder: (context) {
                                                 return const GalleryPermission();
@@ -356,7 +347,6 @@ class _BottomBarState extends State<BottomBar> {
                                         //       });
                                         // });
                                         //
-
 
                                         Navigator.of(context).pop();
                                         FilePickerResult? result =

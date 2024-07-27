@@ -163,7 +163,7 @@ class _CameraScreenState extends State<CameraScreen> {
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
-        if (widget.isComeFromRetake != null && widget.isComeFromRetake == true && widget.isComeFromIdCardRetake != null && widget.isComeFromIdCardRetake == true) {
+        if ( widget.isComeFromRetake == true ||  widget.isComeFromIdCardRetake == true) {
           return;
         } else
         if(widget.isComeFromAdd != null && widget.isComeFromAdd == true){
@@ -677,8 +677,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (widget.isComeFromRetake != null &&
-                                    widget.isComeFromRetake == true) {
+                                if (widget.isComeFromRetake != null && widget.isComeFromRetake == true) {
                                   Navigator.pop(context);
                                 } else if (widget.isComeFromAdd !=
                                     null &&
@@ -706,29 +705,25 @@ class _CameraScreenState extends State<CameraScreen> {
                                 onTap: () async {
                                   if (activePage == 0) {
                                     if (widget.isComeFromRetake == true) {
-                                      if (beepValue) {
-                                        await audioPlayer.play(AssetSource("audio/sound.mp3"));
-                                      }
-                                      XFile documentCapture = await cameraController.takePicture();
 
+                                      // XFile documentCapture =
+
+                                      await cameraController.takePicture().then((value)async{
                                         cameraProvider.updateImage(
                                           index: widget.imageIndex!,
                                           image: ImageModel(
-                                            imageByte: await documentCapture.readAsBytes(),
-                                            name: widget.imageModel!.name,
-                                            docType: "Document",
-                                          ),
-                                        );
+                                              imageByte: await value.readAsBytes(),
+                                          name: widget.imageModel!.name,
+                                          docType: "Document",
+                                        ));
+                                      });
 
-                                      log("before pop  ${cameraProvider.imageList.length.toString()}");
-                                      
+
+
+                                      Navigator.push(context,  MaterialPageRoute(builder: (context)=>const ImagePreviewScreen()));
 
                                     } else if (widget.isComeFromAdd == true) {
-                                      // if (beepValue) {
-                                      //   await audioPlayer.play(AssetSource("audio/sound.mp3"));
-                                      // }
                                       XFile documentCapture = await cameraController.takePicture();
-
                                       String imageName = DateFormat(
                                           'yyyyMMdd_SSSS').format(
                                           DateTime.now());
@@ -748,10 +743,6 @@ class _CameraScreenState extends State<CameraScreen> {
                                       // }
                                       XFile documentCapture = await cameraController
                                           .takePicture();
-                                      // if (beepValue) {
-                                      //   await audioPlayer.play(
-                                      //       AssetSource("audio/sound.mp3"));
-                                      // }
                                       String imageName = DateFormat(
                                           'yyyyMMdd_SSSS').format(
                                           DateTime.now());

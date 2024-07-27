@@ -259,7 +259,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 15),
+                              horizontal: 5, vertical: 30),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -288,14 +288,13 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      const Icon(
-                                        Icons.camera_alt_outlined,
-                                        color: AppColor.primaryColor,
-                                      ),
+                                      SvgPicture.asset(AppAssets.camera),
                                       Text(
                                         translation(context).camera,
-                                        style: TextStyle(
-                                            color: AppColor.primaryColor),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
                                       )
                                     ],
                                   ),
@@ -341,14 +340,13 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      const Icon(
-                                        Icons.photo_outlined,
-                                        color: AppColor.primaryColor,
-                                      ),
+                                      SvgPicture.asset(AppAssets.gallery),
                                       Text(
                                         translation(context).gallery,
                                         style: const TextStyle(
-                                            color: AppColor.primaryColor),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20),
                                       )
                                     ],
                                   ),
