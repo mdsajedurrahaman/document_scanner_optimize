@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -107,7 +108,7 @@ class _BottomBarState extends State<BottomBar> {
         false;
       },
       child: Scaffold(
-
+        key: _scaffoldKey,
         body: pages[_currentIndex],
         // key: _scaffoldKey,
         // body: IndexedStack(
@@ -126,7 +127,7 @@ class _BottomBarState extends State<BottomBar> {
                 builder: (context) {
                   return IntrinsicHeight(
                     child: Container(
-                         height: 220,
+                        height: 220,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
@@ -138,10 +139,12 @@ class _BottomBarState extends State<BottomBar> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10).copyWith(top: 10,bottom: 5),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10)
+                                      .copyWith(top: 10, bottom: 5),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(""),
                                   Text(
@@ -176,7 +179,7 @@ class _BottomBarState extends State<BottomBar> {
                                 ],
                               ),
                             ),
-                             Divider(
+                            Divider(
                               color: Colors.grey.withOpacity(0.3),
                             ),
                             Padding(
@@ -185,7 +188,8 @@ class _BottomBarState extends State<BottomBar> {
                                 bottom: 30,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Material(
@@ -208,8 +212,7 @@ class _BottomBarState extends State<BottomBar> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: Colors.black,
-                                              width: 1),
+                                              color: Colors.black, width: 1),
                                         ),
                                         alignment: Alignment.center,
                                         child: Column(
@@ -218,7 +221,6 @@ class _BottomBarState extends State<BottomBar> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-
                                             SvgPicture.asset(AppAssets.camera),
                                             // Icon(
                                             //   Icons.camera_alt_outlined,
@@ -242,19 +244,31 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
-                                        await checkPermission().then((value) async {
+                                        await checkPermission()
+                                            .then((value) async {
                                           if (value) {
-                                            final ImagePicker _picker = ImagePicker();
-                                            await _picker.pickMultiImage()
+                                            final ImagePicker _picker =
+                                                ImagePicker();
+                                            await _picker
+                                                .pickMultiImage()
                                                 .then((image) async {
                                               if (image.isNotEmpty) {
-                                                for (int i = 0; i < image.length; i++) {
-                                                  String documentName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                                                for (int i = 0;
+                                                    i < image.length;
+                                                    i++) {
+                                                  String documentName =
+                                                      DateFormat(
+                                                              'yyyyMMdd_SSSS')
+                                                          .format(
+                                                              DateTime.now());
                                                   if (image[i] != null) {
                                                     cameraProvider.addImage(
                                                       ImageModel(
-                                                        imageByte: await image[i].readAsBytes(),
-                                                        name: 'Doc-$documentName',
+                                                        imageByte:
+                                                            await image[i]
+                                                                .readAsBytes(),
+                                                        name:
+                                                            'Doc-$documentName',
                                                         docType: 'Document',
                                                       ),
                                                     );
@@ -274,7 +288,6 @@ class _BottomBarState extends State<BottomBar> {
                                             //   Navigator.of(context).pop();
                                             //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This image is not Supported")));
                                             // });
-
                                           } else {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -292,8 +305,7 @@ class _BottomBarState extends State<BottomBar> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: Colors.black,
-                                              width: 1),
+                                              color: Colors.black, width: 1),
                                         ),
                                         alignment: Alignment.center,
                                         child: Column(
@@ -303,7 +315,7 @@ class _BottomBarState extends State<BottomBar> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             SvgPicture.asset(AppAssets.gallery),
-                                           // Icon(
+                                            // Icon(
                                             //   Icons.photo_outlined,
                                             //   color: AppColor.primaryColor,
                                             //   size: size.width >= 600 ? 40 : 50,
@@ -325,44 +337,68 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
-                                        Navigator.pop(context);
-                                        FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                        // await FilePicker.platform.pickFiles(
+                                        //   type: FileType.custom,
+                                        //   allowedExtensions: ['pdf'],
+                                        // ).then((value) async{
+                                        //   File pdfFile=File(value!.paths.first!);
+                                        //       cameraProvider.convertPdfToImage(pdfFile).then((value) {
+                                        //              Navigator.pushAndRemoveUntil(
+                                        //                   context,
+                                        //                   MaterialPageRoute(
+                                        //                     builder: (context) =>
+                                        //                         const ImagePreviewScreen(),
+                                        //                   ),
+                                        //                   (route) => false,
+                                        //                 );
+                                        //
+                                        //
+                                        //       });
+                                        // });
+                                        //
+
+
+                                        Navigator.of(context).pop();
+                                        FilePickerResult? result =
+                                            await FilePicker.platform.pickFiles(
                                           type: FileType.custom,
                                           allowedExtensions: ['pdf'],
                                         );
-
-
-
-
-                                        
-                                        //
-                                        // if (result != null) {
-                                        //   File file = File(result.paths.first!);
-                                        //   int fileSizeInBytes = await file.length();
-                                        //   double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-                                        //   if (fileSizeInMB <= 5) {
-                                        //     cameraProvider.convertPdfToImage(file).then((value) {
-                                        //       if (value) {
-                                        //         BuildContext context = _scaffoldKey.currentContext!;
-                                        //         Navigator.pushAndRemoveUntil(
-                                        //           context,
-                                        //           MaterialPageRoute(
-                                        //             builder: (context) =>
-                                        //                 const ImagePreviewScreen(),
-                                        //           ),
-                                        //           (route) => false,
-                                        //         );
-                                        //       }
-                                        //     });
-                                        //   } else {
-                                        //     BuildContext context = _scaffoldKey.currentContext!;
-                                        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        if (result != null) {
+                                           File file = File(result.paths.first!);
+                                          // int fileSizeInBytes = await file.length();
+                                          // double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                                          // if (fileSizeInMB <= 5) {
+                                            cameraProvider.convertPdfToImage(file).then((value) {
+                                              if (value) {
+                                                BuildContext context = _scaffoldKey.currentContext!;
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ImagePreviewScreen(),
+                                                  ),
+                                                  (route) => false,
+                                                );
+                                              }
+                                            });
+                                          // }
+                                        // else {
+                                        //     BuildContext context =
+                                        //         _scaffoldKey.currentContext!;
+                                        //     ScaffoldMessenger.of(context)
+                                        //         .showSnackBar(const SnackBar(
                                         //       content: Text('File size exceeds 5 MB. Please select a smaller file.'),
                                         //     ));
                                         //   }
-                                        // }else{
-                                        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Something Went Wrong")));
-                                        // }
+                                        } else {
+                                          BuildContext context =
+                                          _scaffoldKey.currentContext!;
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "Something Went Wrong")));
+                                        }
                                       },
                                       child: Container(
                                         height: size.width >= 600 ? 150 : 110,
@@ -371,8 +407,7 @@ class _BottomBarState extends State<BottomBar> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: Colors.black,
-                                              width: 1),
+                                              color: Colors.black, width: 1),
                                         ),
                                         alignment: Alignment.center,
                                         child: Column(
@@ -381,7 +416,6 @@ class _BottomBarState extends State<BottomBar> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-
                                             SvgPicture.asset(AppAssets.pdf),
                                             // Icon(
                                             //   Icons.file_present_rounded,

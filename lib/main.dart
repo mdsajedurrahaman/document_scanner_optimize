@@ -25,7 +25,7 @@ void main() async{
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await LocalStorage().init();
   await AppHelper().createDirectories();
 
