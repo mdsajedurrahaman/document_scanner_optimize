@@ -1,13 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
-import 'package:doc_scanner/home_page/home_page.dart';
 import 'package:doc_scanner/image_edit/image_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:merge_image/merge_image.dart';
@@ -61,7 +60,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                   isLoading = true;
                 });
                 var imageFront = await MergeImageHelper.loadImageFromFile(
-                    File(cameraProvider.idCardImages.first));
+                    File(cameraProvider.idCardImages.first),
+                );
                 var imageBack = await MergeImageHelper.loadImageFromFile(
                     File(cameraProvider.idCardImages.last));
                 await MergeImageHelper.margeImages([imageFront, imageBack],
@@ -69,24 +69,30 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                         direction: Axis.vertical,
                         backgroundColor: Colors.transparent)
                     .then((image) async {
-                  await MergeImageHelper.imageToUint8List(image)
-                      .then((imageFile) {
-                    String idCardName =
-                        DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                  await MergeImageHelper.imageToUint8List(image).then((imageFile) async{
+                    var result = await FlutterImageCompress.compressWithList(
+                      imageFile!,
+                      quality: 50,
+                    );
+
+                    String idCardName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
                     if (widget.isCameFromRetake == true &&
                         widget.isCameFromRetake != null &&
                         widget.imageIndex != null) {
                       cameraProvider.updateImage(
                           index: widget.imageIndex!,
                           image: ImageModel(
-                              imageByte: imageFile!,
+                              imageByte: result,
                               name: "IDCard-$idCardName",
-                              docType: 'ID Card'));
+                              docType: 'ID Card'),
+                      );
                     } else {
-                      cameraProvider.addImage(ImageModel(
-                          imageByte: imageFile!,
+                      cameraProvider.addImage(
+                          ImageModel(
+                          imageByte: result!,
                           name: "IDCard-$idCardName",
-                          docType: 'ID Card'));
+                          docType: 'ID Card'),
+                      );
                     }
                     cameraProvider.clearIdCardImages();
                     setState(() {

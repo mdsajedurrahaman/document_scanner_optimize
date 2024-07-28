@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,8 @@ class CameraProvider extends ChangeNotifier{
       _isCreatingPDFLoader = true;
       notifyListeners();
       String directoryPath;
-      final List<Uint8List> images = _imageList.map((e) => e.imageByte).toList();
+
+      final List<Uint8List> images=_imageList.map((e) => e.imageByte).toList();
       final Directory appDirectory = await getApplicationDocumentsDirectory();
       if(_imageList.every((element) => element.docType== 'ID Card')){
         directoryPath = '${appDirectory.path}/Doc Scanner/ID Card';

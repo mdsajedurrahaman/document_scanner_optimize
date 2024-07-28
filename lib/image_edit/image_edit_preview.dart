@@ -289,15 +289,15 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 );
                               },
                               child:  Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.ios_share_outlined,
                                       color: Colors.black,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 20,
                                     ),
                                     Text(
@@ -331,23 +331,23 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       builder: (context, setState) {
                                         return AlertDialog(
                                           title:  Text(translation(context).savePdf),
-                                          content: cameraProvider
-                                                  .isCreatingPDFLoader
-                                              ? ConstrainedBox(
-                                                  constraints:
-                                                      const BoxConstraints(
+                                          content: cameraProvider.isCreatingPDFLoader
+                                              ?
+
+                                          ConstrainedBox(
+                                                  constraints: const BoxConstraints(
                                                           maxHeight: 40,
                                                           maxWidth: 40),
                                                   child: const Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                    color:
-                                                        AppColor.primaryColor,
-                                                  )))
+                                                      child: CircularProgressIndicator(
+                                                    color: AppColor.primaryColor,
+                                                  ),),)
+
+
+
                                               : TextFormField(
                                                   controller: _renameController,
-                                                  keyboardType:
-                                                      TextInputType.text,
+                                                  keyboardType: TextInputType.text,
                                                   textInputAction:
                                                       TextInputAction.done,
                                                   autofocus: true,
@@ -379,10 +379,8 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                           context: context,
                                                           fileName: _renameController.text)
                                                       .then((value) {
-                                                    cameraProvider
-                                                        .clearImageList();
-                                                    Navigator
-                                                        .pushAndRemoveUntil(
+                                                    cameraProvider.clearImageList();
+                                                    Navigator.pushAndRemoveUntil(
                                                             context,
                                                             MaterialPageRoute(
                                                       builder: (context) {
