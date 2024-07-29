@@ -616,10 +616,10 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                       Expanded(
                         child: PageView.builder(
-                          itemCount:
-                          cameraProvider.documentTypes.length,
+                          itemCount: cameraProvider.documentTypes.length,
                           controller: _pageController,
                           scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
                           onPageChanged: (index) async {
                             setState(() {
                               activePage = index;
@@ -650,6 +650,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           itemBuilder: (context, index) {
                             return TextButton(
                               onPressed: () {
+                                log("onPress Detected");
                                 _pageController.animateToPage(index,
                                     duration: const Duration(
                                         milliseconds: 500),
