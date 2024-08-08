@@ -683,6 +683,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                   Navigator.pop(context);
                                 } else {
                                   cameraProvider.clearImageList();
+                                  cameraProvider.clearIdCardImages();
                                   Navigator.pop(context);
                                 }
                               },
@@ -762,6 +763,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                     XFile idCardCapture = await cameraController.takePicture();
 
                                     if(widget.isComeFromIdCardRetake !=null && widget.isComeFromIdCardRetake ==true ){
+                                      log("Id Card ratake block");
                                       if(widget.isFront !=null && widget.isFront ==true) {
                                         cameraProvider.updateIdCardImage(index: 0, imagePath: idCardCapture.path);
                                         Navigator.push(
@@ -779,10 +781,15 @@ class _CameraScreenState extends State<CameraScreen> {
                                         );
 
                                       }
-                                    }else{
+                                    }
+                                    else{
+                                      log("Id Card else block");
                                       cameraProvider.addIdCardImage(idCardCapture.path);
                                       flipCardController.flipcard();
+
+                                      log("idCardImages.length: ${cameraProvider.idCardImages.length}");
                                       if (cameraProvider.idCardImages.length == 2) {
+                                        log("Id Card length block");
                                         Navigator.push(
                                           context, MaterialPageRoute(
                                           builder: (context) => IdCardImagePreview(

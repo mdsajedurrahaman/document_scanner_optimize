@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
@@ -31,21 +32,35 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) async{
-       await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-          return const BottomBar();
-        },), (route) => false).then((value) =>   cameraProvider.clearIdCardImages());
+    return WillPopScope(
+
+
+      onWillPop: () async {
+        cameraProvider.clearIdCardImages();
+        Navigator.pushAndRemoveUntil(
+           context, MaterialPageRoute(builder: (context) {
+            return const BottomBar();
+          },), (route) => false);
+        return true;
       },
+
+      // canPop: true,
+      // onPopInvoked: (didPop) {
+      //   cameraProvider.clearIdCardImages();
+      //   Navigator.pushAndRemoveUntil(
+      //      context, MaterialPageRoute(builder: (context) {
+      //     return const BottomBar();
+      //   },), (route) => false);
+      // },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () async{
-              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
+            onPressed: () {
+              cameraProvider.clearIdCardImages();
+               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
                 return const BottomBar();
-              },), (route) => false).then((value) =>   cameraProvider.clearIdCardImages());
+              },), (route) => false);
             },
           ),
           centerTitle: true,

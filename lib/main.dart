@@ -63,17 +63,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void initState() {
-    testMethod();
-    super.initState();
-  }
-
-  Future<void> testMethod() async {
-    final directory = await getDownloadsDirectory();
-    log('Directory Path: ${directory!.path}');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
