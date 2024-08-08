@@ -24,6 +24,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  // @override
+  // void didChangeDependencies() {
+  //   context.read<HomePageProvider>().clearDocumentImageFiles();
+  //   context.read<HomePageProvider>().clearIdCardImageFiles();
+  //   context.read<HomePageProvider>().clearQRCodeFiles();
+  //   context.read<HomePageProvider>().clearBarCodeFiles();
+  //   context.read<HomePageProvider>().loadDocumentImage();
+  //   context.read<HomePageProvider>().loadIdCardImage();
+  //   context.read<HomePageProvider>().loadQRCode();
+  //   context.read<HomePageProvider>().loadBarCode();
+  //   super.didChangeDependencies();
+  // }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,6 +53,8 @@ class _HomePageState extends State<HomePage> {
     });
     super.initState();
   }
+
+
 
   String getCameraModeName(String name, BuildContext context) {
     switch (name) {
