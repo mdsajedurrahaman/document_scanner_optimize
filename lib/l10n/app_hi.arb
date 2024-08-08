@@ -177,5 +177,7 @@
   "pleaseAddImageFirst":"कृपया पहले छवि जोड़ें",
   "thisLanguageNotSupported": "यह भाषा समर्थित नहीं है",
   "imageSavedAtGallery": "छवि गैलरी में सहेजी गई",
-  "deselectAll": "सभी का चयन रद्द करें"
+  "deselectAll": "सभी का चयन रद्द करें",
+  "folderAlreadyExists": "फ़ोल्डर पहले से मौजूद है",
+  "fileAlreadyExists": "फ़ाइल पहले से मौजूद है"
 }

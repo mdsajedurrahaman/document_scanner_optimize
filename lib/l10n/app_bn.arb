@@ -177,5 +177,7 @@
   "thisLanguageNotSupported": "এই ভাষা সমর্থিত নয়",
   "docScanner": "ডকুমেন্ট স্ক্যানার",
   "imageSavedAtGallery": "গ্যালারিতে ছবি সংরক্ষিত",
-  "deselectAll": "সব নির্বাচন বাতিল করুন"
+  "deselectAll": "সব নির্বাচন বাতিল করুন",
+  "folderAlreadyExist": "ফোল্ডার ইতিমধ্যে বিদ্যমান",
+  "fileAlreadyExist": "ফাইল ইতিমধ্যে বিদ্যমান"
 }

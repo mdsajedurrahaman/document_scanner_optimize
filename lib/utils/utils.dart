@@ -214,7 +214,7 @@ class TopSnackbar extends StatelessWidget {
         ),
         child: Text(
           message,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -233,33 +233,35 @@ Future<void> flutterGenralDialogue({
     transitionDuration: const Duration(milliseconds: 400),
     pageBuilder: (context, _, __) {
       return SafeArea(
-
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Stack(
             alignment: Alignment.center,
             children: [
               Image.file(imageFile),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  height: 30,
-                  width: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(30),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.close_rounded,
-                        color: Colors.white,
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(30),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.close_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -273,43 +275,52 @@ Future<void> flutterGenralDialogue({
   );
 }
 
-
-Future<void>  showQrAndBarCodeViewDialogue({required BuildContext context,required String text})async{
-
-  showDialog(context: context, builder: (context) {
-    return Dialog(
-      alignment: Alignment.center,
-      child: Container(
-          height: 200,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey.shade200,
-          ),
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(""),
-                  const Text("Content",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                  IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: const Icon(Icons.close))
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(text,textAlign: TextAlign.start,),
+Future<void> showQrAndBarCodeViewDialogue(
+    {required BuildContext context, required String text}) async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        alignment: Alignment.center,
+        child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey.shade200,
+            ),
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(""),
+                    const Text(
+                      "Content",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.close))
+                  ],
                 ),
-              ),
-            ],
-          )
-      ),
-    );
-  },);
-
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      );
+    },
+  );
 }

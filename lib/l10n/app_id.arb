@@ -177,6 +177,8 @@
   "pleaseAddImageFirst":"Silakan Tambahkan Gambar Pertama",
   "thisLanguageNotSupported": "Bahasa ini tidak didukung",
     "imageSavedAtGallery": "Gambar Disimpan di Galeri",
-  "deselectAll": "Batal Pilih Semua"
+  "deselectAll": "Batal Pilih Semua",
+  "folderAlreadyExists" : "Folder Sudah Ada",
+    "fileAlreadyExists" : "File Sudah Ada"
 
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'core/local_storage.dart';
 import 'camera_screen/provider/camera_provider.dart';
@@ -25,7 +27,7 @@ void main() async{
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await LocalStorage().init();
   await AppHelper().createDirectories();
 
@@ -58,6 +60,17 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() {
     getLocale().then((locale) => {setLocale(locale)});
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    testMethod();
+    super.initState();
+  }
+
+  Future<void> testMethod() async {
+    final directory = await getDownloadsDirectory();
+    log('Directory Path: ${directory!.path}');
   }
 
   @override

@@ -311,8 +311,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                   ),
                                   itemBuilder: (context, index) {
                                     String filePath = fileList[index];
-                                    final isSelected =
-                                        _selectedItems.contains(filePath);
+                                    final isSelected = _selectedItems.contains(filePath);
                                     if (Directory(filePath).existsSync()) {
                                       return GestureDetector(
                                         onTap: () {
@@ -353,8 +352,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                     ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ],
                                               ),
@@ -365,25 +363,16 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                       height: 30,
                                                       width: 30,
                                                       child: Checkbox(
-                                                        shape:
-                                                            const CircleBorder(),
-                                                        activeColor: AppColor
-                                                            .primaryColor,
+                                                        shape: const CircleBorder(),
+                                                        activeColor: AppColor.primaryColor,
                                                         value: isSelected,
-                                                        side: const BorderSide(
-                                                            color: Color(
-                                                                0xFFBEBEBE)),
-                                                        onChanged:
-                                                            (bool? value) {
+                                                        side: const BorderSide(color: Color(0xFFBEBEBE)),
+                                                        onChanged: (bool? value) {
                                                           setState(() {
                                                             if (value == true) {
-                                                              _selectedItems
-                                                                  .add(
-                                                                      filePath);
+                                                              _selectedItems.add(filePath);
                                                             } else {
-                                                              _selectedItems
-                                                                  .remove(
-                                                                      filePath);
+                                                              _selectedItems.remove(filePath);
                                                             }
                                                           });
                                                         },
@@ -401,92 +390,48 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         context: context,
                                                         builder: (context) {
                                                           return Container(
-                                                            height: MediaQuery
-                                                                        .sizeOf(
-                                                                            context)
-                                                                    .height *
-                                                                0.2,
-                                                            width: MediaQuery
-                                                                    .sizeOf(
-                                                                        context)
-                                                                .width,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              20),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              20),
+                                                            height: MediaQuery.sizeOf(context).height * 0.2,
+                                                            width: MediaQuery.sizeOf(context).width,
+                                                            decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(20),
+                                                                      topRight: Radius.circular(20),
                                                                     ),
-                                                                    color: Colors
-                                                                        .white),
+                                                                    color: Colors.white),
                                                             child: Column(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              10)
-                                                                      .copyWith(
-                                                                          top:
-                                                                              20,
-                                                                          bottom:
-                                                                              10),
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 10)
+                                                                      .copyWith(top: 20, bottom: 10),
                                                                   child: Row(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     children: [
-                                                                      const Text(
-                                                                          ''),
+                                                                      const Text(''),
                                                                       Text(
-                                                                        translation(context)
-                                                                            .documentFiles,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              20,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                        translation(context).documentFiles,
+                                                                        style: const TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 20,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          color:
-                                                                              Color(0xFFF4F4F4),
-                                                                          shape:
-                                                                              BoxShape.circle,
+                                                                        height: 30,
+                                                                        width: 30,
+                                                                        alignment: Alignment.center,
+                                                                        decoration: const BoxDecoration(
+                                                                          color: Color(0xFFF4F4F4),
+                                                                          shape: BoxShape.circle,
                                                                         ),
-                                                                        child:
-                                                                            Material(
-                                                                          color:
-                                                                              Colors.transparent,
-                                                                          child:
-                                                                              InkWell(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(30),
-                                                                            onTap:
-                                                                                () {
+                                                                        child: Material(
+                                                                          color: Colors.transparent,
+                                                                          child: InkWell(
+                                                                            borderRadius: BorderRadius.circular(30),
+                                                                            onTap: () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:
-                                                                                const Icon(
+                                                                            child: const Icon(
                                                                               Icons.close_rounded,
                                                                               size: 20,
                                                                             ),
@@ -497,104 +442,103 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   ),
                                                                 ),
                                                                 Divider(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      200],
+                                                                  color: Colors.grey[200],
                                                                   thickness: 1,
                                                                 ),
                                                                 Material(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      TextEditingController
-                                                                          _renameController =
-                                                                          TextEditingController(
-                                                                              text: filePath.split("/").last);
-                                                                      final _formKey =
-                                                                          GlobalKey<
-                                                                              FormState>();
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                  color: Colors.transparent,
+                                                                  child: InkWell(
+                                                                    onTap: () async {
+                                                                      TextEditingController _renameController = TextEditingController(text: filePath.split("/").last);
+                                                                      final _formKey = GlobalKey<FormState>();
+                                                                      Navigator.pop(context);
                                                                       showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (context) {
-                                                                          return AlertDialog(
-                                                                            title: Text(translation(context).renameFile,
-                                                                                style: const TextStyle(
-                                                                                  color: Colors.black,
-                                                                                  fontSize: 16,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                )),
-                                                                            content:
-                                                                                Form(
-                                                                              key: _formKey,
-                                                                              child: TextFormField(
-                                                                                controller: _renameController,
-                                                                                keyboardType: TextInputType.text,
-                                                                                textInputAction: TextInputAction.done,
-                                                                                autofocus: true,
-                                                                                validator: (value) {
-                                                                                  if (value!.isEmpty) {
-                                                                                    return translation(context).pleaseEnterFileName;
-                                                                                  }
-                                                                                  return null;
-                                                                                },
-                                                                                decoration: InputDecoration(
-                                                                                  hintText: translation(context).enterFileName,
-                                                                                  focusedBorder: const OutlineInputBorder(
-                                                                                    borderSide: BorderSide(color: AppColor.primaryColor),
-                                                                                  ),
-                                                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                        context: context,
+                                                                        builder: (context) {
+                                                                          String errorMessage = '';
+                                                                          return StatefulBuilder(
+                                                                            builder: (context, setState) {
+                                                                              return AlertDialog(
+                                                                                title: Text(translation(context).renameFile,
+                                                                                    style: const TextStyle(
+                                                                                      color: Colors.black,
+                                                                                      fontSize: 16,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                    ),
                                                                                 ),
-                                                                              ),
-                                                                            ),
-                                                                            actions: [
-                                                                              TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
-                                                                              TextButton(
-                                                                                  onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      Navigator.pop(context);
-                                                                                      String newPath = filePath.replaceAll(filePath.split("/").last, _renameController.text);
-                                                                                      await Directory(filePath).rename(newPath);
-                                                                                      allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                                                    }
-                                                                                  },
-                                                                                  child: Text(translation(context).save)),
-                                                                            ],
+                                                                                content:
+                                                                                    Form(
+                                                                                  key: _formKey,
+                                                                                  child: TextFormField(
+                                                                                    controller: _renameController,
+                                                                                    keyboardType: TextInputType.text,
+                                                                                    textInputAction: TextInputAction.done,
+                                                                                    autofocus: true,
+                                                                                    validator: (value) {
+                                                                                      if (value!.isEmpty) {
+                                                                                        return translation(context).pleaseEnterFileName;
+                                                                                      }
+                                                                                      return null;
+                                                                                    },
+                                                                                    decoration: InputDecoration(
+                                                                                      errorText: errorMessage.isEmpty ? null : errorMessage,
+                                                                                      hintText: translation(context).enterFileName,
+                                                                                      border: const OutlineInputBorder(
+                                                                                        borderSide: BorderSide(color: AppColor.primaryColor),
+                                                                                      ),
+
+                                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
+                                                                                  TextButton(
+                                                                                      onPressed: () async {
+                                                                                        if (_formKey.currentState!.validate()) {
+                                                                                          String newName= _renameController.text;
+                                                                                          String  parentPath=Directory(filePath).parent.path;
+                                                                                          String newPath = "$parentPath/$newName";
+                                                                                          String lowerCaseNewPath = "$parentPath/${newName.toLowerCase()}";
+                                                                                          String upperCaseNewPath = "$parentPath/${newName.toUpperCase()}";
+                                                                                          final Directory newDirectory = Directory(newPath);
+                                                                                          if(newDirectory.existsSync() || Directory(lowerCaseNewPath).existsSync()
+                                                                                              || Directory(upperCaseNewPath).existsSync()){
+                                                                                          setState(() {
+                                                                                            errorMessage = translation(context).folderAlreadyExists;
+                                                                                          });
+                                                                                          }else{
+                                                                                            await Directory(filePath).rename(newPath);
+                                                                                            Navigator.pop(context);
+                                                                                            allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                      child: Text(translation(context).save),
+                                                                                  ),
+                                                                                ],
+                                                                              );
+                                                                            }
                                                                           );
                                                                         },
                                                                       );
                                                                     },
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              20.0,
-                                                                          vertical:
-                                                                              5),
-                                                                      child:
-                                                                          Row(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(
+                                                                          horizontal: 20.0,
+                                                                          vertical: 5),
+                                                                      child: Row(
                                                                         children: [
-                                                                          SvgPicture
-                                                                              .asset(
+                                                                          SvgPicture.asset(
                                                                             AppAssets.rename,
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                           ),
                                                                           const SizedBox(
-                                                                            width:
-                                                                                20,
+                                                                            width: 20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).renameFile,
-                                                                            style:
-                                                                                const TextStyle(
+                                                                            style: const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -615,15 +559,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                           ],
                                         ),
                                       );
-                                    } else if (filePath
-                                            .toLowerCase()
-                                            .endsWith('.jpg') ||
-                                        filePath
-                                            .toLowerCase()
-                                            .endsWith('.jpeg') ||
-                                        filePath
-                                            .toLowerCase()
-                                            .endsWith('.png')) {
+                                    } else if (
+                                        filePath.toLowerCase().endsWith('.jpg') ||
+                                        filePath.toLowerCase().endsWith('.jpeg') ||
+                                        filePath.toLowerCase().endsWith('.png')) {
                                       return GestureDetector(
                                         onTap: () async {
                                           await flutterGenralDialogue(
@@ -649,9 +588,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Image.file(
-                                                    File(
-                                                      filePath,
-                                                    ),
+                                                    File(filePath,),
                                                     width: 100,
                                                     height: 60,
                                                   ),
@@ -673,24 +610,16 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                       width: 30,
                                                       child: Checkbox(
                                                         side: const BorderSide(
-                                                            color: Color(
-                                                                0xFFBEBEBE)),
-                                                        shape:
-                                                            const CircleBorder(),
-                                                        activeColor: AppColor
-                                                            .primaryColor,
+                                                            color: Color(0xFFBEBEBE)),
+                                                        shape: const CircleBorder(),
+                                                        activeColor: AppColor.primaryColor,
                                                         value: isSelected,
-                                                        onChanged:
-                                                            (bool? value) {
+                                                        onChanged: (bool? value) {
                                                           setState(() {
                                                             if (value == true) {
-                                                              _selectedItems
-                                                                  .add(
-                                                                      filePath);
+                                                              _selectedItems.add(filePath);
                                                             } else {
-                                                              _selectedItems
-                                                                  .remove(
-                                                                      filePath);
+                                                              _selectedItems.remove(filePath);
                                                             }
                                                           });
                                                         },
@@ -698,7 +627,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                     ),
                                                   )
                                                 : InkWell(
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.more_vert,
                                                       color: Colors.black,
                                                       size: 20,
@@ -708,92 +637,47 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         context: context,
                                                         builder: (context) {
                                                           return Container(
-                                                            height: MediaQuery
-                                                                        .sizeOf(
-                                                                            context)
-                                                                    .height *
-                                                                0.25,
-                                                            width: MediaQuery
-                                                                    .sizeOf(
-                                                                        context)
-                                                                .width,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              20),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              20),
+                                                            height: MediaQuery.sizeOf(context).height * 0.25,
+                                                            width: MediaQuery.sizeOf(context).width,
+                                                            decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(20),
+                                                                      topRight: Radius.circular(20),
                                                                     ),
-                                                                    color: Colors
-                                                                        .white),
+                                                                    color: Colors.white),
                                                             child: Column(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              10)
-                                                                      .copyWith(
-                                                                          top:
-                                                                              20,
-                                                                          bottom:
-                                                                              10),
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 20, bottom: 10),
                                                                   child: Row(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     children: [
-                                                                      const Text(
-                                                                          ''),
+                                                                      const Text(''),
                                                                       Text(
-                                                                        translation(context)
-                                                                            .documentFiles,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              20,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                        translation(context).documentFiles,
+                                                                        style: const TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 20,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          color:
-                                                                              Color(0xFFF4F4F4),
-                                                                          shape:
-                                                                              BoxShape.circle,
+                                                                        height: 30,
+                                                                        width: 30,
+                                                                        alignment: Alignment.center,
+                                                                        decoration: const BoxDecoration(
+                                                                          color: Color(0xFFF4F4F4),
+                                                                          shape: BoxShape.circle,
                                                                         ),
-                                                                        child:
-                                                                            Material(
-                                                                          color:
-                                                                              Colors.transparent,
-                                                                          child:
-                                                                              InkWell(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(30),
-                                                                            onTap:
-                                                                                () {
+                                                                        child: Material(
+                                                                          color: Colors.transparent,
+                                                                          child: InkWell(
+                                                                            borderRadius: BorderRadius.circular(30),
+                                                                            onTap: () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:
-                                                                                const Icon(
+                                                                            child: const Icon(
                                                                               Icons.close_rounded,
                                                                               size: 20,
                                                                             ),
@@ -816,63 +700,80 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       InkWell(
                                                                     onTap:
                                                                         () async {
-                                                                      TextEditingController
-                                                                          _renameController =
-                                                                          TextEditingController(
-                                                                              text: path.basenameWithoutExtension(filePath));
-                                                                      final _formKey =
-                                                                          GlobalKey<
-                                                                              FormState>();
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                      TextEditingController _renameController = TextEditingController(text: path.basenameWithoutExtension(filePath));
+                                                                      final _formKey = GlobalKey<FormState>();
+                                                                      Navigator.pop(context);
                                                                       showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (context) {
-                                                                          return AlertDialog(
-                                                                            title: Text(translation(context).renameFile,
-                                                                                style: const TextStyle(
-                                                                                  color: Colors.black,
-                                                                                  fontSize: 16,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                )),
-                                                                            content:
-                                                                                Form(
-                                                                              key: _formKey,
-                                                                              child: TextFormField(
-                                                                                controller: _renameController,
-                                                                                keyboardType: TextInputType.text,
-                                                                                textInputAction: TextInputAction.done,
-                                                                                autofocus: true,
-                                                                                validator: (value) {
-                                                                                  if (value!.isEmpty) {
-                                                                                    return translation(context).pleaseEnterFileName;
-                                                                                  }
-                                                                                  return null;
-                                                                                },
-                                                                                decoration: InputDecoration(
-                                                                                  hintText: translation(context).enterFileName,
-                                                                                  focusedBorder: const OutlineInputBorder(
-                                                                                    borderSide: BorderSide(color: AppColor.primaryColor),
+                                                                        context: context,
+                                                                        builder: (context) {
+                                                                          String errorMessage = '';
+                                                                          return StatefulBuilder(
+                                                                            builder: (context, setState) {
+                                                                              return AlertDialog(
+                                                                                title: Text(translation(context).renameFile,
+                                                                                    style: const TextStyle(
+                                                                                      color: Colors.black,
+                                                                                      fontSize: 16,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                    )),
+                                                                                content:
+                                                                                    Form(
+                                                                                  key: _formKey,
+                                                                                  child: TextFormField(
+                                                                                    controller: _renameController,
+                                                                                    keyboardType: TextInputType.text,
+                                                                                    textInputAction: TextInputAction.done,
+                                                                                    autofocus: true,
+                                                                                    validator: (value) {
+                                                                                      if (value!.isEmpty) {
+                                                                                        return translation(context).pleaseEnterFileName;
+                                                                                      }
+                                                                                      return null;
+                                                                                    },
+                                                                                    decoration: InputDecoration(
+                                                                                      errorText: errorMessage.isEmpty ? null : errorMessage,
+                                                                                      hintText: translation(context).enterFileName,
+                                                                                      border: const OutlineInputBorder(
+                                                                                        borderSide: BorderSide(color: AppColor.primaryColor),
+                                                                                      ),
+                                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                                    ),
                                                                                   ),
-                                                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                                                                                 ),
-                                                                              ),
-                                                                            ),
-                                                                            actions: [
-                                                                              TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
-                                                                              TextButton(
-                                                                                  onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
-                                                                                      File(filePath).renameSync(newPath);
-                                                                                      Navigator.pop(context);
-                                                                                      allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                                                    }
-                                                                                  },
-                                                                                  child: Text(translation(context).save)),
-                                                                            ],
+                                                                                actions: [
+                                                                                  TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
+
+                                                                                  TextButton(
+                                                                                    onPressed: () async {
+                                                                                      if (_formKey.currentState!.validate()) {
+                                                                                        String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                        if (File(newPath).existsSync()) {
+                                                                                          setState(() {
+                                                                                            errorMessage = translation(context).fileAlreadyExists;
+                                                                                          });
+                                                                                        } else {
+                                                                                          File(filePath).renameSync(newPath);
+                                                                                          Navigator.pop(context);
+                                                                                          allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                        }
+                                                                                      }
+                                                                                    },
+                                                                                    child: Text(translation(context).save),
+                                                                                  ),
+
+                                                                                  // TextButton(
+                                                                                  //     onPressed: () async {
+                                                                                  //       if (_formKey.currentState!.validate()) {
+                                                                                  //         String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                  //         File(filePath).renameSync(newPath);
+                                                                                  //         Navigator.pop(context);
+                                                                                  //         allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                  //       }
+                                                                                  //     },
+                                                                                  //     child: Text(translation(context).save)),
+                                                                                ],
+                                                                              );
+                                                                            }
                                                                           );
                                                                         },
                                                                       );
@@ -984,9 +885,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                           ],
                                         ),
                                       );
-                                    } else if (filePath
-                                        .toLowerCase()
-                                        .endsWith('.txt')) {
+                                    } else if (filePath.toLowerCase().endsWith('.txt')) {
                                       return GestureDetector(
                                         onTap: () async {
                                           showQrAndBarCodeViewDialogue(
@@ -1003,8 +902,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                               ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                             alignment: Alignment.center,
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -1030,37 +928,206 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                       height: 30,
                                                       width: 30,
                                                       child: Checkbox(
-                                                        side: const BorderSide(
-                                                            color: Color(
-                                                                0xFFBEBEBE)),
-                                                        shape:
-                                                            const CircleBorder(),
-                                                        activeColor: AppColor
-                                                            .primaryColor,
+                                                        side: const BorderSide(color: Color(0xFFBEBEBE)),
+                                                        shape: const CircleBorder(),
+                                                        activeColor: AppColor.primaryColor,
                                                         value: isSelected,
-                                                        onChanged:
-                                                            (bool? value) {
+                                                        onChanged: (bool? value) {
                                                           setState(() {
                                                             if (value == true) {
-                                                              _selectedItems
-                                                                  .add(
-                                                                      filePath);
+                                                              _selectedItems.add(filePath);
                                                             } else {
-                                                              _selectedItems
-                                                                  .remove(
-                                                                      filePath);
+                                                              _selectedItems.remove(filePath);
                                                             }
                                                           });
                                                         },
                                                       ),
                                                     ),
                                                   )
-                                                : const SizedBox.shrink()
+                                                :  InkWell(
+                                              child: const Icon(
+                                                Icons.more_vert,
+                                                color: Colors.black,
+                                                size: 20,
+                                              ),
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Container(
+                                                      height: MediaQuery.sizeOf(context).height * 0.2,
+                                                      width: MediaQuery.sizeOf(context).width,
+                                                      decoration: const BoxDecoration(
+                                                          borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(20),
+                                                            topRight: Radius.circular(20),
+                                                          ),
+                                                          color: Colors.white),
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 20, bottom: 10),
+                                                            child: Row(
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                const Text(''),
+                                                                Text(
+                                                                  translation(context).documentFiles,
+                                                                  style: const TextStyle(
+                                                                    color: Colors.black,
+                                                                    fontSize: 20,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                  alignment: Alignment.center,
+                                                                  decoration: const BoxDecoration(
+                                                                    color: Color(0xFFF4F4F4),
+                                                                    shape: BoxShape.circle,
+                                                                  ),
+                                                                  child: Material(
+                                                                    color: Colors.transparent,
+                                                                    child: InkWell(
+                                                                      borderRadius: BorderRadius.circular(30),
+                                                                      onTap: () {
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      child: const Icon(
+                                                                        Icons.close_rounded,
+                                                                        size: 20,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Divider(
+                                                            color: Colors
+                                                                .grey[
+                                                            200],
+                                                            thickness: 1,
+                                                          ),
+                                                          Material(
+                                                            color: Colors.transparent,
+                                                            child: InkWell(
+                                                              onTap: () async {
+                                                                TextEditingController _renameController = TextEditingController(text: path.basenameWithoutExtension(filePath));
+                                                                final _formKey = GlobalKey<FormState>();
+                                                                Navigator.pop(context);
+                                                                showDialog(
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    String errorMessage = '';
+                                                                    return StatefulBuilder(
+                                                                        builder: (context, setState) {
+                                                                          return AlertDialog(
+                                                                            title: Text(translation(context).renameFile,
+                                                                                style: const TextStyle(
+                                                                                  color: Colors.black,
+                                                                                  fontSize: 16,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                )),
+                                                                            content:
+                                                                            Form(
+                                                                              key: _formKey,
+                                                                              child: TextFormField(
+                                                                                controller: _renameController,
+                                                                                keyboardType: TextInputType.text,
+                                                                                textInputAction: TextInputAction.done,
+                                                                                autofocus: true,
+                                                                                validator: (value) {
+                                                                                  if (value!.isEmpty) {
+                                                                                    return translation(context).pleaseEnterFileName;
+                                                                                  }
+                                                                                  return null;
+                                                                                },
+                                                                                decoration: InputDecoration(
+                                                                                  errorText: errorMessage.isEmpty ? null : errorMessage,
+                                                                                  hintText: translation(context).enterFileName,
+                                                                                  border: const OutlineInputBorder(
+                                                                                    borderSide: BorderSide(color: AppColor.primaryColor),
+                                                                                  ),
+                                                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            actions: [
+                                                                              TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
+
+                                                                              TextButton(
+                                                                                onPressed: () async {
+                                                                                  if (_formKey.currentState!.validate()) {
+                                                                                    String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                    if (File(newPath).existsSync()) {
+                                                                                      setState(() {
+                                                                                        errorMessage = translation(context).fileAlreadyExists;
+                                                                                      });
+                                                                                    } else {
+                                                                                      File(filePath).renameSync(newPath);
+                                                                                      Navigator.pop(context);
+                                                                                      allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                    }
+                                                                                  }
+                                                                                },
+                                                                                child: Text(translation(context).save),
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        }
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                              child:
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                    20.0,
+                                                                    vertical:
+                                                                    5),
+                                                                child:
+                                                                Row(
+                                                                  children: [
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                      AppAssets.rename,
+                                                                      color:
+                                                                      Colors.black,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width:
+                                                                      20,
+                                                                    ),
+                                                                    Text(
+                                                                      translation(context).renameFile,
+                                                                      style:
+                                                                      const TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 16,
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
                                           ],
                                         ),
                                       );
-                                    } else if (filePath
-                                        .toLowerCase()
+                                    } else if (filePath.toLowerCase()
                                         .endsWith('.pdf')) {
                                       return GestureDetector(
                                         onTap: () async {
@@ -1241,98 +1308,94 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   thickness: 1,
                                                                 ),
                                                                 Material(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      TextEditingController
-                                                                          _renameController =
-                                                                          TextEditingController(
-                                                                              text: path.basenameWithoutExtension(filePath));
-                                                                      final _formKey =
-                                                                          GlobalKey<
-                                                                              FormState>();
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                  color: Colors.transparent,
+                                                                  child: InkWell(
+                                                                    onTap: () async {
+                                                                      TextEditingController _renameController = TextEditingController(text: path.basenameWithoutExtension(filePath));
+                                                                      final _formKey = GlobalKey<FormState>();
+                                                                      Navigator.pop(context);
                                                                       showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (context) {
-                                                                          return AlertDialog(
-                                                                            title: Text(translation(context).renameFile,
-                                                                                style: const TextStyle(
-                                                                                  color: Colors.black,
-                                                                                  fontSize: 16,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                )),
-                                                                            content:
-                                                                                Form(
-                                                                              key: _formKey,
-                                                                              child: TextFormField(
-                                                                                controller: _renameController,
-                                                                                keyboardType: TextInputType.text,
-                                                                                textInputAction: TextInputAction.done,
-                                                                                autofocus: true,
-                                                                                validator: (value) {
-                                                                                  if (value!.isEmpty) {
-                                                                                    return translation(context).pleaseEnterFileName;
-                                                                                  }
-                                                                                  return null;
-                                                                                },
-                                                                                decoration: InputDecoration(
-                                                                                  hintText: translation(context).enterFileName,
-                                                                                  focusedBorder: const OutlineInputBorder(
-                                                                                    borderSide: BorderSide(color: AppColor.primaryColor),
-                                                                                  ),
-                                                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                        context: context,
+                                                                        builder: (context) {
+                                                                          String errorMessage = '';
+                                                                          return StatefulBuilder(
+                                                                            builder: (context,setState) {
+                                                                              return AlertDialog(
+                                                                                title: Text(translation(context).renameFile,
+                                                                                    style: const TextStyle(
+                                                                                      color: Colors.black,
+                                                                                      fontSize: 16,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                    ),
                                                                                 ),
-                                                                              ),
-                                                                            ),
-                                                                            actions: [
-                                                                              TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
-                                                                              TextButton(
-                                                                                  onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
-                                                                                      File(filePath).renameSync(newPath);
-                                                                                      Navigator.pop(context);
-                                                                                      allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                                                    }
-                                                                                  },
-                                                                                  child: Text(translation(context).save)),
-                                                                            ],
+                                                                                content: Form(
+                                                                                  key: _formKey,
+                                                                                  child: TextFormField(
+                                                                                    controller: _renameController,
+                                                                                    keyboardType: TextInputType.text,
+                                                                                    textInputAction: TextInputAction.done,
+                                                                                    autofocus: true,
+                                                                                    validator: (value) {
+                                                                                      if (value!.isEmpty) {
+                                                                                        return translation(context).pleaseEnterFileName;
+                                                                                      }
+                                                                                      return null;
+                                                                                    },
+                                                                                    decoration: InputDecoration(
+                                                                                      hintText: translation(context).enterFileName,
+                                                                                      errorText: errorMessage.isEmpty ? null : errorMessage,
+                                                                                      border: const OutlineInputBorder(
+                                                                                        borderSide: BorderSide(color: AppColor.primaryColor),
+                                                                                      ),
+                                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                      onPressed: () => Navigator.pop(context),
+                                                                                      child: Text(translation(context).cancel),
+                                                                                  ),
+                                                                                  TextButton(
+                                                                                      onPressed: () async {
+                                                                                        if (_formKey.currentState!.validate()) {
+                                                                                          String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                          if (File(newPath).existsSync()) {
+                                                                                           setState(() {
+                                                                                             errorMessage = translation(context).fileAlreadyExists;
+                                                                                           });
+                                                                                          } else {
+                                                                                            File(filePath).renameSync(newPath);
+                                                                                            Navigator.pop(context);
+                                                                                            allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                      child: Text(translation(context).save)),
+                                                                                ],
+                                                                              );
+                                                                            }
                                                                           );
                                                                         },
                                                                       );
                                                                     },
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              20.0,
-                                                                          vertical:
-                                                                              5),
-                                                                      child:
-                                                                          Row(
+                                                                      padding: const EdgeInsets.symmetric(
+                                                                          horizontal: 20.0,
+                                                                          vertical: 5),
+                                                                      child: Row(
                                                                         children: [
-                                                                          SvgPicture
-                                                                              .asset(
+                                                                          SvgPicture.asset(
                                                                             AppAssets.rename,
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                           ),
                                                                           const SizedBox(
-                                                                            width:
-                                                                                20,
+                                                                            width: 20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).renameFile,
-                                                                            style:
-                                                                                const TextStyle(
+                                                                            style: const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1344,24 +1407,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   ),
                                                                 ),
                                                                 Divider(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      200],
+                                                                  color: Colors.grey[200],
                                                                   thickness: 1,
-                                                                  indent: MediaQuery.sizeOf(
-                                                                              context)
-                                                                          .width *
-                                                                      0.15,
+                                                                  indent: MediaQuery.sizeOf(context).width * 0.15,
                                                                 ),
                                                                 Material(
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                  color: Colors.transparent,
+                                                                  child: InkWell(
+                                                                    onTap: () async {
+                                                                      Navigator.pop(context);
                                                                       await DocumentFileSavePlus()
                                                                           .saveFile(
                                                                               await File(filePath).readAsBytes(),
@@ -1369,23 +1423,21 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               "application/pdf")
                                                                           .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translation(context).fileSavedDownloadFolder))));
                                                                     },
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsets.symmetric(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(
                                                                           horizontal: 20.0,
                                                                           vertical: 5),
                                                                       child: Row(
                                                                         children: [
-                                                                          Icon(
+                                                                          const Icon(
                                                                             Icons.ios_share_outlined,
                                                                             color: Colors.black,
                                                                           ),
-                                                                          SizedBox(
+                                                                          const SizedBox(
                                                                             width: 20,
                                                                           ),
-                                                                          Text(
-                                                                            translation(context).saveAtGallery,
-                                                                            style: TextStyle(
+                                                                          Text(translation(context).saveAtGallery,
+                                                                            style: const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1446,9 +1498,12 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                           await showModalBottomSheet(
                                             context: context,
                                             builder: (context) {
-                                              List<String> directories = getSubdirectoriesSyncForIos(widget.directoryPath);
+                                              List<String> directories =
+                                                  getSubdirectoriesSyncForIos(
+                                                      widget.directoryPath);
                                               log(directories.toString());
-                                              log(widget.directoryPath.toString());
+                                              log(widget.directoryPath
+                                                  .toString());
 
                                               return SizedBox(
                                                 height: MediaQuery.of(context)
@@ -2319,10 +2374,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
       directory = Directory("${rootDirectory.path}/Doc Scanner/ID Card");
     } else if (directoryPath.contains("QR Code")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/QR Code");
-    } else if(directoryPath.contains("Bar Code")) {
+    } else if (directoryPath.contains("Bar Code")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Bar Code");
-    }else{
-      directory=Directory("");
+    } else {
+      directory = Directory("");
     }
     print("--- > ${directory.absolute.path}");
     if (directory.existsSync()) {
@@ -2342,7 +2397,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
       throw Exception("Directory does not exist");
     }
   }
-
 
   List<String> getSubdirectoriesSyncForIos(String directoryPath) {
     print("directory path->  $directoryPath");

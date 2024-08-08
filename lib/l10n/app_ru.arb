@@ -177,5 +177,7 @@
   "pleaseAddImageFirst":"Пожалуйста, сначала добавьте изображение",
   "thisLanguageNotSupported":"Этот язык не поддерживается",
   "imageSavedAtGallery":"Изображение сохранено в галерее",
-  "deselectAll":"Отменить выбор всех"
+  "deselectAll":"Отменить выбор всех",
+  "folderAlreadyExists": "Папка уже существует",
+  "fileAlreadyExists": "Файл уже существует"
 }

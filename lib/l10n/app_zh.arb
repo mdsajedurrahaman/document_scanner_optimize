@@ -177,6 +177,8 @@
   "pleaseAddImageFirst":"请先添加图像",
   "thisLanguageNotSupported":"此语言不受支持",
   "imageSavedAtGallery":"图像已保存在相册中",
-  "deselectAll":"取消全选"
+  "deselectAll":"取消全选",
+  "folderAlreadyExists": "文件夹已存在",
+  "fileAlreadyExists": "文件已存在"
 
 }

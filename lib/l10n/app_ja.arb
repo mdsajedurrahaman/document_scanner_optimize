@@ -177,5 +177,7 @@
   "pleaseAddImageFirst":"最初に画像を追加してください",
   "thisLanguageNotSupported":"この言語はサポートされていません",
   "imageSavedAtGallery":"画像がギャラリーに保存されました",
-  "deselectAll":"すべての選択を解除"
+  "deselectAll":"すべての選択を解除",
+  "folderAlreadyExists": "フォルダはすでに存在します",
+  "fileAlreadyExists": "ファイルはすでに存在します"
 }

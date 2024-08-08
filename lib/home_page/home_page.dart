@@ -141,9 +141,7 @@ class _HomePageState extends State<HomePage> {
 
         ],
       ),
-      body:
-
-      cameraProvider.pdfConverting
+      body: cameraProvider.pdfConverting
           ? const Center(
         child: CircularProgressIndicator(),
       )

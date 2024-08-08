@@ -177,5 +177,7 @@
   "pleaseAddImageFirst": "Por favor, agregue una imagen primero",
   "thisLanguageNotSupported": "Este idioma no es compatible",
   "imageSavedAtGallery": "Imagen guardada en la galería",
-  "deselectAll": "Deseleccionar todo"
+  "deselectAll": "Deseleccionar todo",
+  "folderAlreadyExists": "La carpeta ya existe",
+  "fileAlreadyExists": "El archivo ya existe"
 }

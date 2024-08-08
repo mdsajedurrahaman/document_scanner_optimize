@@ -387,8 +387,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                         return const BottomBar();
                                                       },
                                                     ), (route) => false);
-                                                    showTopSnackbar(context,
-                                                        "PDF successfully saved");
+                                                    showTopSnackbar(context, "PDF successfully saved");
                                                   });
                                                 }
                                               },
@@ -410,11 +409,11 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 );
                               },
                               child:  Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.picture_as_pdf_outlined,
                                       color: Colors.black,
                                     ),

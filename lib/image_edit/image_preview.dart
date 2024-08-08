@@ -27,7 +27,9 @@ import 'image_edit_preview.dart';
 import 'image_rotation.dart';
 
 class ImagePreviewScreen extends StatefulWidget {
-  const ImagePreviewScreen({super.key});
+
+  final bool? isCameFromIdCard;
+  const ImagePreviewScreen({super.key,  this.isCameFromIdCard});
 
   @override
   State<ImagePreviewScreen> createState() => _ImagePreviewScreenState();
@@ -245,7 +247,8 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                 },
                 iconPath: AppAssets.retake,
               ),
-              Material(
+             widget.isCameFromIdCard==true  ? const SizedBox.shrink():
+             Material(
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () async {

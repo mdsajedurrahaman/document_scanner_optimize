@@ -136,23 +136,71 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
     required Directory targetDirectory,
     required String directoryName,
   }) async {
-
     Directory rootDirectory = await getApplicationDocumentsDirectory();
-    final documentDirectory = Directory('${rootDirectory.path}/Doc Scanner/Document/$directoryName');
-    final idCardDirectory = Directory('${rootDirectory.path}/Doc Scanner/ID Card/$directoryName');
-    final qrCode = Directory('${rootDirectory.path}/Doc Scanner/QR Code/$directoryName');
-    final barCode = Directory('${rootDirectory.path}/Doc Scanner/Bar Code/$directoryName');
+
+    // Define paths for the four specific directories
+    final documentDirectory = Directory('${rootDirectory.path}/Doc Scanner/Document');
+    final idCardDirectory = Directory('${rootDirectory.path}/Doc Scanner/ID Card');
+    final qrCodeDirectory = Directory('${rootDirectory.path}/Doc Scanner/QR Code');
+    final barCodeDirectory = Directory('${rootDirectory.path}/Doc Scanner/Bar Code');
+
     try {
-      if (await documentDirectory.exists() || await idCardDirectory.exists() || await qrCode.exists() || await barCode.exists()) {
-        return false;
+      // Check if the directory exists in any of the specified paths with the same name or different case
+      if (await _directoryExistsWithCaseInsensitive(documentDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(idCardDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(qrCodeDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(barCodeDirectory, directoryName)) {
+        return false; // Directory already exists in one of the paths
       } else {
+        // Create the new directory in the target directory
         final newCreatedDirectory = Directory('${targetDirectory.path}/$directoryName');
         await newCreatedDirectory.create(recursive: true);
-        return true;
+        return true; // Directory created successfully
       }
     } catch (e) {
-
+      // Handle any exceptions that occur during directory creation
       return false;
     }
   }
+
+  Future<bool> _directoryExistsWithCaseInsensitive(Directory parentDirectory, String directoryName) async {
+    try {
+      final List<FileSystemEntity> entities = await parentDirectory.list().toList();
+      for (final entity in entities) {
+        if (entity is Directory && entity.path.split('/').last.toLowerCase() == directoryName.toLowerCase()) {
+          return true;
+        }
+      }
+    } catch (e) {
+      // Handle any exceptions that occur while listing directories
+    }
+    return false;
+  }
+
+
+  //
+  // Future<bool> createDirectory({
+  //   required Directory targetDirectory,
+  //   required String directoryName,
+  // }) async {
+  //   Directory rootDirectory = await getApplicationDocumentsDirectory();
+  //   final documentDirectory = Directory('${rootDirectory.path}/Doc Scanner/Document/$directoryName');
+  //   final idCardDirectory = Directory('${rootDirectory.path}/Doc Scanner/ID Card/$directoryName');
+  //   final qrCode = Directory('${rootDirectory.path}/Doc Scanner/QR Code/$directoryName');
+  //   final barCode = Directory('${rootDirectory.path}/Doc Scanner/Bar Code/$directoryName');
+  //   try {
+  //     if (await documentDirectory.exists() ||
+  //         await idCardDirectory.exists() ||
+  //         await qrCode.exists() ||
+  //         await barCode.exists()) {
+  //       return false;
+  //     } else {
+  //       final newCreatedDirectory = Directory('${targetDirectory.path}/$directoryName');
+  //       await newCreatedDirectory.create(recursive: true);
+  //       return true;
+  //     }
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 }

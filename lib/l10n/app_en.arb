@@ -175,5 +175,7 @@
   "pleaseAddImageFirst":"Please add image first",
   "thisLanguageNotSupported": "This language not supported",
   "imageSavedAtGallery": "Image Saved at Gallery",
-  "deselectAll": "Deselect All"
+  "deselectAll": "Deselect All",
+  "folderAlreadyExists": "Folder Already Exists",
+  "fileAlreadyExists": "File Already Exists"
 }

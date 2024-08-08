@@ -41,7 +41,7 @@ class CameraScreen extends StatefulWidget {
   final bool? isFront;
 
   const CameraScreen({super.key,
-    this.initialPage = 0,
+    this.initialPage = 1,
     this.isComeFromRetake,
     this.imageIndex,
     this.imageModel,
@@ -437,9 +437,8 @@ class _CameraScreenState extends State<CameraScreen> {
                                         result!.code!,
                                         onCopy: () async {
                                           Clipboard.setData(
-                                              ClipboardData(
-                                                  text: result!
-                                                      .code!));
+                                              ClipboardData(text: result!.code!)
+                                          );
                                           ScaffoldMessenger.of(context).clearSnackBars();
                                           ScaffoldMessenger
                                               .of(context)
@@ -474,9 +473,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                           result!.format
                                               .formatName)) {
                                     if (beepValue) {
-                                      await audioPlayer.play(
-                                          AssetSource(
-                                              'audio/beep_sound.mp3'));
+                                      await audioPlayer.play(AssetSource('audio/beep_sound.mp3'));
                                     }
                                     if (vibrationValue) {
                                       Vibration.vibrate(

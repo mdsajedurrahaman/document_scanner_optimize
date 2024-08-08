@@ -126,7 +126,6 @@ class CameraProvider extends ChangeNotifier{
       _isCreatingPDFLoader = true;
       notifyListeners();
       String directoryPath;
-
       final List<Uint8List> images=_imageList.map((e) => e.imageByte).toList();
       final Directory appDirectory = await getApplicationDocumentsDirectory();
       if(_imageList.every((element) => element.docType== 'ID Card')){

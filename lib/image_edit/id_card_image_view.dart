@@ -101,7 +101,9 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ImagePreviewScreen(),
+                          builder: (context) => const ImagePreviewScreen(
+                           isCameFromIdCard: true,
+                          ),
                         ),
                         (route) => false);
                   });

@@ -44,7 +44,6 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Container(
               width: MediaQuery.sizeOf(context).width,
-              height: MediaQuery.sizeOf(context).height*0.058,
+              height: MediaQuery.sizeOf(context).height * 0.058,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -72,8 +71,14 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               child: Row(
                 children: [
-                  SvgPicture.asset(AppAssets.languageIcon,height: 20,width: 20,),
-                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.015,),
+                  SvgPicture.asset(
+                    AppAssets.languageIcon,
+                    height: 20,
+                    width: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width * 0.015,
+                  ),
                   Text(
                     translation(context).language,
                     style: const TextStyle(
@@ -109,7 +114,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           );
                         }).toList();
                       },
-
                       items: Language.languageList()
                           .map<DropdownMenuItem<Language>>((Language language) {
                         return DropdownMenuItem<Language>(
@@ -117,14 +121,19 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: ListTile(
                             title: Text(language.name),
                             titleAlignment: ListTileTitleAlignment.center,
-                            trailing:_selectedLanguage.name==language.name? const Icon(Icons.done):const SizedBox.shrink(),
+                            trailing: _selectedLanguage.name == language.name
+                                ? const Icon(Icons.done)
+                                : const SizedBox.shrink(),
                           ),
                         );
                       }).toList(),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios,size: 15,),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  ),
                 ],
               ),
             ),
@@ -143,18 +152,20 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SwitchItem(
-                      iconPath: AppAssets.vibration,
-                      title: translation(context).vibration,
-                      onChanged: (value) {
-                        log(value.toString());
-                        setState(() {
-                          vibration = value;
-                        });
-                        LocalStorage().setBool(AppConstant.VIBRATION_KEY, value);
-                      },
-                      value: vibration,
+                    iconPath: AppAssets.vibration,
+                    title: translation(context).vibration,
+                    onChanged: (value) {
+                      log(value.toString());
+                      setState(() {
+                        vibration = value;
+                      });
+                      LocalStorage().setBool(AppConstant.VIBRATION_KEY, value);
+                    },
+                    value: vibration,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   SwitchItem(
                       iconPath: AppAssets.beep,
                       title: translation(context).beep,
@@ -185,16 +196,26 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () {
-                        Share.shareUri(
-                          Uri.parse(
-                              'https://apps.apple.com/app/id6472610820'),
-                        );
+
+                        if(Platform.isIOS){
+                          Share.share(
+                            'https://apps.apple.com/app/id6472610820',
+                          );
+                        }else if(Platform.isAndroid){
+                          Share.share(
+                            'https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner',
+                          );
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            SvgPicture.asset(AppAssets.shareWithFriend,height: 20,width: 20,),
+                            SvgPicture.asset(
+                              AppAssets.shareWithFriend,
+                              height: 20,
+                              width: 20,
+                            ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.015,
                             ),
@@ -206,14 +227,17 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             const Spacer(),
-                            const Icon(Icons.arrow_forward_ios,size: 15,),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.sizeOf(context).height*0.012,
+                    height: MediaQuery.sizeOf(context).height * 0.012,
                   ),
                   Material(
                     color: Colors.transparent,
@@ -221,20 +245,38 @@ class _SettingsPageState extends State<SettingsPage> {
                       borderRadius: BorderRadius.circular(6),
                       onTap: () async {
                         try {
-                          if (Platform.isAndroid || Platform.isIOS) {
-                            final appId = Platform.isAndroid
-                                ? ''
-                                : 'com.documentscannerpdfscanner';
+                          if (Platform.isIOS) {
                             final url = Uri.parse(
-                              Platform.isAndroid
-                                  ? "market://details?id=$appId"
-                                  : "https://apps.apple.com/app/id6472610820",
+                              "https://apps.apple.com/app/id6472610820",
+                            );
+                            await launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            final url = Uri.parse(
+                              "https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner",
                             );
                             await launchUrl(
                               url,
                               mode: LaunchMode.externalApplication,
                             );
                           }
+
+                          // if (Platform.isAndroid || Platform.isIOS) {
+                          //   final appId = Platform.isAndroid
+                          //       ? ''
+                          //       : 'com.documentscannerpdfscanner';
+                          //   final url = Uri.parse(
+                          //     Platform.isAndroid
+                          //         ? "market://details?id=$appId"
+                          //         : "https://apps.apple.com/app/id6472610820",
+                          //   );
+                          //   await launchUrl(
+                          //     url,
+                          //     mode: LaunchMode.externalApplication,
+                          //   );
+                          // }
                         } catch (e) {
                           developer.log(e.toString());
                         }
@@ -243,7 +285,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            SvgPicture.asset(AppAssets.rateUs,height: 20,width: 20,),
+                            SvgPicture.asset(
+                              AppAssets.rateUs,
+                              height: 20,
+                              width: 20,
+                            ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.015,
                             ),
@@ -256,38 +302,60 @@ class _SettingsPageState extends State<SettingsPage> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             const Spacer(),
-                            const Icon(Icons.arrow_forward_ios,size: 15,),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.sizeOf(context).height*0.012,
+                    height: MediaQuery.sizeOf(context).height * 0.012,
                   ),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () {
-                        if (mounted) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => WebViewPage(
-                                appBarTitleName:
-                                    translation(context).privacyPolicy,
-                                url:
-                                    "https://sites.google.com/view/docu-scanner/home",
+                        if (Platform.isIOS) {
+                          if (mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => WebViewPage(
+                                  appBarTitleName:
+                                      translation(context).privacyPolicy,
+                                  url:
+                                      "https://sites.google.com/view/docum-scanner/home",
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
+                        } else if (Platform.isAndroid) {
+                          if (mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => WebViewPage(
+                                  appBarTitleName:
+                                      translation(context).privacyPolicy,
+                                  url:
+                                      "https://sites.google.com/view/docu-scanner/home",
+                                ),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            SvgPicture.asset(AppAssets.privacyPolicy,height: 20,width: 20,),
+                            SvgPicture.asset(
+                              AppAssets.privacyPolicy,
+                              height: 20,
+                              width: 20,
+                            ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.015,
                             ),
@@ -299,38 +367,60 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             const Spacer(),
-                            const Icon(Icons.arrow_forward_ios,size: 15,),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                   SizedBox(
-                    height: MediaQuery.sizeOf(context).height*0.012,
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.012,
                   ),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () {
-                        if (mounted) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => WebViewPage(
-                                appBarTitleName:
-                                    translation(context).termsAndConditions,
-                                url:
-                                    "https://sites.google.com/view/docum-scanner/home",
+                        if (Platform.isIOS) {
+                          if (mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => WebViewPage(
+                                  appBarTitleName:
+                                      translation(context).termsAndConditions,
+                                  url:
+                                      "https://sites.google.com/view/docum-scanner/home",
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
+                        } else if (Platform.isAndroid) {
+                          if (mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => WebViewPage(
+                                  appBarTitleName:
+                                      translation(context).termsAndConditions,
+                                  url:
+                                      "https://sites.google.com/view/docum-scanner/home",
+                                ),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            SvgPicture.asset(AppAssets.termsCondition,height: 20,width: 20,),
+                            SvgPicture.asset(
+                              AppAssets.termsCondition,
+                              height: 20,
+                              width: 20,
+                            ),
                             SizedBox(
                               width: MediaQuery.sizeOf(context).width * 0.015,
                             ),
@@ -342,7 +432,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                             const Spacer(),
-                            const Icon(Icons.arrow_forward_ios,size: 15,),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                            ),
                           ],
                         ),
                       ),

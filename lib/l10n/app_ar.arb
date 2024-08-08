@@ -177,5 +177,7 @@
   "thisLanguageNotSupported": "هذه اللغة غير مدعومة",
   "docScanner": "ماسح الوثائق",
   "imageSavedAtGallery": "تم حفظ الصورة في المعرض",
-  "deselectAll": "إلغاء تحديد الكل"
+  "deselectAll": "إلغاء تحديد الكل",
+  "folderAlreadyExist" : "المجلد موجود بالفعل",
+  "fileAlreadyExist" : "الملف موجود بالفعل"
 }
