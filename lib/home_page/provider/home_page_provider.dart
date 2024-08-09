@@ -382,30 +382,74 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
+  // void moveFilesToDirectory({
+  //   required String targetDirectoryPath,
+  //   required List<String> filePaths,
+  // }) {
+  //   for (String filePath in filePaths) {
+  //     File file = File(filePath);
+  //     if (file.existsSync()) {
+  //       String fileName = file.path.split('/').last;
+  //       String destinationFilePath = '$targetDirectoryPath/$fileName';
+  //       if (!File(destinationFilePath).existsSync()) {
+  //         file.renameSync(destinationFilePath);
+  //         notifyListeners();
+  //         print('Moved $filePath to $destinationFilePath');
+  //       } else {
+  //         print('File $fileName already exists in the destination directory');
+  //       }
+  //     } else {
+  //       print('File $filePath does not exist');
+  //     }
+  //   }
+  // }
+
+
+
   void moveFilesToDirectory({
-    required String directoryPath,
+    required String targetDirectoryPath,
     required List<String> filePaths,
   }) {
-    Directory destinationDirectory = Directory(directoryPath);
-    if (!destinationDirectory.existsSync()) {
-      destinationDirectory.createSync(recursive: true);
-    }
     for (String filePath in filePaths) {
       File file = File(filePath);
       if (file.existsSync()) {
-        String fileName = file.path.split('/').last; // Extract file name
-        String destinationFilePath = '$directoryPath/$fileName';
-        if (!File(destinationFilePath).existsSync()) {
-          file.renameSync(destinationFilePath);
-          notifyListeners();
-          print('Moved $filePath to $destinationFilePath');
-        } else {
-          print('File $fileName already exists in the destination directory');
+        String fileName = file.path.split('/').last;
+        String destinationFilePath = '$targetDirectoryPath/$fileName';
+        if (File(destinationFilePath).existsSync()) {
+          String baseName = fileName.split('.').first;
+          String extension = fileName.contains('.') ? '.${fileName.split('.').last}' : '';
+          int count = 1;
+          while (File(destinationFilePath).existsSync()) {
+            destinationFilePath = '$targetDirectoryPath/$baseName-$count$extension';
+            count++;
+          }
         }
+        file.renameSync(destinationFilePath);
+        notifyListeners();
+        print('Moved $filePath to $destinationFilePath');
       } else {
         print('File $filePath does not exist');
       }
     }
+  }
+
+
+
+  bool checkIfFilesExistInDirectory({
+    required String targetDirectoryPath,
+    required List<String> filePaths,
+  }) {
+    for (String filePath in filePaths) {
+      File file = File(filePath);
+      if (file.existsSync()) {
+        String fileName = file.path.split('/').last;
+        String destinationFilePath = '$targetDirectoryPath/$fileName';
+        if (File(destinationFilePath).existsSync()) {
+          return true; // A file with the same name exists
+        }
+      }
+    }
+    return false; // No files with the same name exist
   }
 
   List<String> _allFiles = [];

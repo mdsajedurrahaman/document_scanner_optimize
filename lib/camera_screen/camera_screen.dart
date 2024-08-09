@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:camera/camera.dart';
@@ -283,11 +284,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
                           if (activePage == 0 || activePage == 1) {
                             if (flash) {
-                              cameraController
-                                  .setFlashMode(FlashMode.torch);
+                              cameraController.setFlashMode(FlashMode.torch);
                             } else {
-                              cameraController
-                                  .setFlashMode(FlashMode.off);
+                              cameraController.setFlashMode(FlashMode.off);
                             }
                           } else {
                             if (flash) {
@@ -677,9 +676,9 @@ class _CameraScreenState extends State<CameraScreen> {
                               onTap: () {
                                 if (widget.isComeFromRetake != null && widget.isComeFromRetake == true) {
                                   Navigator.pop(context);
-                                } else if (widget.isComeFromAdd !=
-                                    null &&
-                                    widget.isComeFromAdd == true) {
+                                } else if (widget.isComeFromAdd != null && widget.isComeFromAdd == true) {
+                                  Navigator.pop(context);
+                                } else if(widget.isComeFromIdCardRetake !=null && widget.isComeFromIdCardRetake ==true ){
                                   Navigator.pop(context);
                                 } else {
                                   cameraProvider.clearImageList();
@@ -707,39 +706,53 @@ class _CameraScreenState extends State<CameraScreen> {
 
                                       // XFile documentCapture =
 
+                                      if(Platform.isAndroid){
+                                        if (beepValue) {
+                                          await audioPlayer.play(
+                                              AssetSource("audio/sound.mp3"));
+                                        }
+                                      }
+
                                       await cameraController.takePicture().then((value)async{
                                         cameraProvider.updateImage(
                                           index: widget.imageIndex!,
                                           image: ImageModel(
-                                              imageByte: await value.readAsBytes(),
-                                          name: widget.imageModel!.name,
-                                          docType: "Document",
-                                        ));
+                                            imageByte: await value.readAsBytes(),
+                                            name: widget.imageModel!.name,
+                                            docType: "Document",
+                                          ),
+                                        );
                                       });
+                                      //Navigator.push(context,  MaterialPageRoute(builder: (context)=>const ImagePreviewScreen(),),);
 
-
-
-                                      Navigator.push(context,  MaterialPageRoute(builder: (context)=>const ImagePreviewScreen()));
+                                      Navigator.pop(context);
 
                                     } else if (widget.isComeFromAdd == true) {
+
+                                      if(Platform.isAndroid){
+                                        if (beepValue) {
+                                          await audioPlayer.play(
+                                              AssetSource("audio/sound.mp3"));
+                                        }
+                                      }
+
                                       XFile documentCapture = await cameraController.takePicture();
-                                      String imageName = DateFormat(
-                                          'yyyyMMdd_SSSS').format(
-                                          DateTime.now());
-                                      cameraProvider.addImage(
-                                        ImageModel(
-                                          imageByte: await documentCapture
-                                              .readAsBytes(),
-                                          name: "Doc-$imageName",
-                                          docType: "Document",
-                                        ),
+                                      String imageName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                                      cameraProvider.addImageSpecipicIndex(
+                                       [ImageModel(
+                                         imageByte: await documentCapture.readAsBytes(),
+                                         name: "Doc-$imageName",
+                                         docType: "Document",)],
+                                          widget.imageIndex!+1
                                       );
-                                      Navigator.pop(context);
+                                      Navigator.pop(context ,widget.imageIndex!+1);
                                     } else {
-                                      // if (beepValue) {
-                                      //   await audioPlayer.play(
-                                      //       AssetSource("audio/sound.mp3"));
-                                      // }
+                                      if(Platform.isAndroid){
+                                        if (beepValue) {
+                                          await audioPlayer.play(
+                                              AssetSource("audio/sound.mp3"));
+                                        }
+                                      }
                                       XFile documentCapture = await cameraController
                                           .takePicture();
                                       String imageName = DateFormat(
@@ -756,14 +769,15 @@ class _CameraScreenState extends State<CameraScreen> {
                                     }
                                   }
                                   else if (activePage == 1) {
-                                    // if (beepValue) {
-                                    //   await audioPlayer.play(AssetSource("audio/sound.mp3"));
-                                    // }
-
+                                    if(Platform.isAndroid){
+                                      if (beepValue) {
+                                        await audioPlayer.play(
+                                            AssetSource("audio/sound.mp3"));
+                                      }
+                                    }
                                     XFile idCardCapture = await cameraController.takePicture();
 
                                     if(widget.isComeFromIdCardRetake !=null && widget.isComeFromIdCardRetake ==true ){
-                                      log("Id Card ratake block");
                                       if(widget.isFront !=null && widget.isFront ==true) {
                                         cameraProvider.updateIdCardImage(index: 0, imagePath: idCardCapture.path);
                                         Navigator.push(
@@ -783,13 +797,10 @@ class _CameraScreenState extends State<CameraScreen> {
                                       }
                                     }
                                     else{
-                                      log("Id Card else block");
+
                                       cameraProvider.addIdCardImage(idCardCapture.path);
                                       flipCardController.flipcard();
-
-                                      log("idCardImages.length: ${cameraProvider.idCardImages.length}");
                                       if (cameraProvider.idCardImages.length == 2) {
-                                        log("Id Card length block");
                                         Navigator.push(
                                           context, MaterialPageRoute(
                                           builder: (context) => IdCardImagePreview(

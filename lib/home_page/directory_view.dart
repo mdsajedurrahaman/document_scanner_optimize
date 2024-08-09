@@ -891,7 +891,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(
                                                                                   onPressed: () async {
                                                                                     if (_formKey.currentState!.validate()) {
-                                                                                      String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                      String newName = _renameController.text;
+                                                                                      String parentPath = Directory(filePath).parent.path;
+                                                                                      String newPath = "$parentPath/$newName.jpg";
                                                                                       if (File(newPath).existsSync()) {
                                                                                         setState(() {
                                                                                           errorMessage = translation(context).fileAlreadyExists;
@@ -1272,7 +1274,11 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(
                                                                                   onPressed: () async {
                                                                                     if (_formKey.currentState!.validate()) {
-                                                                                      String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                      // String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                      String newName = _renameController.text;
+                                                                                      String parentPath = Directory(filePath).parent.path;
+                                                                                      String newPath = "$parentPath/$newName.txt";
+
                                                                                       if (File(newPath).existsSync()) {
                                                                                         setState(() {
                                                                                           errorMessage = translation(context).fileAlreadyExists;
@@ -1584,7 +1590,12 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(
                                                                                     onPressed: () async {
                                                                                       if (_formKey.currentState!.validate()) {
-                                                                                        String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+                                                                                        //  String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
+
+                                                                                        String newName = _renameController.text;
+                                                                                        String parentPath = Directory(filePath).parent.path;
+                                                                                        String newPath = "$parentPath/$newName.pdf";
+
                                                                                         if (File(newPath).existsSync()) {
                                                                                           setState(() {
                                                                                             errorMessage = translation(context).fileAlreadyExists;
@@ -1680,7 +1691,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             );
                                                                       }
                                                                     },
-                                                                    child: Padding(
+                                                                    child:
+                                                                        Padding(
                                                                       padding: const EdgeInsets
                                                                           .symmetric(
                                                                           horizontal:
@@ -1743,53 +1755,28 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
-                                        if (_selectedItems.every((element) =>
-                                                element
-                                                    .toLowerCase()
-                                                    .endsWith('.jpg') ||
-                                                element
-                                                    .toLowerCase()
-                                                    .endsWith('.txt') ||
-                                                element
-                                                    .toLowerCase()
-                                                    .endsWith('.pdf') ||
-                                                element
-                                                    .toLowerCase()
-                                                    .endsWith('.jpeg') ||
-                                                element
-                                                    .toLowerCase()
-                                                    .endsWith('.png')) &&
+                                        if (_selectedItems.every((element) => element.toLowerCase().endsWith('.jpg') ||
+                                                element.toLowerCase().endsWith('.txt') ||
+                                                element.toLowerCase().endsWith('.pdf') ||
+                                                element.toLowerCase().endsWith('.jpeg') ||
+                                                element.toLowerCase().endsWith('.png')) &&
                                             _selectedItems.isNotEmpty) {
                                           await showModalBottomSheet(
                                             context: context,
                                             builder: (context) {
-                                              List<String> directories =
-                                                  getSubdirectoriesSyncForIos(
-                                                      widget.directoryPath);
+                                              List<String> directories = getSubdirectoriesSyncForIos(widget.directoryPath);
+                                              directories.remove(widget.directoryPath);
                                               log(directories.toString());
-                                              log(widget.directoryPath
-                                                  .toString());
 
                                               return SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.5,
+                                                height: MediaQuery.of(context).size.height *0.5,
                                                 child: directories.isNotEmpty
                                                     ? Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal:
-                                                                    20.0,
-                                                                vertical: 10),
+                                                            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                                                         child: ListView(
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          children:
-                                                              List.generate(
-                                                                  directories
-                                                                      .length,
+                                                          scrollDirection: Axis.vertical,
+                                                          children: List.generate(directories.length,
                                                                   (index) {
                                                             return ListTile(
                                                               leading:
@@ -1799,34 +1786,72 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     .primaryColor,
                                                                 size: 40,
                                                               ),
-                                                              title: Text(
-                                                                  directories[
-                                                                          index]
-                                                                      .split(
-                                                                          '/')
-                                                                      .last),
+                                                              title: Text(directories[index].split('/').last),
                                                               onTap: () async {
-                                                                homePageProvider
-                                                                    .moveFilesToDirectory(
-                                                                  directoryPath:
-                                                                      directories[
-                                                                          index],
-                                                                  filePaths:
-                                                                      _selectedItems
-                                                                          .toList(),
+                                                                var conflictResult = homePageProvider.checkIfFilesExistInDirectory(
+                                                                  targetDirectoryPath: directories[index],
+                                                                  filePaths: _selectedItems.toList(),
                                                                 );
-                                                                setState(() {
-                                                                  _selectedItems
-                                                                      .clear();
-                                                                  _isLongPressed =
-                                                                      false;
-                                                                });
-                                                                Navigator.pop(
-                                                                    context);
-                                                                allFiles = homePageProvider
-                                                                    .getFileList(
-                                                                        widget
-                                                                            .directoryPath);
+
+                                                                if (conflictResult) {
+                                                                  showDialog(
+                                                                    context: context,
+                                                                    builder: (context) {
+                                                                      return AlertDialog(
+                                                                        title: const Text("Conflict Alert!"),
+                                                                        content: const Text("Some files are already exist in this directory. Do you want to copy them?"),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                            onPressed: () {
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                            child: const Text("Cancel"),
+                                                                          ),
+                                                                          TextButton(
+                                                                            onPressed: () {
+                                                                              homePageProvider.moveFilesToDirectory(
+                                                                                targetDirectoryPath: directories[index],
+                                                                                filePaths: _selectedItems.toList(),
+                                                                              );
+                                                                              setState(() {
+                                                                                _selectedItems.clear();
+                                                                                _isLongPressed = false;
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                              Navigator.pop(context);
+                                                                              allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                            },
+                                                                            child: const Text("Copy"),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  );
+                                                                }
+                                                                else {
+                                                                  homePageProvider.moveFilesToDirectory(
+                                                                    targetDirectoryPath: directories[index],
+                                                                    filePaths: _selectedItems.toList(),
+                                                                  );
+                                                                  setState(() {
+                                                                    _selectedItems.clear();
+                                                                    _isLongPressed = false;
+                                                                  });
+                                                                  Navigator.pop(context);
+                                                                  allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                }
+
+                                                                // homePageProvider.moveFilesToDirectory(
+                                                                //   targetDirectoryPath: directories[index],
+                                                                //   filePaths: _selectedItems.toList(),
+                                                                //   context: context,
+                                                                // );
+                                                                // setState(() {
+                                                                //   _selectedItems.clear();
+                                                                //   _isLongPressed = false;
+                                                                // });
+                                                                // Navigator.pop(context);
+                                                                // allFiles = homePageProvider.getFileList(widget.directoryPath);
                                                               },
                                                             );
                                                           }),

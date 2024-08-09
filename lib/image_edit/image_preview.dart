@@ -39,10 +39,11 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
   int currentIndex = 0;
   PageController pageController = PageController();
 
+
+
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    log("image preview screen ${cameraProvider.imageList.length.toString()}");
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop)
@@ -183,7 +184,6 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                       controller: pageController,
                       itemCount: cameraProvider.imageList.length,
                       onPageChanged: (index) {
-
                         setState(() {
                           currentIndex = index;
                         });
@@ -192,14 +192,14 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(15),
                           child: Image.memory(
-                            cameraProvider.imageList[index].imageByte,
+                            cameraProvider.imageList[currentIndex].imageByte,
                             fit: BoxFit.contain,
                           ),
                         );
                       },
                     ),
                   ),
-                cameraProvider.imageList.isNotEmpty? Container(
+              cameraProvider.imageList.isNotEmpty? Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3),
               child: Text(
                 '${currentIndex + 1}/${cameraProvider.imageList.length}',
@@ -219,7 +219,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
             children: [
               ImageEditButton(
                 title: translation(context).retake,
-                onTap: () {
+                onTap: ()async {
                   if (cameraProvider.imageList.isNotEmpty) {
                     Navigator.push(
                       context,
@@ -267,17 +267,23 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   Navigator.pop(context);
-                                  Navigator.push(
+                                  var result = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const CameraScreen(
+                                         CameraScreen(
                                           isComeFromAdd: true,
+                                          initialPage: 0,
+                                          imageIndex: currentIndex,
+
                                         ),
-                                      ));
-                                },
+                                      ),
+                                    );
+
+                                  pageController.animateToPage(result, duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
+                                                                },
                                 child: Container(
                                   height: 100,
                                   width: 160,
@@ -306,27 +312,28 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                               InkWell(
                                 onTap: () async {
                                   Navigator.pop(context);
-
                                   final ImagePicker _picker = ImagePicker();
-                                  final List<XFile?> image =
-                                      await _picker.pickMultiImage(
-                                          limit: 5, imageQuality: 50);
+                                  final List<XFile?> image = await _picker.pickMultiImage( imageQuality: 50);
                                   if (image.isNotEmpty) {
+                                    List<ImageModel> imageList = [];
                                     for (int i = 0; i < image.length; i++) {
-                                      String documentName =
-                                          DateFormat('yyyyMMdd_SSSS')
-                                              .format(DateTime.now());
+                                      String documentName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
                                       if (image[i] != null) {
-                                        cameraProvider.addImage(
+                                        imageList.add(
                                           ImageModel(
-                                            imageByte:
-                                                await image[i]!.readAsBytes(),
+                                            imageByte: await image[i]!.readAsBytes(),
                                             name: 'Doc-$documentName',
                                             docType: 'Document',
                                           ),
                                         );
                                       }
                                     }
+                                    cameraProvider.addImageSpecipicIndex(imageList,currentIndex+1);
+                                    // setState(() {
+                                    //   currentIndex=currentIndex+1;
+                                    // });
+
+                                    pageController.animateToPage(currentIndex+1, duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
                                     Navigator.of(context);
                                   }
                                 },
@@ -410,9 +417,16 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                             if(currentIndex>0){
                               currentIndex--;
                             }
-
                           });
                           Navigator.pop(context);
+                          if(cameraProvider.imageList.isEmpty){
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const BottomBar(),
+                                ),
+                                    (route) => false);
+                          }
                         },
                         onCancel: () => Navigator.pop(context),
                       );

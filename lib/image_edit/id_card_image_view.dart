@@ -70,7 +70,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           ),
           actions: [
             TextButton(
-              onPressed: () async {
+              onPressed:isLoading?null: () async {
                 setState(() {
                   isLoading = true;
                 });
@@ -140,10 +140,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                     return Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 5, bottom: 20),
-                          child: Image.file(
-                              File(cameraProvider.idCardImages[index])),
+                          padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 20),
+                          child: Image.file(File(cameraProvider.idCardImages[index])),
                         ),
                         Positioned(
                           bottom: 20,

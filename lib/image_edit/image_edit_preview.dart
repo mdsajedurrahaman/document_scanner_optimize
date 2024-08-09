@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../bottom_bar/bottom_bar.dart';
@@ -155,74 +157,112 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return AlertDialog(
-                                      title:
-                                          Text(translation(context).renameFile,
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                      content: Form(
-                                        key: _formKey,
-                                        child: TextFormField(
-                                          controller: _renameController,
-                                          keyboardType: TextInputType.text,
-                                          textInputAction: TextInputAction.done,
-                                          autofocus: true,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return translation(context)
-                                                  .pleaseEnterFileName;
-                                            }
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                            hintText: translation(context)
-                                                .enterFileName,
-                                            focusedBorder:
-                                                const OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: AppColor.primaryColor),
-                                            ),
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                          ),
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text(
-                                                translation(context).cancel)),
-                                        TextButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                cameraProvider.updateImage(
-                                                  index: _currentIndex,
-                                                  image: ImageModel(
-                                                    imageByte: cameraProvider
-                                                        .imageList[
-                                                            _currentIndex]
-                                                        .imageByte,
-                                                    name:
-                                                        _renameController.text,
-                                                    docType: cameraProvider
-                                                        .imageList[
-                                                            _currentIndex]
-                                                        .docType,
+                                    String errorMessage = '';
+                                    return StatefulBuilder(
+                                      builder: (context,setState) {
+                                        return AlertDialog(
+                                          title: Text(translation(context).renameFile,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
-                                                );
+                                          ),
+                                          content: Form(
+                                            key: _formKey,
+                                            child: TextFormField(
+                                              controller: _renameController,
+                                              keyboardType: TextInputType.text,
+                                              textInputAction: TextInputAction.done,
+                                              autofocus: true,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return translation(context)
+                                                      .pleaseEnterFileName;
+                                                }
+                                                return null;
+                                              },
+                                              decoration: InputDecoration(
+                                                errorText: errorMessage.isEmpty ? null : errorMessage,
+                                                hintText: translation(context).enterFileName,
+                                                border: const OutlineInputBorder(
+                                                  borderSide: BorderSide(color: AppColor.primaryColor),
+                                                ),
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                              ),
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text(
+                                                    translation(context).cancel)),
+                                            TextButton(
+                                                onPressed: () async {
+                                                  if (_formKey.currentState!.validate()) {
+                                                    if (cameraProvider.imageList.first.docType == "ID Card") {
+                                                      Directory rootDirectory = await getApplicationDocumentsDirectory();
+                                                      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
+                                                      File file = File("$path/${_renameController.text}.jpg");
+                                                      if (file.existsSync()) {
+                                                        setState(() {
+                                                          errorMessage = translation(context).fileAlreadyExists;
+                                                        });
 
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: Text(
-                                                translation(context).save)),
-                                      ],
+                                                      } else {
+                                                        cameraProvider.updateImage(
+                                                          index: _currentIndex,
+                                                          image: ImageModel(
+                                                            imageByte: cameraProvider.imageList[_currentIndex].imageByte,
+                                                            name: _renameController.text,
+                                                            docType: cameraProvider.imageList[_currentIndex].docType,
+                                                          ),
+                                                        );
+
+                                                        Navigator.pop(context);
+                                                      }
+                                                    } else {
+
+                                                      Directory rootDirectory = await getApplicationDocumentsDirectory();
+                                                      String path = "${rootDirectory.path}/Doc Scanner/Document";
+                                                      File file = File("$path/${_renameController.text}.jpg");
+                                                      if (file.existsSync()) {
+                                                        setState(() {
+                                                          errorMessage = translation(context).fileAlreadyExists;
+                                                        });
+
+                                                      } else {
+                                                        cameraProvider.updateImage(
+                                                          index: _currentIndex,
+                                                          image: ImageModel(
+                                                            imageByte: cameraProvider.imageList[_currentIndex].imageByte,
+                                                            name: _renameController.text,
+                                                            docType: cameraProvider.imageList[_currentIndex].docType,
+                                                          ),
+                                                        );
+
+                                                        Navigator.pop(context);
+                                                      }
+
+                                                    }
+                                                    // cameraProvider.updateImage(
+                                                    //   index: _currentIndex,
+                                                    //   image: ImageModel(
+                                                    //     imageByte: cameraProvider.imageList[_currentIndex].imageByte,
+                                                    //     name: _renameController.text,
+                                                    //     docType: cameraProvider.imageList[_currentIndex].docType,
+                                                    //   ),
+                                                    // );
+                                                    //
+                                                    // Navigator.pop(context);
+                                                  }
+                                                },
+                                                child: Text(
+                                                    translation(context).save)),
+                                          ],
+                                        );
+                                      }
                                     );
                                   },
                                 );
@@ -288,7 +328,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   onCancel: () => Navigator.pop(context),
                                 );
                               },
-                              child:  Padding(
+                              child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
@@ -325,40 +365,49 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    final cameProvider = context.watch<CameraProvider>();
-                                    TextEditingController _renameController = TextEditingController();
+                                    final cameProvider =
+                                        context.watch<CameraProvider>();
+                                    TextEditingController _renameController =
+                                        TextEditingController();
                                     return StatefulBuilder(
                                       builder: (context, setState) {
                                         return AlertDialog(
-                                          title:  Text(translation(context).savePdf),
-                                          content: cameraProvider.isCreatingPDFLoader
-                                              ?
-
-                                          ConstrainedBox(
-                                                  constraints: const BoxConstraints(
+                                          title: Text(
+                                              translation(context).savePdf),
+                                          content: cameraProvider
+                                                  .isCreatingPDFLoader
+                                              ? ConstrainedBox(
+                                                  constraints:
+                                                      const BoxConstraints(
                                                           maxHeight: 40,
                                                           maxWidth: 40),
                                                   child: const Center(
-                                                      child: CircularProgressIndicator(
-                                                    color: AppColor.primaryColor,
-                                                  ),),)
-
-
-
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color:
+                                                          AppColor.primaryColor,
+                                                    ),
+                                                  ),
+                                                )
                                               : TextFormField(
                                                   controller: _renameController,
-                                                  keyboardType: TextInputType.text,
+                                                  keyboardType:
+                                                      TextInputType.text,
                                                   textInputAction:
                                                       TextInputAction.done,
                                                   autofocus: true,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
-                                                      return translation(context).pleaseEnterFileName;
+                                                      return translation(
+                                                              context)
+                                                          .pleaseEnterFileName;
                                                     }
                                                     return null;
                                                   },
                                                   decoration: InputDecoration(
-                                                    hintText: translation(context).enterFileName,
+                                                    hintText:
+                                                        translation(context)
+                                                            .enterFileName,
                                                     focusedBorder:
                                                         const OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -374,20 +423,27 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                if (_renameController.text.isNotEmpty) {
-                                                  cameProvider.createPDFFromByte(
+                                                if (_renameController
+                                                    .text.isNotEmpty) {
+                                                  cameProvider
+                                                      .createPDFFromByte(
                                                           context: context,
-                                                          fileName: _renameController.text)
+                                                          fileName:
+                                                              _renameController
+                                                                  .text)
                                                       .then((value) {
-                                                    cameraProvider.clearImageList();
-                                                    Navigator.pushAndRemoveUntil(
+                                                    cameraProvider
+                                                        .clearImageList();
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
                                                             context,
                                                             MaterialPageRoute(
                                                       builder: (context) {
                                                         return const BottomBar();
                                                       },
                                                     ), (route) => false);
-                                                    showTopSnackbar(context, "PDF successfully saved");
+                                                    showTopSnackbar(context,
+                                                        "PDF successfully saved");
                                                   });
                                                 }
                                               },
@@ -408,7 +464,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   },
                                 );
                               },
-                              child:  Padding(
+                              child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
@@ -604,10 +660,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                     String text = recognizedText.text;
                     if (text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                         SnackBar(
+                        SnackBar(
                           content: Text(
                             translation(context).thisLanguageNotSupported,
-
                           ),
                         ),
                       );

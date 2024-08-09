@@ -28,6 +28,11 @@ class CameraProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void addImageSpecipicIndex( List<ImageModel> image, int index){
+    _imageList.insertAll(index, image);
+    notifyListeners();
+  }
+
 
   void updateImage({required int index, required ImageModel image}){
     _imageList[index] = image;
