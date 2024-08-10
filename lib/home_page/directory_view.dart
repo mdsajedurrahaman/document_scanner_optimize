@@ -144,7 +144,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         style: IconButton.styleFrom(
                                           padding: EdgeInsets.zero,
                                         ),
-                                        icon: Platform.isAndroid? const Icon(Icons.arrow_back): const Icon(Icons.arrow_back_ios)
+                                        icon: Platform.isAndroid?  const Icon(Icons.arrow_back): const Icon(Icons.arrow_back_ios)
                                     ),
                                     Text(
                                       widget.directoryPath.split('/').last,
