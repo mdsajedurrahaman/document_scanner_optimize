@@ -36,6 +36,7 @@ class _AddSignatureState extends State<AddSignature> {
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
+    final size=MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: const Color(0xFFECECEC),
       appBar: AppBar(
@@ -53,7 +54,7 @@ class _AddSignatureState extends State<AddSignature> {
               setState(() {
                 initialShowActionIcons = false;
               });
-              Future.delayed(Duration(seconds: 1), () async {
+              Future.delayed(const Duration(seconds: 1), () async {
                 var image = await captureImage();
                 if (image != null) {
                   cameraProvider.updateImage(
@@ -63,7 +64,6 @@ class _AddSignatureState extends State<AddSignature> {
                           docType: widget.imageModel.docType),
                       index: widget.imageIndex);
                   Navigator.pop(context);
-
                 }
               });
 
@@ -145,19 +145,22 @@ class _AddSignatureState extends State<AddSignature> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: RepaintBoundary(
-                key: _globalKey,
+          key: _globalKey,
+          child: Center(
+            child: IntrinsicWidth(
+              child: IntrinsicHeight(
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Center(
                       child: Image.memory(
                         widget.imageModel.imageByte,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     if (signaturePath != null)
                       InteractiveBox(
-                        initialPosition: const Offset(50, 200),
+                       initialPosition: const Offset(0, 50),
                         includedScaleDirections: const [
                           ScaleDirection.topRight,
                           ScaleDirection.bottomRight,
@@ -181,15 +184,18 @@ class _AddSignatureState extends State<AddSignature> {
                         },
                         initialShowActionIcons: initialShowActionIcons,
                         rotateIndicatorSpacing: 10,
-                        child:
-                            SvgPicture.string(signaturePath!, fit: BoxFit.cover),
+                        child: SvgPicture.string(signaturePath!, fit: BoxFit.cover),
+
                       ),
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: Container(
-        height: 70,
+        height: size.width>=600?80: 70,
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: ImageEditButton(

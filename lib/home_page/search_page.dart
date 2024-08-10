@@ -1,19 +1,17 @@
 import 'dart:io';
-
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
-
 import '../utils/app_color.dart';
 import '../utils/utils.dart';
 import 'directory_view.dart';
 import 'fixed_size_delegate_grid.dart';
-import 'package:path/path.dart' as path;
+
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -42,6 +40,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final homeProvider = context.watch<HomePageProvider>();
+    final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       body: homeProvider.allFileLoading
           ? const Center(
@@ -119,13 +118,12 @@ class _SearchPageState extends State<SearchPage> {
                   ):
                   GridView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                itemCount: homeProvider.filteredItems.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
-                  crossAxisCount: 3,
-                  height: 100,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                    itemCount: homeProvider.filteredItems.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
+                    crossAxisCount: 3,
+                    height: screenSize.width>=600 ? 130: 100,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
                   String filePath = homeProvider.filteredItems[index];

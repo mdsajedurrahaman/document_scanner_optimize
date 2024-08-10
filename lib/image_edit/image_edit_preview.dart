@@ -1,22 +1,16 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/image_edit/text_recognition_screen.dart';
 import 'package:doc_scanner/image_edit/widget/image_edit_button.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../bottom_bar/bottom_bar.dart';
-import '../camera_screen/camera_screen.dart';
 import '../camera_screen/model/image_model.dart';
 import '../camera_screen/provider/camera_provider.dart';
 import '../localaization/language_constant.dart';
@@ -59,7 +53,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    final homepageProvider = context.watch<HomePageProvider>();
+    final size=MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: const Color(0xFFECECEC),
       appBar: AppBar(
@@ -119,8 +113,8 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   ),
                                 ),
                                 Container(
-                                  height: 30,
-                                  width: 30,
+                                  height: size.width>=600?40: 30,
+                                  width: size.width>=600?40: 30,
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(
                                     color: Color(0xFFF4F4F4),
@@ -133,9 +127,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       onTap: () {
                                         Navigator.pop(context);
                                       },
-                                      child: const Icon(
+                                      child:  Icon(
                                         Icons.close_rounded,
-                                        size: 20,
+                                        size: size.width>=600?30: 20,
                                       ),
                                     ),
                                   ),
@@ -152,8 +146,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                             child: InkWell(
                               onTap: () async {
                                 Navigator.pop(context);
-                                _renameController.text = cameraProvider
-                                    .imageList[_currentIndex].name;
+                                _renameController.text = cameraProvider.imageList[_currentIndex].name;
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -275,6 +268,8 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                     SvgPicture.asset(
                                       AppAssets.rename,
                                       color: Colors.black,
+                                      height: size.width>=600?30:20,
+                                      width: size.width>=600?30:20,
                                     ),
                                     SizedBox(
                                       width: 20,
@@ -333,9 +328,10 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                     Icon(
                                       Icons.ios_share_outlined,
                                       color: Colors.black,
+                                      size: size.width>=600?30:20,
                                     ),
                                     const SizedBox(
                                       width: 20,
@@ -365,85 +361,57 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    final cameProvider =
-                                        context.watch<CameraProvider>();
-                                    TextEditingController _renameController =
-                                        TextEditingController();
+                                    final cameProvider = context.watch<CameraProvider>();
+                                    TextEditingController _renameController = TextEditingController();
                                     return StatefulBuilder(
                                       builder: (context, setState) {
                                         return AlertDialog(
-                                          title: Text(
-                                              translation(context).savePdf),
-                                          content: cameraProvider
-                                                  .isCreatingPDFLoader
+                                          title: Text(translation(context).savePdf),
+                                          content: cameraProvider.isCreatingPDFLoader
                                               ? ConstrainedBox(
-                                                  constraints:
-                                                      const BoxConstraints(
+                                                  constraints: const BoxConstraints(
                                                           maxHeight: 40,
                                                           maxWidth: 40),
                                                   child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      color:
-                                                          AppColor.primaryColor,
+                                                    child: CircularProgressIndicator(
+                                                      color: AppColor.primaryColor,
                                                     ),
                                                   ),
                                                 )
                                               : TextFormField(
                                                   controller: _renameController,
-                                                  keyboardType:
-                                                      TextInputType.text,
-                                                  textInputAction:
-                                                      TextInputAction.done,
+                                                  keyboardType: TextInputType.text,
+                                                  textInputAction: TextInputAction.done,
                                                   autofocus: true,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
-                                                      return translation(
-                                                              context)
-                                                          .pleaseEnterFileName;
+                                                      return translation(context).pleaseEnterFileName;
                                                     }
                                                     return null;
                                                   },
                                                   decoration: InputDecoration(
-                                                    hintText:
-                                                        translation(context)
-                                                            .enterFileName,
-                                                    focusedBorder:
-                                                        const OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: AppColor
-                                                              .primaryColor),
+                                                    hintText: translation(context).enterFileName,
+                                                    border: const OutlineInputBorder(
+                                                      borderSide: BorderSide(color: AppColor.primaryColor),
                                                     ),
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: 10),
+                                                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                                                   ),
                                                 ),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                if (_renameController
-                                                    .text.isNotEmpty) {
-                                                  cameProvider
-                                                      .createPDFFromByte(
+                                                if (_renameController.text.isNotEmpty) {
+                                                  cameProvider.createPDFFromByte(
                                                           context: context,
-                                                          fileName:
-                                                              _renameController
-                                                                  .text)
+                                                          fileName: _renameController.text)
                                                       .then((value) {
-                                                    cameraProvider
-                                                        .clearImageList();
-                                                    Navigator
-                                                        .pushAndRemoveUntil(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return const BottomBar();
+                                                    cameraProvider.clearImageList();
+                                                    Navigator.pushAndRemoveUntil(
+                                                            context, MaterialPageRoute(builder: (context) {
+                                                              return const BottomBar();
                                                       },
                                                     ), (route) => false);
-                                                    showTopSnackbar(context,
-                                                        "PDF successfully saved");
+                                                    showTopSnackbar(context, "PDF successfully saved");
                                                   });
                                                 }
                                               },
@@ -469,16 +437,17 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                     horizontal: 20.0, vertical: 5),
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                     Icon(
                                       Icons.picture_as_pdf_outlined,
                                       color: Colors.black,
+                                      size: size.width>=600?30:20,
                                     ),
                                     SizedBox(
                                       width: 20,
                                     ),
                                     Text(
                                       translation(context).exportAsPdf,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,

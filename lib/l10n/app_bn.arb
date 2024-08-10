@@ -179,5 +179,8 @@
   "imageSavedAtGallery": "গ্যালারিতে ছবি সংরক্ষিত",
   "deselectAll": "সব নির্বাচন বাতিল করুন",
   "folderAlreadyExist": "ফোল্ডার ইতিমধ্যে বিদ্যমান",
-  "fileAlreadyExist": "ফাইল ইতিমধ্যে বিদ্যমান"
+  "fileAlreadyExist": "ফাইল ইতিমধ্যে বিদ্যমান",
+  "conflictAlert": "সংঘর্ষ সতর্কতা",
+  "fileConflictAlertContent": "কিছু ফাইল ইতিমধ্যেই এই ডিরেক্টরিতে বিদ্যমান। আপনি কি তাদের নকল করতে চান?",
+  "duplicate": "নকল"
 }

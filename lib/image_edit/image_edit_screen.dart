@@ -45,7 +45,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
          imageEditProvider.clearState();
        },
       child: Scaffold(
-        backgroundColor: Color(0xFFECECEC),
+        backgroundColor: const Color(0xFFECECEC),
         appBar: AppBar(
           centerTitle: true,
           title: Text(widget.image.name),

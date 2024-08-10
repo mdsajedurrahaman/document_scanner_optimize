@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
@@ -46,8 +47,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
     final cameraProvider = context.watch<CameraProvider>();
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop)
-    {
+      onPopInvoked: (didPop) {
       if (cameraProvider.imageList.isEmpty) {
         cameraProvider.clearImageList();
         Navigator.pushAndRemoveUntil(
@@ -79,11 +79,10 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
     }
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFECECEC),
+        backgroundColor: const Color(0xFFECECEC),
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(onPressed: (){
-
             if(cameraProvider.imageList.isEmpty){
               cameraProvider.clearImageList();
               Navigator.pushAndRemoveUntil(
@@ -114,7 +113,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
               );
             }
 
-          }, icon: const Icon(Icons.arrow_back,color: Colors.black,)),
+          }, icon:  Icon( Platform.isAndroid? Icons.arrow_back :Icons.arrow_back_ios  ,color: Colors.black,)),
           title: cameraProvider.imageList.isEmpty
               ? Text(
                   translation(context).pleaseTakePhoto,

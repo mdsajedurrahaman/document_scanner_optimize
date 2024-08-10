@@ -179,5 +179,8 @@
     "imageSavedAtGallery":"이미지가 갤러리에 저장됨",
   "deselectAll":"모두 선택 취소",
     "folderAlreadyExists": "폴더가 이미 있습니다",
-    "fileAlreadyExists": "파일이 이미 있습니다"
+    "fileAlreadyExists": "파일이 이미 있습니다",
+  "conflictAlert": "파일 충돌 경고",
+  "fileConflictAlertContent":"일부 파일이 이 디렉토리에 이미 존재합니다. 복제하시겠습니까?",
+  "duplicate":"중복"
 }

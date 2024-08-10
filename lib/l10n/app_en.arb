@@ -177,5 +177,8 @@
   "imageSavedAtGallery": "Image Saved at Gallery",
   "deselectAll": "Deselect All",
   "folderAlreadyExists": "Folder Already Exists",
-  "fileAlreadyExists": "File Already Exists"
+  "fileAlreadyExists": "File Already Exists",
+  "conflictAlert": "Conflict Alert!",
+  "fileConflictAlertContent": "Some files already exist in this directory. Do you want to duplicate them?",
+  "duplicate": "Duplicate"
 }

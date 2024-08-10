@@ -179,6 +179,9 @@
     "imageSavedAtGallery": "Gambar Disimpan di Galeri",
   "deselectAll": "Batal Pilih Semua",
   "folderAlreadyExists" : "Folder Sudah Ada",
-    "fileAlreadyExists" : "File Sudah Ada"
+    "fileAlreadyExists" : "File Sudah Ada",
+  "conflictAlert": "Peringatan Konflik",
+  "fileConflictAlertContent":"Beberapa berkas sudah ada di direktori ini. Apakah Anda ingin menduplikasinya?",
+  "duplicate": "Duplikat"
 
 }

@@ -617,6 +617,10 @@ class _CameraScreenState extends State<CameraScreen> {
                           scrollDirection: Axis.horizontal,
                           physics: const NeverScrollableScrollPhysics(),
                           onPageChanged: (index) async {
+
+                            cameraProvider.idCardImages.clear();
+                            cameraProvider.imageList.clear();
+
                             setState(() {
                               activePage = index;
                             });

@@ -47,9 +47,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 200,
               ),
               const Text(
-                "Document Scanner : Scan to PDF",
+                "Scan faster, Work smarter.",
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 18,
                     fontWeight: FontWeight.w400,
                     color: Colors.white),
               ),

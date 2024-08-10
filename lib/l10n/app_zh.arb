@@ -179,6 +179,9 @@
   "imageSavedAtGallery":"图像已保存在相册中",
   "deselectAll":"取消全选",
   "folderAlreadyExists": "文件夹已存在",
-  "fileAlreadyExists": "文件已存在"
+  "fileAlreadyExists": "文件已存在",
+  "conflictAlert": "文件冲突警告",
+  "fileConflictAlertContent":"該目錄中已經存在一些檔案。您想複製它們嗎？",
+  "duplicate": "重复"
 
 }

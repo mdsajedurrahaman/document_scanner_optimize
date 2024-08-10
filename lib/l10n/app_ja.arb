@@ -179,5 +179,8 @@
   "imageSavedAtGallery":"画像がギャラリーに保存されました",
   "deselectAll":"すべての選択を解除",
   "folderAlreadyExists": "フォルダはすでに存在します",
-  "fileAlreadyExists": "ファイルはすでに存在します"
+  "fileAlreadyExists": "ファイルはすでに存在します",
+  "conflictAlert": "ファイルの競合警告",
+  "fileConflictAlertContent":"このディレクトリにはすでにいくつかのファイルがあります。複製しますか?",
+  "duplicate": "重複"
 }

@@ -20,6 +20,8 @@ class ImageEditButton extends StatefulWidget {
 class _ImageEditButtonState extends State<ImageEditButton> {
   @override
   Widget build(BuildContext context) {
+
+    final size=MediaQuery.sizeOf(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -32,8 +34,8 @@ class _ImageEditButtonState extends State<ImageEditButton> {
             children: [
               SvgPicture.asset(
                   widget.iconPath,
-                  height: 20,
-                  width: 20,
+                  height: size.width>=600? 30: 20,
+                  width: size.width>=600? 30: 20,
                   fit: BoxFit.cover,
                 color: Colors.black,
                 ),

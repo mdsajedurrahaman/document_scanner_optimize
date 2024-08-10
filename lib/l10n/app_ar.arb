@@ -179,5 +179,8 @@
   "imageSavedAtGallery": "تم حفظ الصورة في المعرض",
   "deselectAll": "إلغاء تحديد الكل",
   "folderAlreadyExist" : "المجلد موجود بالفعل",
-  "fileAlreadyExist" : "الملف موجود بالفعل"
+  "fileAlreadyExist" : "الملف موجود بالفعل",
+  "conflictAlert": "تنبيه الصراع",
+  "fileConflictAlertContent": "توجد بعض الملفات بالفعل في هذا الدليل. هل تريد تكرارها؟",
+  "duplicate": "ينسخ"
 }

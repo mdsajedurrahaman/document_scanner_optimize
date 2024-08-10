@@ -139,25 +139,43 @@ class CameraProvider extends ChangeNotifier{
         directoryPath = '${appDirectory.path}/Doc Scanner/Document';
       }
       final pdf = pw.Document();
-      for (var imageData in images) {
-        final pdfImage = pw.MemoryImage(imageData);
-        pdf.addPage(
-          pw.Page(
-            clip: false,
-            pageFormat: PdfPageFormat.a4,
-            margin: const pw.EdgeInsets.all(0),
-            build: (pw.Context context) {
-              return pw.Center(
-                child: pw.Image(
-                  pdfImage,
-                  fit: pw.BoxFit.fill,
-                ),
-              );
-            },
-          ),
-        );
-      }
-
+     if(_imageList.length==1 && _imageList.first.docType == 'ID Card') {
+       final pdfImage = pw.MemoryImage(images.first);
+       pdf.addPage(
+         pw.Page(
+           pageFormat: PdfPageFormat.a4,
+           margin: const pw.EdgeInsets.all(20),
+           build: (pw.Context context) {
+             return pw.Container(
+               color: PdfColors.white,
+               alignment: pw.Alignment.center,
+               child: pw.Center(
+                 child: pw.Image(pdfImage),
+               ),
+             );
+           },
+         ),
+       );
+     }else{
+       for (var imageData in images) {
+         final pdfImage = pw.MemoryImage(imageData);
+         pdf.addPage(
+           pw.Page(
+             clip: false,
+             pageFormat: PdfPageFormat.a4,
+             margin: const pw.EdgeInsets.all(0),
+             build: (pw.Context context) {
+               return pw.Center(
+                 child: pw.Image(
+                   pdfImage,
+                   fit: pw.BoxFit.fill,
+                 ),
+               );
+             },
+           ),
+         );
+       }
+     }
       int index = 1;
       String newFileName = fileName;
       while (File('$directoryPath/$newFileName.pdf').existsSync()) {

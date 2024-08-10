@@ -179,5 +179,8 @@
   "imageSavedAtGallery": "छवि गैलरी में सहेजी गई",
   "deselectAll": "सभी का चयन रद्द करें",
   "folderAlreadyExists": "फ़ोल्डर पहले से मौजूद है",
-  "fileAlreadyExists": "फ़ाइल पहले से मौजूद है"
+  "fileAlreadyExists": "फ़ाइल पहले से मौजूद है",
+  "conflictAlert": "संघर्ष चेतावनी",
+  "fileConflictAlertContent":"इस निर्देशिका में कुछ फ़ाइलें पहले से मौजूद हैं। क्या आप उन्हें डुप्लिकेट करना चाहते हैं?",
+  "duplicate": "डुप्लिकेट"
 }

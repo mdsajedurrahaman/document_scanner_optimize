@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/image_edit/provider/image_edit_provider.dart';
+import 'package:doc_scanner/splash_screen/splash_screen.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/helper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -88,7 +89,7 @@ class _MyAppState extends State<MyApp> {
                  style: TextButton.styleFrom(foregroundColor: AppColor.primaryColor),
                 ),
               ),
-              home: const BottomBar(),
+              home: const SplashScreen(),
             ),
           );
         }

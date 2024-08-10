@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -124,7 +125,7 @@ class _BottomBarState extends State<BottomBar> {
                 builder: (context) {
                   return IntrinsicHeight(
                     child: Container(
-                        height: 220,
+                        height:size.width>=600?270: 220,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
@@ -137,11 +138,9 @@ class _BottomBarState extends State<BottomBar> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10)
-                                      .copyWith(top: 10, bottom: 5),
+                                  const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10, bottom: 5),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(""),
                                   Text(
@@ -152,8 +151,8 @@ class _BottomBarState extends State<BottomBar> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Container(
-                                    height: 30,
-                                    width: 30,
+                                    height:size.width>=600?40: 30,
+                                    width: size.width>=600?40: 30,
                                     alignment: Alignment.center,
                                     decoration: const BoxDecoration(
                                       color: Color(0xFFF4F4F4),
@@ -166,9 +165,9 @@ class _BottomBarState extends State<BottomBar> {
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
-                                        child: const Icon(
+                                        child:  Icon(
                                           Icons.close_rounded,
-                                          size: 20,
+                                          size: size.width>=600?30: 20,
                                         ),
                                       ),
                                     ),
@@ -180,13 +179,9 @@ class _BottomBarState extends State<BottomBar> {
                               color: Colors.grey.withOpacity(0.3),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10)
-                                  .copyWith(
-                                bottom: 30,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 10).copyWith(bottom: 30),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Material(
@@ -204,7 +199,7 @@ class _BottomBarState extends State<BottomBar> {
                                       },
                                       child: Container(
                                         height: size.width >= 600 ? 150 : 110,
-                                        width: size.width >= 600 ? 210 : 110,
+                                        width: size.width >= 600 ? 150 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -291,7 +286,7 @@ class _BottomBarState extends State<BottomBar> {
                                       },
                                       child: Container(
                                         height: size.width >= 600 ? 150 : 110,
-                                        width: size.width >= 600 ? 210 : 110,
+                                        width: size.width >= 600 ? 150 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -392,7 +387,7 @@ class _BottomBarState extends State<BottomBar> {
                                       },
                                       child: Container(
                                         height: size.width >= 600 ? 150 : 110,
-                                        width: size.width >= 600 ? 210 : 110,
+                                        width: size.width >= 600 ? 150 : 110,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),

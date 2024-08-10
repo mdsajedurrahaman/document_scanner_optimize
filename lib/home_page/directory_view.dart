@@ -113,15 +113,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                           ),
                         ],
                       );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.none) {
+                    }
+                    else if (snapshot.connectionState == ConnectionState.none) {
                       return Center(
                         child: Text(
                           translation(context).somethingWentWrong,
                         ),
                       );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
+                    }
+                    else if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
                         List<String> fileList = snapshot.data!;
                         directoryList = fileList.where((path) {
@@ -144,7 +144,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         style: IconButton.styleFrom(
                                           padding: EdgeInsets.zero,
                                         ),
-                                        icon: const Icon(Icons.arrow_back)),
+                                        icon: Platform.isAndroid? const Icon(Icons.arrow_back): const Icon(Icons.arrow_back_ios)
+                                    ),
                                     Text(
                                       widget.directoryPath.split('/').last,
                                       style: const TextStyle(
@@ -401,94 +402,49 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         context: context,
                                                         builder: (context) {
                                                           return Container(
-                                                            height: MediaQuery
-                                                                        .sizeOf(
-                                                                            context)
-                                                                    .height *
-                                                                0.2,
-                                                            width: MediaQuery
-                                                                    .sizeOf(
-                                                                        context)
-                                                                .width,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              20),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              20),
+                                                            height: MediaQuery.sizeOf(context).height * 0.2,
+                                                            width: MediaQuery.sizeOf(context).width,
+                                                            decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(20),
+                                                                      topRight: Radius.circular(20),
                                                                     ),
-                                                                    color: Colors
-                                                                        .white),
+                                                                    color: Colors.white),
                                                             child: Column(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              10)
-                                                                      .copyWith(
-                                                                          top:
-                                                                              20,
-                                                                          bottom:
-                                                                              10),
+                                                                  padding: const EdgeInsets.symmetric(horizontal: 10)
+                                                                      .copyWith(top: 20, bottom: 10),
                                                                   child: Row(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     children: [
-                                                                      const Text(
-                                                                          ''),
-                                                                      Text(
-                                                                        translation(context)
-                                                                            .documentFiles,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              20,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                      const Text(''),
+                                                                      Text(translation(context).documentFiles,
+                                                                        style: const TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 20,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          color:
-                                                                              Color(0xFFF4F4F4),
-                                                                          shape:
-                                                                              BoxShape.circle,
+                                                                        height:size.width>=600?40: 30,
+                                                                        width: size.width>=600?40: 30,
+                                                                        alignment: Alignment.center,
+                                                                        decoration: const BoxDecoration(
+                                                                          color: Color(0xFFF4F4F4),
+                                                                          shape: BoxShape.circle,
                                                                         ),
-                                                                        child:
-                                                                            Material(
-                                                                          color:
-                                                                              Colors.transparent,
-                                                                          child:
-                                                                              InkWell(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(30),
-                                                                            onTap:
-                                                                                () {
+                                                                        child: Material(
+                                                                          color: Colors.transparent,
+                                                                          child: InkWell(
+                                                                            borderRadius: BorderRadius.circular(30),
+                                                                            onTap:() {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:
-                                                                                const Icon(
+                                                                            child:  Icon(
                                                                               Icons.close_rounded,
-                                                                              size: 20,
+                                                                              size: size.width>=600?30: 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -523,9 +479,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             context,
                                                                         builder:
                                                                             (context) {
-                                                                          String
-                                                                              errorMessage =
-                                                                              '';
+                                                                          String errorMessage = '';
                                                                           return StatefulBuilder(builder:
                                                                               (context, setState) {
                                                                             return AlertDialog(
@@ -787,10 +741,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
+                                                                        height: size.width>=600?40: 30,
+                                                                        width:size.width>=600?40: 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -812,10 +764,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:
-                                                                                const Icon(
+                                                                            child: Icon(
                                                                               Icons.close_rounded,
-                                                                              size: 20,
+                                                                              size: size.width>=600?30: 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1171,10 +1122,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                            30,
+                                                                        height: size.width>=600?40: 30,
                                                                         width:
-                                                                            30,
+                                                                        size.width>=600?40: 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -1197,9 +1147,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                             },
                                                                             child:
-                                                                                const Icon(
+                                                                                 Icon(
                                                                               Icons.close_rounded,
-                                                                              size: 20,
+                                                                              size:size.width>=600?30: 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1466,26 +1416,20 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         MainAxisAlignment
                                                                             .spaceBetween,
                                                                     children: [
-                                                                      const Text(
-                                                                          ''),
+                                                                      const Text(''),
                                                                       Text(
-                                                                        translation(context)
-                                                                            .documentFiles,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              20,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                        translation(context).documentFiles,
+                                                                        style: const TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontSize: 20,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
                                                                         height:
-                                                                            30,
+                                                                        size.width>=600?40: 30,
                                                                         width:
-                                                                            30,
+                                                                        size.width>=600?40: 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -1508,9 +1452,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                             },
                                                                             child:
-                                                                                const Icon(
+                                                                                 Icon(
                                                                               Icons.close_rounded,
-                                                                              size: 20,
+                                                                              size:size.width>=600?30: 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1666,17 +1610,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       InkWell(
                                                                     onTap:
                                                                         () async {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      if (Platform
-                                                                          .isIOS) {
-                                                                        await Share
-                                                                            .shareXFiles([
-                                                                          XFile(
-                                                                              filePath)
-                                                                        ]);
-                                                                      } else if (Platform
-                                                                          .isAndroid) {
+                                                                      Navigator.pop(context);
+                                                                      if (Platform.isIOS) {
+                                                                        await Share.shareXFiles([XFile(filePath)]);
+                                                                      } else if (Platform.isAndroid) {
                                                                         await DocumentFileSavePlus()
                                                                             .saveFile(
                                                                                 await File(filePath).readAsBytes(),
@@ -1691,30 +1628,22 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             );
                                                                       }
                                                                     },
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              20.0,
-                                                                          vertical:
-                                                                              5),
-                                                                      child:
-                                                                          Row(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(
+                                                                          horizontal: 20.0,
+                                                                          vertical: 5),
+                                                                      child: Row(
                                                                         children: [
                                                                           const Icon(
                                                                             Icons.ios_share_outlined,
-                                                                            color:
-                                                                                Colors.black,
+                                                                            color: Colors.black,
                                                                           ),
                                                                           const SizedBox(
-                                                                            width:
-                                                                                20,
+                                                                            width: 20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).saveAtGallery,
-                                                                            style:
-                                                                                const TextStyle(
+                                                                            style: const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1744,14 +1673,12 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                 ),
                               ),
                               Container(
-                                height: 70,
+                                height: size.width>=600?100:70,
                                 color: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
@@ -1798,14 +1725,14 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     context: context,
                                                                     builder: (context) {
                                                                       return AlertDialog(
-                                                                        title: const Text("Conflict Alert!"),
-                                                                        content: const Text("Some files are already exist in this directory. Do you want to copy them?"),
+                                                                        title:  Text(translation(context).conflictAlert),
+                                                                        content:  Text(translation(context).fileConflictAlertContent),
                                                                         actions: [
                                                                           TextButton(
                                                                             onPressed: () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child: const Text("Cancel"),
+                                                                            child:  Text(translation(context).cancel),
                                                                           ),
                                                                           TextButton(
                                                                             onPressed: () {
@@ -1821,7 +1748,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                               allFiles = homePageProvider.getFileList(widget.directoryPath);
                                                                             },
-                                                                            child: const Text("Copy"),
+                                                                            child:  Text(translation(context).duplicate),
                                                                           ),
                                                                         ],
                                                                       );
@@ -2061,9 +1988,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         ],
                                       ),
                                     ),
-                                    widget.directoryPath.endsWith("QR Code") ||
-                                            widget.directoryPath
-                                                .endsWith("Bar Code")
+                                    widget.directoryPath.endsWith("QR Code") || widget.directoryPath.endsWith("Bar Code")
                                         ? GestureDetector(
                                             onTap: () async {
                                               if (_selectedItems.isNotEmpty) {
@@ -2474,49 +2399,24 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         .removeBarCode(item);
                                                   }
                                                   file.delete();
-                                                } else if (fileSystemEntity ==
-                                                    FileSystemEntityType
-                                                        .directory) {
-                                                  Directory directory =
-                                                      Directory(item);
-                                                  List<FileSystemEntity>
-                                                      entities =
-                                                      directory.listSync();
+                                                } else if (fileSystemEntity == FileSystemEntityType.directory) {
+                                                  Directory directory = Directory(item);
+                                                  List<FileSystemEntity>entities = directory.listSync();
                                                   if (entities.isEmpty) {
-                                                    await directory.delete(
-                                                        recursive: true);
+                                                    await directory.delete(recursive: true);
                                                   } else {
-                                                    for (var entity
-                                                        in entities) {
-                                                      if (entity.path
-                                                          .split("/")
-                                                          .contains(
-                                                              "Document")) {
-                                                        homePageProvider
-                                                            .removeDocumentImage(
-                                                                entity.path);
-                                                      } else if (entity.path
-                                                          .split("/")
-                                                          .contains(
-                                                              "ID Card")) {
-                                                        homePageProvider
-                                                            .removeIdCarImage(
-                                                                entity.path);
-                                                      } else if (entity.path
-                                                          .split("/")
-                                                          .contains(
-                                                              "QR Code")) {
-                                                        homePageProvider
-                                                            .removeQrCode(
-                                                                entity.path);
+                                                    for (var entity in entities) {
+                                                      if (entity.path.split("/").contains("Document")) {
+                                                        homePageProvider.removeDocumentImage(entity.path);
+                                                      } else if (entity.path.split("/").contains("ID Card")) {
+                                                        homePageProvider.removeIdCarImage(entity.path);
+                                                      } else if (entity.path.split("/").contains("QR Code")) {
+                                                        homePageProvider.removeQrCode(entity.path);
                                                       } else {
-                                                        homePageProvider
-                                                            .removeBarCode(
-                                                                entity.path);
+                                                        homePageProvider.removeBarCode(entity.path);
                                                       }
                                                     }
-                                                    await directory.delete(
-                                                        recursive: true);
+                                                    await directory.delete(recursive: true);
                                                   }
                                                 }
                                               }
@@ -2530,6 +2430,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 isDeleteLoading = false;
                                               });
                                             },
+
                                             // onOk: () async {
                                             //   for (int i = 0; i < _selectedItems.length; i++) {
                                             //     var item = _selectedItems.elementAt(i);
@@ -2581,6 +2482,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             //   });
                                             //   Navigator.pop(context);
                                             // },
+
                                             onCancel: () {
                                               Navigator.pop(context);
                                             },
@@ -2656,7 +2558,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
   }
 
   List<String> getSubdirectoriesSyncForAndroid(String directoryPath) {
-    print("directory path->  $directoryPath");
     Directory directory;
     if (directoryPath.contains("Document")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Document");
@@ -2669,12 +2570,11 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     } else {
       directory = Directory("");
     }
-    print("--- > ${directory.absolute.path}");
     if (directory.existsSync()) {
       try {
         final subdirectories = [
           directory.path
-        ]; // Start with the provided directory
+        ];
         final entities = directory.listSync();
         subdirectories.addAll(
           entities.whereType<Directory>().map((dir) => dir.path).toList(),
@@ -2689,7 +2589,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
   }
 
   List<String> getSubdirectoriesSyncForIos(String directoryPath) {
-    print("directory path->  $directoryPath");
     Directory directory;
     if (directoryPath.contains("Doc Scanner/Document")) {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Document");
@@ -2700,12 +2599,11 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     } else {
       directory = Directory("${rootDirectory.path}/Doc Scanner/Bar Code");
     }
-    print("--- > ${directory.absolute.path}");
     if (directory.existsSync()) {
       try {
         final subdirectories = [
           directory.path
-        ]; // Start with the provided directory
+        ];
         final entities = directory.listSync();
         subdirectories.addAll(
           entities.whereType<Directory>().map((dir) => dir.path).toList(),

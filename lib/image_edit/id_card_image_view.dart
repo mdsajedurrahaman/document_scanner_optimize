@@ -82,8 +82,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                 await MergeImageHelper.margeImages([imageFront, imageBack],
                         fit: true,
                         direction: Axis.vertical,
-                        backgroundColor: Colors.transparent)
-                    .then((image) async {
+                        backgroundColor: Colors.white).then((image) async {
                   await MergeImageHelper.imageToUint8List(image).then((imageFile) async{
                     var result = await FlutterImageCompress.compressWithList(
                       imageFile!,
