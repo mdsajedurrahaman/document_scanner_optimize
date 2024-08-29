@@ -925,18 +925,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       .transparent,
                                                                   child:
                                                                       InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      await Gal.putImage(
-                                                                          filePath,
-                                                                          album:
-                                                                              "Doc Scanner");
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(content: Text(translation(context).saveAtGallery)));
+                                                                    onTap: () async {
+                                                                      await Gal.putImage(filePath, album: "Doc Scanner");
+                                                                      Navigator.pop(context);
+                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translation(context).saveAtGallery)));
                                                                     },
                                                                     child:
                                                                         Padding(
@@ -1608,8 +1600,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       .transparent,
                                                                   child:
                                                                       InkWell(
-                                                                    onTap:
-                                                                        () async {
+                                                                    onTap: () async {
                                                                       Navigator.pop(context);
                                                                       if (Platform.isIOS) {
                                                                         await Share.shareXFiles([XFile(filePath)]);
@@ -2420,9 +2411,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                   }
                                                 }
                                               }
-                                              allFiles =
-                                                  homePageProvider.getFileList(
-                                                      widget.directoryPath);
+                                              allFiles = homePageProvider.getFileList(widget.directoryPath);
 
                                               setState(() {
                                                 _selectedItems.clear();
@@ -2557,36 +2546,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     );
   }
 
-  List<String> getSubdirectoriesSyncForAndroid(String directoryPath) {
-    Directory directory;
-    if (directoryPath.contains("Document")) {
-      directory = Directory("${rootDirectory.path}/Doc Scanner/Document");
-    } else if (directoryPath.contains("ID Card")) {
-      directory = Directory("${rootDirectory.path}/Doc Scanner/ID Card");
-    } else if (directoryPath.contains("QR Code")) {
-      directory = Directory("${rootDirectory.path}/Doc Scanner/QR Code");
-    } else if (directoryPath.contains("Bar Code")) {
-      directory = Directory("${rootDirectory.path}/Doc Scanner/Bar Code");
-    } else {
-      directory = Directory("");
-    }
-    if (directory.existsSync()) {
-      try {
-        final subdirectories = [
-          directory.path
-        ];
-        final entities = directory.listSync();
-        subdirectories.addAll(
-          entities.whereType<Directory>().map((dir) => dir.path).toList(),
-        );
-        return subdirectories;
-      } catch (e) {
-        throw Exception("An error occurred while listing subdirectories: $e");
-      }
-    } else {
-      throw Exception("Directory does not exist");
-    }
-  }
 
   List<String> getSubdirectoriesSyncForIos(String directoryPath) {
     Directory directory;

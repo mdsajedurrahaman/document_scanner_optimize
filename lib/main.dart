@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:ui';
-import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/image_edit/provider/image_edit_provider.dart';
 import 'package:doc_scanner/splash_screen/splash_screen.dart';
@@ -77,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScaleFactor)),
             child: MaterialApp(
-              title: 'Doc Scan',
+              title: 'Document Scanner - PDF Scanner',
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

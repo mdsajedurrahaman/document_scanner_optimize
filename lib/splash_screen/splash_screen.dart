@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
-
 import '../bottom_bar/bottom_bar.dart';
 import '../utils/app_assets.dart';
 

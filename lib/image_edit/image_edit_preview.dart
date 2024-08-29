@@ -304,14 +304,14 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   onOkText: translation(context).save,
                                   onCancelText: translation(context).cancel,
                                   onOk: () async {
-                                    await cameraProvider
-                                        .exportAllImages()
-                                        .then((value) {
+                                    await cameraProvider.exportAllImages().then((value) {
                                       cameraProvider.clearImageList();
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(
                                         builder: (context) {
-                                          return const BottomBar();
+                                          return const BottomBar(
+                                            shouldShowReview: true,
+                                          );
                                         },
                                       ), (route) => false);
                                       showTopSnackbar(
@@ -408,7 +408,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                     cameraProvider.clearImageList();
                                                     Navigator.pushAndRemoveUntil(
                                                             context, MaterialPageRoute(builder: (context) {
-                                                              return const BottomBar();
+                                                              return const BottomBar(
+                                                                shouldShowReview: true,
+                                                              );
                                                       },
                                                     ), (route) => false);
                                                     showTopSnackbar(context, "PDF successfully saved");

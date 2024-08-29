@@ -20,11 +20,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
      context.read<HomePageProvider>().getAllFileList();
    });
     super.initState();

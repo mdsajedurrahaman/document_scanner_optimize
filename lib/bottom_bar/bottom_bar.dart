@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ import '../camera_screen/provider/camera_provider.dart';
 import '../image_edit/image_preview.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+  final bool? shouldShowReview;
+  const BottomBar({super.key, this.shouldShowReview});
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -73,6 +75,23 @@ class _BottomBarState extends State<BottomBar> {
     }
   }
 
+  final InAppReview inAppReview = InAppReview.instance;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      if(widget.shouldShowReview!=null && widget.shouldShowReview==true){
+        if (await inAppReview.isAvailable()) {
+              inAppReview.requestReview();
+         }
+      }
+
+    });
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
@@ -103,6 +122,8 @@ class _BottomBarState extends State<BottomBar> {
             );
           },
         );
+
+
         false;
       },
       child: Scaffold(
@@ -269,10 +290,6 @@ class _BottomBarState extends State<BottomBar> {
                                                 );
                                               }
                                             });
-                                            //     .catchError(  (e){
-                                            //   Navigator.of(context).pop();
-                                            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("This image is not Supported")));
-                                            // });
                                           } else {
                                             Navigator.push(
                                                 context,
@@ -323,6 +340,7 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
+
                                         // await FilePicker.platform.pickFiles(
                                         //   type: FileType.custom,
                                         //   allowedExtensions: ['pdf'],

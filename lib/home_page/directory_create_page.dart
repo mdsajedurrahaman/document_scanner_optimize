@@ -16,10 +16,7 @@ class DirectoryCreatePage extends StatefulWidget {
 }
 
 class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+
 
   Directory? selectedDirectory;
   TextEditingController _directoryNameController = TextEditingController();

@@ -160,8 +160,7 @@ class HomePageProvider extends ChangeNotifier {
       notifyListeners();
 
       Directory appDir = await getApplicationDocumentsDirectory();
-      Directory documentDirectory =
-          Directory('${appDir.path}/Doc Scanner/Document');
+      Directory documentDirectory = Directory('${appDir.path}/Doc Scanner/Document');
       await for (FileSystemEntity entity in documentDirectory.list()) {
         if (entity is Directory) {
           await for (FileSystemEntity subEntity in entity.list()) {
@@ -255,9 +254,6 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<void> loadBarCode() async {
-
-
-
     try {
       _historyLoading=true;
       notifyListeners();
@@ -312,6 +308,9 @@ class HomePageProvider extends ChangeNotifier {
     fileList.addAll(subdirectoryPaths);
     return fileList.reversed.toList();
   }
+
+
+
 
   Future<String> readTxtFile(String filePath) async {
     try {

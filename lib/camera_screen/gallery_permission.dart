@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/provider/camera_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
@@ -8,9 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import '../image_edit/image_preview.dart';
 import 'model/image_model.dart';
+
+
 
 class GalleryPermission extends StatefulWidget {
   const GalleryPermission({super.key});
@@ -52,8 +52,7 @@ class _GalleryPermissionState extends State<GalleryPermission>
               if (image[i] != null) {
                 Provider.of<CameraProvider>(context,listen: false).addImage(
                   ImageModel(
-                      imageByte:
-                      await image[i]!.readAsBytes(),
+                  imageByte: await image[i]!.readAsBytes(),
                   name: 'Doc-$documentName',
                   docType: 'Document',
                 ),
@@ -374,24 +373,15 @@ class _GalleryPermissionState extends State<GalleryPermission>
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(
-                                  context);
+                              Navigator.pop(context);
                             },
-                            child: Text(
-                                translation(
-                                    context)
-                                    .cancel),
+                            child: Text(translation(context).cancel),
                           ),
                           TextButton(
                             onPressed: () async {
-                              Navigator.pop(
-                                  context);
-                              await openAppSettings();
+                              Navigator.pop(context);await openAppSettings();
                             },
-                            child: Text(
-                                translation(
-                                    context)
-                                    .openSettings),
+                            child: Text(translation(context).openSettings),
                           )
                         ],
                       );

@@ -33,8 +33,6 @@ class _SettingsPageState extends State<SettingsPage> {
     vibration = LocalStorage().getBool(AppConstant.VIBRATION_KEY);
     beep = LocalStorage().getBool(AppConstant.BEEP_KEY);
 
-    log(vibration.toString());
-    log(beep.toString());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Locale _locale = await getLocale();
       _selectedLanguage = Language.languageList().firstWhere(
@@ -203,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           );
                         }else if(Platform.isAndroid){
                           Share.share(
-                            'https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner',
+                            'https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner_',
                           );
                         }
                       },
@@ -255,7 +253,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             );
                           } else {
                             final url = Uri.parse(
-                              "https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner",
+                              "https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner_",
                             );
                             await launchUrl(
                               url,
@@ -340,7 +338,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   appBarTitleName:
                                       translation(context).privacyPolicy,
                                   url:
-                                      "https://sites.google.com/view/docu-scanner/home",
+                                      "https://sites.google.com/view/docum-scanne",
                                 ),
                               ),
                             );
@@ -389,10 +387,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => WebViewPage(
-                                  appBarTitleName:
-                                      translation(context).termsAndConditions,
-                                  url:
-                                      "https://sites.google.com/view/docum-scanner/home",
+                                  appBarTitleName: translation(context).termsAndConditions,
+                                  url: "https://sites.google.com/view/docum-scanner/home",
                                 ),
                               ),
                             );
@@ -402,10 +398,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => WebViewPage(
-                                  appBarTitleName:
-                                      translation(context).termsAndConditions,
-                                  url:
-                                      "https://sites.google.com/view/docum-scanner/home",
+                                  appBarTitleName: translation(context).termsAndConditions,
+                                  url: "https://sites.google.com/view/docu-scanne",
                                 ),
                               ),
                             );
