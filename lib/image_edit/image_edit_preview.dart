@@ -311,7 +311,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(
                                         builder: (context) {
-                                          return const BottomBar();
+                                          return const BottomBar(
+                                             shouldShowReview: true,
+                                          );
                                         },
                                       ), (route) => false);
                                       showTopSnackbar(
@@ -408,7 +410,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                     cameraProvider.clearImageList();
                                                     Navigator.pushAndRemoveUntil(
                                                             context, MaterialPageRoute(builder: (context) {
-                                                              return const BottomBar();
+                                                              return const BottomBar(
+                                                                shouldShowReview: true,
+                                                              );
                                                       },
                                                     ), (route) => false);
                                                     showTopSnackbar(context, "PDF successfully saved");
@@ -458,6 +462,8 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                               ),
                             ),
                           ),
+
+
                           // Divider(
                           //   color: Colors.grey[200],
                           //   thickness: 1,
