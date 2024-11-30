@@ -2,8 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 
-class ImageEditProvider extends ChangeNotifier{
-
+class ImageEditProvider extends ChangeNotifier {
   List<Uint8List> _history = [];
   int _currentIndex = -1;
   Uint8List get currentState => _history[_currentIndex];
@@ -30,6 +29,4 @@ class ImageEditProvider extends ChangeNotifier{
   }
 
   bool get canUndo => _currentIndex > 0;
-
-
 }

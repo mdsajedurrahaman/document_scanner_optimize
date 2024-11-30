@@ -28,8 +28,8 @@ class EditImagePreview extends StatefulWidget {
 
 class _EditImagePreviewState extends State<EditImagePreview> {
   int _currentIndex = 0;
-  final PageController _pageController = PageController();
-  final TextEditingController _renameController = TextEditingController();
+  PageController _pageController = PageController();
+  TextEditingController _renameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void showTopSnackbar(BuildContext context, String message) {
@@ -307,12 +307,12 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       height: size.width >= 600 ? 30 : 20,
                                       width: size.width >= 600 ? 30 : 20,
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                       width: 20,
                                     ),
                                     Text(
                                       translation(context).renameFile,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -376,7 +376,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                     ),
                                     Text(
                                       translation(context).exportImages,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -401,7 +401,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   builder: (context) {
                                     final cameProvider =
                                         context.watch<CameraProvider>();
-                                    TextEditingController renameController =
+                                    TextEditingController _renameController =
                                         TextEditingController();
                                     return StatefulBuilder(
                                       builder: (context, setState) {
@@ -424,7 +424,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                   ),
                                                 )
                                               : TextFormField(
-                                                  controller: renameController,
+                                                  controller: _renameController,
                                                   keyboardType:
                                                       TextInputType.text,
                                                   textInputAction:
@@ -457,13 +457,13 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                if (renameController
+                                                if (_renameController
                                                     .text.isNotEmpty) {
                                                   cameProvider
                                                       .createPDFFromByte(
                                                           context: context,
                                                           fileName:
-                                                              renameController
+                                                              _renameController
                                                                   .text)
                                                       .then((value) {
                                                     cameraProvider
@@ -511,7 +511,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       color: Colors.black,
                                       size: size.width >= 600 ? 30 : 20,
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                       width: 20,
                                     ),
                                     Text(

@@ -1,11 +1,18 @@
+import 'dart:io';
+
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
+import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/home_page/directory_create_page.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/home_page/search_page.dart';
+import 'package:doc_scanner/image_edit/image_edit_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
+import 'package:doc_scanner/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
@@ -165,15 +172,45 @@ class _HomePageState extends State<HomePage> {
                       children: List.generate(cameraItems.length, (index) {
                         final cameraItem = cameraItems[index];
                         return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CameraScreen(
-                                  initialPage: index,
-                                ),
-                              ),
-                            );
+                          onTap: () async {
+                            cameraItem.name == "Documents"
+                                ? await AppHelper.handlePermissions()
+                                    .then((_) async {
+                                    await CunningDocumentScanner.getPictures(
+                                            isGalleryImportAllowed: true)
+                                        .then((pictures) {
+                                      if (pictures!.isNotEmpty) {
+                                        pictures.forEach((element) async {
+                                          String imageName =
+                                              DateFormat('yyyyMMdd_SSSS')
+                                                  .format(DateTime.now());
+                                          cameraProvider.addImage(ImageModel(
+                                              docType: 'Document',
+                                              imageByte: File(element)
+                                                  .readAsBytesSync(),
+                                              name: "Document-$imageName"));
+                                        });
+
+                                        if (cameraProvider
+                                            .imageList.isNotEmpty) {
+                                          Navigator.pushAndRemoveUntil(context,
+                                              MaterialPageRoute(
+                                            builder: (context) {
+                                              return const EditImagePreview();
+                                            },
+                                          ), (route) => true);
+                                        }
+                                      }
+                                    });
+                                  })
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CameraScreen(
+                                        initialPage: index,
+                                      ),
+                                    ),
+                                  );
                           },
                           child: Column(
                             children: [

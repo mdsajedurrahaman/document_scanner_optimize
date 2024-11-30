@@ -75,6 +75,8 @@ dependencies:
   # document_file_save_plus: ^2.0.0
   firebase_crashlytics: ^4.0.1
   in_app_review: ^2.0.9
+  flutter_speed_dial: ^7.0.0
+  cunning_document_scanner: ^1.2.3
 
 
 
