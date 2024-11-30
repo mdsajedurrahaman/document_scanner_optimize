@@ -3,25 +3,24 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../localaization/language_constant.dart';
 
-
 class WebViewPage extends StatefulWidget {
   final String appBarTitleName;
   final String url;
-  const WebViewPage({super.key, required this.appBarTitleName, required this.url});
+  const WebViewPage(
+      {super.key, required this.appBarTitleName, required this.url});
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  late  WebViewController controller;
-  bool internetDisconnected=false;
+  late WebViewController controller;
+  bool internetDisconnected = false;
   var loadingPercentage = 0;
-
 
   @override
   void setState(VoidCallback fn) {
-    if (mounted){
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -34,7 +33,6 @@ class _WebViewPageState extends State<WebViewPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-
             setState(() {
               loadingPercentage = progress;
             });
@@ -68,28 +66,30 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.appBarTitleName,style: const TextStyle(fontSize: 18),)),
-        body:  Stack(
+        appBar: AppBar(
+            title: Text(
+          widget.appBarTitleName,
+          style: const TextStyle(fontSize: 18),
+        )),
+        body: Stack(
           children: [
-            !internetDisconnected?WebViewWidget(controller: controller):  Center(
-              child:Text(
-              translation(context).noInternetConnection,
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-              )
-            ),
+            !internetDisconnected
+                ? WebViewWidget(controller: controller)
+                : Center(
+                    child: Text(
+                    translation(context).noInternetConnection,
+                    style: const TextStyle(
+                      fontSize: 24,
+                    ),
+                  )),
             if (loadingPercentage < 100)
               LinearProgressIndicator(
                 value: loadingPercentage / 100.0,
               ),
           ],
-        )
-    );
+        ));
   }
 }
-

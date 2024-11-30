@@ -5,7 +5,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class MergeImageHelper {
   ///Merge images from a list of ui.Image
   ///[imageList] list of ui.Image
@@ -17,72 +16,76 @@ class MergeImageHelper {
   ///[backgroundColor] background color of picture
   ///
 
-
   static Future<ui.Image> margeImages(List<ui.Image> imageList,
-    {Axis direction = Axis.vertical, bool fit = true, Color? backgroundColor}) {
-  int maxWidth = 0;
-  int maxHeight = 0;
-  //calculate max width/height of image
-  imageList.forEach((image) {
-    if (direction == Axis.vertical) {
-      if (maxWidth < image.width) maxWidth = image.width;
-    } else {
-      if (maxHeight < image.height) maxHeight = image.height;
-    }
-  });
-  int totalHeight = maxHeight;
-  int totalWidth = maxWidth;
-  ui.PictureRecorder recorder = ui.PictureRecorder();
-  final paint = Paint();
-  Canvas canvas = Canvas(recorder);
-  double dx = 0;
-  double dy = 0;
-  //set background color
-  if (backgroundColor != null) canvas.drawColor(backgroundColor, BlendMode.srcOver);
-  //draw images into canvas
-  for (var i = 0; i < imageList.length; i++) {
-    var image = imageList[i];
-    double scaleDx = dx;
-    double scaleDy = dy;
-    double imageHeight = image.height.toDouble();
-    double imageWidth = image.width.toDouble();
-    if (fit) {
-      //scale the image to same width/height
-      canvas.save();
-      if (direction == Axis.vertical && image.width != maxWidth) {
-        canvas.scale(maxWidth / image.width);
-        scaleDy *= imageWidth / maxWidth;
-        imageHeight *= maxWidth / imageWidth;
-      } else if (direction == Axis.horizontal && image.height != maxHeight) {
-        canvas.scale(maxHeight / image.height);
-        scaleDx *= imageHeight / maxHeight;
-        imageWidth *= maxHeight / imageHeight;
-      }
-      canvas.drawImage(image, Offset(scaleDx, scaleDy), paint);
-      canvas.restore();
-    } else {
-      //draw directly
-      canvas.drawImage(image, Offset(dx, dy), paint);
-    }
-    //accumulate dx/dy
-    if (direction == Axis.vertical) {
-      dy += imageHeight;
-      totalHeight += imageHeight.floor();
-      if (i < imageList.length - 1) { // Check if it's not the last image
-        dy += 40; // Add 20 logical pixel gap after each image
-      }
-    } else {
-      dx += imageWidth;
-      totalWidth += imageWidth.floor();
-      if (i < imageList.length - 1) { // Check if it's not the last image
-        dx += 40; // Add 20 logical pixel gap after each image
+      {Axis direction = Axis.vertical,
+      bool fit = true,
+      Color? backgroundColor}) {
+    int maxWidth = 0;
+    int maxHeight = 0;
+    //calculate max width/height of image
+    for (var image in imageList) {
+      if (direction == Axis.vertical) {
+        if (maxWidth < image.width) maxWidth = image.width;
+      } else {
+        if (maxHeight < image.height) maxHeight = image.height;
       }
     }
+    int totalHeight = maxHeight;
+    int totalWidth = maxWidth;
+    ui.PictureRecorder recorder = ui.PictureRecorder();
+    final paint = Paint();
+    Canvas canvas = Canvas(recorder);
+    double dx = 0;
+    double dy = 0;
+    //set background color
+    if (backgroundColor != null) {
+      canvas.drawColor(backgroundColor, BlendMode.srcOver);
+    }
+    //draw images into canvas
+    for (var i = 0; i < imageList.length; i++) {
+      var image = imageList[i];
+      double scaleDx = dx;
+      double scaleDy = dy;
+      double imageHeight = image.height.toDouble();
+      double imageWidth = image.width.toDouble();
+      if (fit) {
+        //scale the image to same width/height
+        canvas.save();
+        if (direction == Axis.vertical && image.width != maxWidth) {
+          canvas.scale(maxWidth / image.width);
+          scaleDy *= imageWidth / maxWidth;
+          imageHeight *= maxWidth / imageWidth;
+        } else if (direction == Axis.horizontal && image.height != maxHeight) {
+          canvas.scale(maxHeight / image.height);
+          scaleDx *= imageHeight / maxHeight;
+          imageWidth *= maxHeight / imageHeight;
+        }
+        canvas.drawImage(image, Offset(scaleDx, scaleDy), paint);
+        canvas.restore();
+      } else {
+        //draw directly
+        canvas.drawImage(image, Offset(dx, dy), paint);
+      }
+      //accumulate dx/dy
+      if (direction == Axis.vertical) {
+        dy += imageHeight;
+        totalHeight += imageHeight.floor();
+        if (i < imageList.length - 1) {
+          // Check if it's not the last image
+          dy += 40; // Add 20 logical pixel gap after each image
+        }
+      } else {
+        dx += imageWidth;
+        totalWidth += imageWidth.floor();
+        if (i < imageList.length - 1) {
+          // Check if it's not the last image
+          dx += 40; // Add 20 logical pixel gap after each image
+        }
+      }
+    }
+    //output image
+    return recorder.endRecording().toImage(totalWidth, totalHeight);
   }
-  //output image
-  return recorder.endRecording().toImage(totalWidth, totalHeight);
-}
-
 
   // static Future<ui.Image> margeImages(List<ui.Image> imageList,
   //     {Axis direction = Axis.vertical, bool fit = true, Color? backgroundColor}) {
@@ -145,7 +148,8 @@ class MergeImageHelper {
   ///transfer ui.Image to Unit8List
   ///[image]
   ///[format] default to png
-  static Future<Uint8List?> imageToUint8List(ui.Image image, {ui.ImageByteFormat format = ui.ImageByteFormat.png}) async {
+  static Future<Uint8List?> imageToUint8List(ui.Image image,
+      {ui.ImageByteFormat format = ui.ImageByteFormat.png}) async {
     ByteData? byteData = await image.toByteData(format: format);
     return byteData?.buffer.asUint8List();
   }
@@ -156,11 +160,11 @@ class MergeImageHelper {
   ///by path_provider if null
   static Future<File?> imageToFile(ui.Image image, {String? path}) async {
     Uint8List? byte = await imageToUint8List(image);
-    if(byte==null) return null;
+    if (byte == null) return null;
     final directory = path ?? (await getTemporaryDirectory()).path;
     String fileName = DateTime.now().toIso8601String();
     String fullPath = '$directory/$fileName.png';
-    File imgFile = new File(fullPath);
+    File imgFile = File(fullPath);
     return await imgFile.writeAsBytes(byte);
   }
 

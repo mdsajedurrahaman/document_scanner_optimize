@@ -1,6 +1,5 @@
 part of "merge_image.dart";
 
-
 class _MergePainter extends CustomPainter {
   _MergePainter(this.imageList, this.direction, this.fit, this.scale);
 
@@ -16,7 +15,7 @@ class _MergePainter extends CustomPainter {
     double totalWidth = size.width;
     double totalHeight = size.height;
     Paint paint = Paint();
-    imageList.forEach((image) {
+    for (var image in imageList) {
       //scale the image to same width/height
       late double imageHeight;
       late double imageWidth;
@@ -61,7 +60,7 @@ class _MergePainter extends CustomPainter {
       } else {
         dx += imageWidth;
       }
-    });
+    }
   }
 
   @override

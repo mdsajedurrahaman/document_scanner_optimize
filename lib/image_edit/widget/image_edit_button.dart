@@ -1,4 +1,3 @@
-import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,8 +19,7 @@ class ImageEditButton extends StatefulWidget {
 class _ImageEditButtonState extends State<ImageEditButton> {
   @override
   Widget build(BuildContext context) {
-
-    final size=MediaQuery.sizeOf(context);
+    final size = MediaQuery.sizeOf(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -33,12 +31,12 @@ class _ImageEditButtonState extends State<ImageEditButton> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                  widget.iconPath,
-                  height: size.width>=600? 30: 20,
-                  width: size.width>=600? 30: 20,
-                  fit: BoxFit.cover,
+                widget.iconPath,
+                height: size.width >= 600 ? 30 : 20,
+                width: size.width >= 600 ? 30 : 20,
+                fit: BoxFit.cover,
                 color: Colors.black,
-                ),
+              ),
               const SizedBox(height: 5),
               Text(
                 widget.title,

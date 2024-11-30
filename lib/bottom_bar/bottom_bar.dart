@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/camera_screen/gallery_permission.dart';
@@ -39,7 +38,7 @@ class _BottomBarState extends State<BottomBar> {
     });
   }
 
-  GlobalKey _scaffoldKey = GlobalKey();
+  final GlobalKey _scaffoldKey = GlobalKey();
   late PermissionStatus storage;
 
   Future<bool> checkPermission() async {
@@ -79,18 +78,15 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-      if(widget.shouldShowReview!=null && widget.shouldShowReview==true){
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.shouldShowReview != null && widget.shouldShowReview == true) {
         if (await inAppReview.isAvailable()) {
-              inAppReview.requestReview();
-         }
+          inAppReview.requestReview();
+        }
       }
-
     });
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +119,6 @@ class _BottomBarState extends State<BottomBar> {
           },
         );
 
-
         false;
       },
       child: Scaffold(
@@ -146,7 +141,7 @@ class _BottomBarState extends State<BottomBar> {
                 builder: (context) {
                   return IntrinsicHeight(
                     child: Container(
-                        height:size.width>=600?270: 220,
+                        height: size.width >= 600 ? 270 : 220,
                         width: MediaQuery.of(context).size.width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
@@ -159,9 +154,11 @@ class _BottomBarState extends State<BottomBar> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10, bottom: 5),
+                                  const EdgeInsets.symmetric(horizontal: 10)
+                                      .copyWith(top: 10, bottom: 5),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(""),
                                   Text(
@@ -172,8 +169,8 @@ class _BottomBarState extends State<BottomBar> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Container(
-                                    height:size.width>=600?40: 30,
-                                    width: size.width>=600?40: 30,
+                                    height: size.width >= 600 ? 40 : 30,
+                                    width: size.width >= 600 ? 40 : 30,
                                     alignment: Alignment.center,
                                     decoration: const BoxDecoration(
                                       color: Color(0xFFF4F4F4),
@@ -186,9 +183,9 @@ class _BottomBarState extends State<BottomBar> {
                                         onTap: () {
                                           Navigator.pop(context);
                                         },
-                                        child:  Icon(
+                                        child: Icon(
                                           Icons.close_rounded,
-                                          size: size.width>=600?30: 20,
+                                          size: size.width >= 600 ? 30 : 20,
                                         ),
                                       ),
                                     ),
@@ -200,9 +197,11 @@ class _BottomBarState extends State<BottomBar> {
                               color: Colors.grey.withOpacity(0.3),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10).copyWith(bottom: 30),
+                              padding: const EdgeInsets.symmetric(vertical: 10)
+                                  .copyWith(bottom: 30),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Material(
@@ -260,26 +259,29 @@ class _BottomBarState extends State<BottomBar> {
                                         await checkPermission()
                                             .then((value) async {
                                           if (value) {
-                                            final ImagePicker _picker =
+                                            final ImagePicker picker =
                                                 ImagePicker();
-                                            await _picker
+                                            await picker
                                                 .pickMultiImage()
                                                 .then((image) async {
                                               if (image.isNotEmpty) {
-                                                for (int i = 0; i < image.length; i++) {
+                                                for (int i = 0;
+                                                    i < image.length;
+                                                    i++) {
                                                   String documentName =
-                                                      DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                                                      DateFormat(
+                                                              'yyyyMMdd_SSSS')
+                                                          .format(
+                                                              DateTime.now());
                                                   cameraProvider.addImage(
                                                     ImageModel(
-                                                      imageByte:
-                                                          await image[i]
-                                                              .readAsBytes(),
-                                                      name:
-                                                          'Doc-$documentName',
+                                                      imageByte: await image[i]
+                                                          .readAsBytes(),
+                                                      name: 'Doc-$documentName',
                                                       docType: 'Document',
                                                     ),
                                                   );
-                                                                                                }
+                                                }
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(
@@ -291,8 +293,7 @@ class _BottomBarState extends State<BottomBar> {
                                               }
                                             });
                                           } else {
-                                            Navigator.push(
-                                                context,
+                                            Navigator.push(context,
                                                 MaterialPageRoute(
                                               builder: (context) {
                                                 return const GalleryPermission();
@@ -340,7 +341,6 @@ class _BottomBarState extends State<BottomBar> {
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () async {
-
                                         // await FilePicker.platform.pickFiles(
                                         //   type: FileType.custom,
                                         //   allowedExtensions: ['pdf'],
@@ -368,35 +368,38 @@ class _BottomBarState extends State<BottomBar> {
                                           allowedExtensions: ['pdf'],
                                         );
                                         if (result != null) {
-                                           File file = File(result.paths.first!);
+                                          File file = File(result.paths.first!);
                                           // int fileSizeInBytes = await file.length();
                                           // double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
                                           // if (fileSizeInMB <= 5) {
-                                            cameraProvider.convertPdfToImage(file).then((value) {
-                                              if (value) {
-                                                BuildContext context = _scaffoldKey.currentContext!;
-                                                Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const ImagePreviewScreen(),
-                                                  ),
-                                                  (route) => false,
-                                                );
-                                              }
-                                            });
+                                          cameraProvider
+                                              .convertPdfToImage(file)
+                                              .then((value) {
+                                            if (value) {
+                                              BuildContext context =
+                                                  _scaffoldKey.currentContext!;
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ImagePreviewScreen(),
+                                                ),
+                                                (route) => false,
+                                              );
+                                            }
+                                          });
                                           // }
-                                        // else {
-                                        //     BuildContext context =
-                                        //         _scaffoldKey.currentContext!;
-                                        //     ScaffoldMessenger.of(context)
-                                        //         .showSnackBar(const SnackBar(
-                                        //       content: Text('File size exceeds 5 MB. Please select a smaller file.'),
-                                        //     ));
-                                        //   }
+                                          // else {
+                                          //     BuildContext context =
+                                          //         _scaffoldKey.currentContext!;
+                                          //     ScaffoldMessenger.of(context)
+                                          //         .showSnackBar(const SnackBar(
+                                          //       content: Text('File size exceeds 5 MB. Please select a smaller file.'),
+                                          //     ));
+                                          //   }
                                         } else {
                                           BuildContext context =
-                                          _scaffoldKey.currentContext!;
+                                              _scaffoldKey.currentContext!;
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                                   content: Text(
@@ -427,7 +430,7 @@ class _BottomBarState extends State<BottomBar> {
                                             // ),
                                             Text(
                                               translation(context).pdf,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 20),
@@ -461,7 +464,7 @@ class _BottomBarState extends State<BottomBar> {
           clipBehavior: Clip.antiAlias,
           child: NavigationBarTheme(
             data: NavigationBarThemeData(
-              labelTextStyle: MaterialStateProperty.all(
+              labelTextStyle: WidgetStateProperty.all(
                 const TextStyle(
                   fontSize: 14,
                   color: Colors.black,
@@ -470,9 +473,9 @@ class _BottomBarState extends State<BottomBar> {
             ),
             child: NavigationBarTheme(
               data: NavigationBarThemeData(
-                labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
-                  (Set<MaterialState> states) =>
-                      states.contains(MaterialState.selected)
+                labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+                  (Set<WidgetState> states) =>
+                      states.contains(WidgetState.selected)
                           ? const TextStyle(color: AppColor.primaryColor)
                           : const TextStyle(color: Colors.black),
                 ),

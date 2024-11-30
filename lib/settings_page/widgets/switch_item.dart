@@ -1,6 +1,5 @@
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SwitchItem extends StatefulWidget {
@@ -30,7 +29,9 @@ class _SwitchItemState extends State<SwitchItem> {
           height: 20,
           width: 20,
         ),
-        SizedBox(width: MediaQuery.sizeOf(context).width*0.015,),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.015,
+        ),
         Text(
           widget.title,
           style: const TextStyle(

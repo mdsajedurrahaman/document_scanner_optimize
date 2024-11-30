@@ -16,7 +16,7 @@ import 'package:share_plus/share_plus.dart';
 import '../utils/utils.dart';
 import 'fixed_size_delegate_grid.dart';
 import 'package:path/path.dart' as path;
-import 'package:document_file_save_plus/document_file_save_plus.dart';
+// import 'package:document_file_save_plus/document_file_save_plus.dart';
 
 class DirectoryDetailsPage extends StatefulWidget {
   final String directoryPath;
@@ -113,15 +113,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                           ),
                         ],
                       );
-                    }
-                    else if (snapshot.connectionState == ConnectionState.none) {
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.none) {
                       return Center(
                         child: Text(
                           translation(context).somethingWentWrong,
                         ),
                       );
-                    }
-                    else if (snapshot.connectionState == ConnectionState.done) {
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
                       if (snapshot.hasData) {
                         List<String> fileList = snapshot.data!;
                         directoryList = fileList.where((path) {
@@ -144,8 +144,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         style: IconButton.styleFrom(
                                           padding: EdgeInsets.zero,
                                         ),
-                                        icon: Platform.isAndroid?  const Icon(Icons.arrow_back): const Icon(Icons.arrow_back_ios)
-                                    ),
+                                        icon: Platform.isAndroid
+                                            ? const Icon(Icons.arrow_back)
+                                            : const Icon(Icons.arrow_back_ios)),
                                     Text(
                                       widget.directoryPath.split('/').last,
                                       style: const TextStyle(
@@ -402,49 +403,98 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         context: context,
                                                         builder: (context) {
                                                           return Container(
-                                                            height: MediaQuery.sizeOf(context).height * 0.2,
-                                                            width: MediaQuery.sizeOf(context).width,
-                                                            decoration: const BoxDecoration(
-                                                                    borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius.circular(20),
-                                                                      topRight: Radius.circular(20),
+                                                            height: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .height *
+                                                                0.2,
+                                                            width: MediaQuery
+                                                                    .sizeOf(
+                                                                        context)
+                                                                .width,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              20),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              20),
                                                                     ),
-                                                                    color: Colors.white),
+                                                                    color: Colors
+                                                                        .white),
                                                             child: Column(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 10)
-                                                                      .copyWith(top: 20, bottom: 10),
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          horizontal:
+                                                                              10)
+                                                                      .copyWith(
+                                                                          top:
+                                                                              20,
+                                                                          bottom:
+                                                                              10),
                                                                   child: Row(
-                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
                                                                     children: [
-                                                                      const Text(''),
-                                                                      Text(translation(context).documentFiles,
-                                                                        style: const TextStyle(
-                                                                          color: Colors.black,
-                                                                          fontSize: 20,
-                                                                          fontWeight: FontWeight.w500,
+                                                                      const Text(
+                                                                          ''),
+                                                                      Text(
+                                                                        translation(context)
+                                                                            .documentFiles,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              20,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:size.width>=600?40: 30,
-                                                                        width: size.width>=600?40: 30,
-                                                                        alignment: Alignment.center,
-                                                                        decoration: const BoxDecoration(
-                                                                          color: Color(0xFFF4F4F4),
-                                                                          shape: BoxShape.circle,
+                                                                        height: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
+                                                                        width: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          color:
+                                                                              Color(0xFFF4F4F4),
+                                                                          shape:
+                                                                              BoxShape.circle,
                                                                         ),
-                                                                        child: Material(
-                                                                          color: Colors.transparent,
-                                                                          child: InkWell(
-                                                                            borderRadius: BorderRadius.circular(30),
-                                                                            onTap:() {
+                                                                        child:
+                                                                            Material(
+                                                                          color:
+                                                                              Colors.transparent,
+                                                                          child:
+                                                                              InkWell(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(30),
+                                                                            onTap:
+                                                                                () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:  Icon(
+                                                                            child:
+                                                                                Icon(
                                                                               Icons.close_rounded,
-                                                                              size: size.width>=600?30: 20,
+                                                                              size: size.width >= 600 ? 30 : 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -466,10 +516,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     onTap:
                                                                         () async {
                                                                       TextEditingController
-                                                                          _renameController =
+                                                                          renameController =
                                                                           TextEditingController(
                                                                               text: filePath.split("/").last);
-                                                                      final _formKey =
+                                                                      final formKey =
                                                                           GlobalKey<
                                                                               FormState>();
                                                                       Navigator.pop(
@@ -479,7 +529,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             context,
                                                                         builder:
                                                                             (context) {
-                                                                          String errorMessage = '';
+                                                                          String
+                                                                              errorMessage =
+                                                                              '';
                                                                           return StatefulBuilder(builder:
                                                                               (context, setState) {
                                                                             return AlertDialog(
@@ -492,9 +544,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 ),
                                                                               ),
                                                                               content: Form(
-                                                                                key: _formKey,
+                                                                                key: formKey,
                                                                                 child: TextFormField(
-                                                                                  controller: _renameController,
+                                                                                  controller: renameController,
                                                                                   keyboardType: TextInputType.text,
                                                                                   textInputAction: TextInputAction.done,
                                                                                   autofocus: true,
@@ -518,8 +570,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
                                                                                 TextButton(
                                                                                   onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      String newName = _renameController.text;
+                                                                                    if (formKey.currentState!.validate()) {
+                                                                                      String newName = renameController.text;
                                                                                       String parentPath = Directory(filePath).parent.path;
                                                                                       String newPath = "$parentPath/$newName";
                                                                                       String lowerCaseNewPath = "$parentPath/${newName.toLowerCase()}";
@@ -741,8 +793,14 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height: size.width>=600?40: 30,
-                                                                        width:size.width>=600?40: 30,
+                                                                        height: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
+                                                                        width: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -764,9 +822,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child: Icon(
+                                                                            child:
+                                                                                Icon(
                                                                               Icons.close_rounded,
-                                                                              size: size.width>=600?30: 20,
+                                                                              size: size.width >= 600 ? 30 : 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -788,10 +847,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     onTap:
                                                                         () async {
                                                                       TextEditingController
-                                                                          _renameController =
+                                                                          renameController =
                                                                           TextEditingController(
                                                                               text: path.basenameWithoutExtension(filePath));
-                                                                      final _formKey =
+                                                                      final formKey =
                                                                           GlobalKey<
                                                                               FormState>();
                                                                       Navigator.pop(
@@ -814,9 +873,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                     fontWeight: FontWeight.w500,
                                                                                   )),
                                                                               content: Form(
-                                                                                key: _formKey,
+                                                                                key: formKey,
                                                                                 child: TextFormField(
-                                                                                  controller: _renameController,
+                                                                                  controller: renameController,
                                                                                   keyboardType: TextInputType.text,
                                                                                   textInputAction: TextInputAction.done,
                                                                                   autofocus: true,
@@ -841,8 +900,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
 
                                                                                 TextButton(
                                                                                   onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
-                                                                                      String newName = _renameController.text;
+                                                                                    if (formKey.currentState!.validate()) {
+                                                                                      String newName = renameController.text;
                                                                                       String parentPath = Directory(filePath).parent.path;
                                                                                       String newPath = "$parentPath/$newName.jpg";
                                                                                       if (File(newPath).existsSync()) {
@@ -925,10 +984,18 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       .transparent,
                                                                   child:
                                                                       InkWell(
-                                                                    onTap: () async {
-                                                                      await Gal.putImage(filePath, album: "Doc Scanner");
-                                                                      Navigator.pop(context);
-                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translation(context).saveAtGallery)));
+                                                                    onTap:
+                                                                        () async {
+                                                                      await Gal.putImage(
+                                                                          filePath,
+                                                                          album:
+                                                                              "Doc Scanner");
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(content: Text(translation(context).saveAtGallery)));
                                                                     },
                                                                     child:
                                                                         Padding(
@@ -941,19 +1008,19 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          Icon(
+                                                                          const Icon(
                                                                             Icons.ios_share_outlined,
                                                                             color:
                                                                                 Colors.black,
                                                                           ),
-                                                                          SizedBox(
+                                                                          const SizedBox(
                                                                             width:
                                                                                 20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).saveAtGallery,
                                                                             style:
-                                                                                TextStyle(
+                                                                                const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1114,9 +1181,14 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height: size.width>=600?40: 30,
-                                                                        width:
-                                                                        size.width>=600?40: 30,
+                                                                        height: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
+                                                                        width: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -1139,9 +1211,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                             },
                                                                             child:
-                                                                                 Icon(
+                                                                                Icon(
                                                                               Icons.close_rounded,
-                                                                              size:size.width>=600?30: 20,
+                                                                              size: size.width >= 600 ? 30 : 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1163,10 +1235,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     onTap:
                                                                         () async {
                                                                       TextEditingController
-                                                                          _renameController =
+                                                                          renameController =
                                                                           TextEditingController(
                                                                               text: path.basenameWithoutExtension(filePath));
-                                                                      final _formKey =
+                                                                      final formKey =
                                                                           GlobalKey<
                                                                               FormState>();
                                                                       Navigator.pop(
@@ -1189,9 +1261,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                     fontWeight: FontWeight.w500,
                                                                                   )),
                                                                               content: Form(
-                                                                                key: _formKey,
+                                                                                key: formKey,
                                                                                 child: TextFormField(
-                                                                                  controller: _renameController,
+                                                                                  controller: renameController,
                                                                                   keyboardType: TextInputType.text,
                                                                                   textInputAction: TextInputAction.done,
                                                                                   autofocus: true,
@@ -1215,9 +1287,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
                                                                                 TextButton(
                                                                                   onPressed: () async {
-                                                                                    if (_formKey.currentState!.validate()) {
+                                                                                    if (formKey.currentState!.validate()) {
                                                                                       // String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
-                                                                                      String newName = _renameController.text;
+                                                                                      String newName = renameController.text;
                                                                                       String parentPath = Directory(filePath).parent.path;
                                                                                       String newPath = "$parentPath/$newName.txt";
 
@@ -1408,20 +1480,30 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         MainAxisAlignment
                                                                             .spaceBetween,
                                                                     children: [
-                                                                      const Text(''),
+                                                                      const Text(
+                                                                          ''),
                                                                       Text(
-                                                                        translation(context).documentFiles,
-                                                                        style: const TextStyle(
-                                                                          color: Colors.black,
-                                                                          fontSize: 20,
-                                                                          fontWeight: FontWeight.w500,
+                                                                        translation(context)
+                                                                            .documentFiles,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              20,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                       Container(
-                                                                        height:
-                                                                        size.width>=600?40: 30,
-                                                                        width:
-                                                                        size.width>=600?40: 30,
+                                                                        height: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
+                                                                        width: size.width >=
+                                                                                600
+                                                                            ? 40
+                                                                            : 30,
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration:
@@ -1444,9 +1526,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                             },
                                                                             child:
-                                                                                 Icon(
+                                                                                Icon(
                                                                               Icons.close_rounded,
-                                                                              size:size.width>=600?30: 20,
+                                                                              size: size.width >= 600 ? 30 : 20,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1468,10 +1550,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     onTap:
                                                                         () async {
                                                                       TextEditingController
-                                                                          _renameController =
+                                                                          renameController =
                                                                           TextEditingController(
                                                                               text: path.basenameWithoutExtension(filePath));
-                                                                      final _formKey =
+                                                                      final formKey =
                                                                           GlobalKey<
                                                                               FormState>();
                                                                       Navigator.pop(
@@ -1496,9 +1578,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 ),
                                                                               ),
                                                                               content: Form(
-                                                                                key: _formKey,
+                                                                                key: formKey,
                                                                                 child: TextFormField(
-                                                                                  controller: _renameController,
+                                                                                  controller: renameController,
                                                                                   keyboardType: TextInputType.text,
                                                                                   textInputAction: TextInputAction.done,
                                                                                   autofocus: true,
@@ -1525,10 +1607,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 ),
                                                                                 TextButton(
                                                                                     onPressed: () async {
-                                                                                      if (_formKey.currentState!.validate()) {
+                                                                                      if (formKey.currentState!.validate()) {
                                                                                         //  String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
 
-                                                                                        String newName = _renameController.text;
+                                                                                        String newName = renameController.text;
                                                                                         String parentPath = Directory(filePath).parent.path;
                                                                                         String newPath = "$parentPath/$newName.pdf";
 
@@ -1600,41 +1682,90 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                       .transparent,
                                                                   child:
                                                                       InkWell(
-                                                                    onTap: () async {
-                                                                      Navigator.pop(context);
-                                                                      if (Platform.isIOS) {
-                                                                        await Share.shareXFiles([XFile(filePath)]);
-                                                                      } else if (Platform.isAndroid) {
-                                                                        await DocumentFileSavePlus()
-                                                                            .saveFile(
-                                                                                await File(filePath).readAsBytes(),
-                                                                                path.basenameWithoutExtension(filePath),
-                                                                                "application/pdf")
-                                                                            .then(
-                                                                              (value) => ScaffoldMessenger.of(context).showSnackBar(
-                                                                                SnackBar(
-                                                                                  content: Text(translation(context).fileSavedDownloadFolder),
-                                                                                ),
-                                                                              ),
-                                                                            );
+                                                                    onTap:
+                                                                        () async {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      if (Platform
+                                                                          .isIOS) {
+                                                                        await Share
+                                                                            .shareXFiles([
+                                                                          XFile(
+                                                                              filePath)
+                                                                        ]);
+                                                                      } else if (Platform
+                                                                          .isAndroid) {
+                                                                        // await DocumentFileSavePlus()
+                                                                        //     .saveFile(
+                                                                        //         await File(filePath).readAsBytes(),
+                                                                        //         path.basenameWithoutExtension(filePath),
+                                                                        //         "application/pdf")
+                                                                        //     .then(
+                                                                        //       (value) => ScaffoldMessenger.of(context).showSnackBar(
+                                                                        //         SnackBar(
+                                                                        //           content: Text(translation(context).fileSavedDownloadFolder),
+                                                                        //         ),
+                                                                        //       ),
+                                                                        //     );
+                                                                        try {
+                                                                          // Get the application's document directory
+                                                                          Directory
+                                                                              directory =
+                                                                              await getExternalStorageDirectory() ?? Directory('/storage/emulated/0');
+
+                                                                          // Create the file path and file
+                                                                          String
+                                                                              fileName =
+                                                                              path.basenameWithoutExtension(filePath);
+                                                                          String
+                                                                              newPath =
+                                                                              path.join(directory.path, '$fileName.pdf');
+                                                                          File
+                                                                              newFile =
+                                                                              File(newPath);
+
+                                                                          // Read the original file bytes and write them to the new location
+                                                                          await newFile
+                                                                              .writeAsBytes(await File(filePath).readAsBytes());
+
+                                                                          // Show success message
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .showSnackBar(
+                                                                            SnackBar(content: Text('File saved to $newPath')),
+                                                                          );
+                                                                        } catch (e) {
+                                                                          // Handle any errors
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .showSnackBar(
+                                                                            SnackBar(content: Text('Failed to save file: $e')),
+                                                                          );
+                                                                        }
                                                                       }
                                                                     },
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.symmetric(
-                                                                          horizontal: 20.0,
-                                                                          vertical: 5),
-                                                                      child: Row(
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          horizontal:
+                                                                              20.0,
+                                                                          vertical:
+                                                                              5),
+                                                                      child:
+                                                                          Row(
                                                                         children: [
                                                                           const Icon(
                                                                             Icons.ios_share_outlined,
-                                                                            color: Colors.black,
+                                                                            color:
+                                                                                Colors.black,
                                                                           ),
                                                                           const SizedBox(
-                                                                            width: 20,
+                                                                            width:
+                                                                                20,
                                                                           ),
                                                                           Text(
                                                                             translation(context).saveAtGallery,
-                                                                            style: const TextStyle(
+                                                                            style:
+                                                                                const TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
@@ -1664,37 +1795,64 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                 ),
                               ),
                               Container(
-                                height: size.width>=600?100:70,
+                                height: size.width >= 600 ? 100 : 70,
                                 color: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 alignment: Alignment.center,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
-                                        if (_selectedItems.every((element) => element.toLowerCase().endsWith('.jpg') ||
-                                                element.toLowerCase().endsWith('.txt') ||
-                                                element.toLowerCase().endsWith('.pdf') ||
-                                                element.toLowerCase().endsWith('.jpeg') ||
-                                                element.toLowerCase().endsWith('.png')) &&
+                                        if (_selectedItems.every((element) =>
+                                                element
+                                                    .toLowerCase()
+                                                    .endsWith('.jpg') ||
+                                                element
+                                                    .toLowerCase()
+                                                    .endsWith('.txt') ||
+                                                element
+                                                    .toLowerCase()
+                                                    .endsWith('.pdf') ||
+                                                element
+                                                    .toLowerCase()
+                                                    .endsWith('.jpeg') ||
+                                                element
+                                                    .toLowerCase()
+                                                    .endsWith('.png')) &&
                                             _selectedItems.isNotEmpty) {
                                           await showModalBottomSheet(
                                             context: context,
                                             builder: (context) {
-                                              List<String> directories = getSubdirectoriesSyncForIos(widget.directoryPath);
-                                              directories.remove(widget.directoryPath);
+                                              List<String> directories =
+                                                  getSubdirectoriesSyncForIos(
+                                                      widget.directoryPath);
+                                              directories
+                                                  .remove(widget.directoryPath);
                                               log(directories.toString());
 
                                               return SizedBox(
-                                                height: MediaQuery.of(context).size.height *0.5,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.5,
                                                 child: directories.isNotEmpty
                                                     ? Padding(
                                                         padding:
-                                                            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    20.0,
+                                                                vertical: 10),
                                                         child: ListView(
-                                                          scrollDirection: Axis.vertical,
-                                                          children: List.generate(directories.length,
+                                                          scrollDirection:
+                                                              Axis.vertical,
+                                                          children:
+                                                              List.generate(
+                                                                  directories
+                                                                      .length,
                                                                   (index) {
                                                             return ListTile(
                                                               leading:
@@ -1704,29 +1862,47 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     .primaryColor,
                                                                 size: 40,
                                                               ),
-                                                              title: Text(directories[index].split('/').last),
+                                                              title: Text(
+                                                                  directories[
+                                                                          index]
+                                                                      .split(
+                                                                          '/')
+                                                                      .last),
                                                               onTap: () async {
-                                                                var conflictResult = homePageProvider.checkIfFilesExistInDirectory(
-                                                                  targetDirectoryPath: directories[index],
-                                                                  filePaths: _selectedItems.toList(),
+                                                                var conflictResult =
+                                                                    homePageProvider
+                                                                        .checkIfFilesExistInDirectory(
+                                                                  targetDirectoryPath:
+                                                                      directories[
+                                                                          index],
+                                                                  filePaths:
+                                                                      _selectedItems
+                                                                          .toList(),
                                                                 );
 
                                                                 if (conflictResult) {
                                                                   showDialog(
-                                                                    context: context,
-                                                                    builder: (context) {
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) {
                                                                       return AlertDialog(
-                                                                        title:  Text(translation(context).conflictAlert),
-                                                                        content:  Text(translation(context).fileConflictAlertContent),
+                                                                        title: Text(
+                                                                            translation(context).conflictAlert),
+                                                                        content:
+                                                                            Text(translation(context).fileConflictAlertContent),
                                                                         actions: [
                                                                           TextButton(
-                                                                            onPressed: () {
+                                                                            onPressed:
+                                                                                () {
                                                                               Navigator.pop(context);
                                                                             },
-                                                                            child:  Text(translation(context).cancel),
+                                                                            child:
+                                                                                Text(translation(context).cancel),
                                                                           ),
                                                                           TextButton(
-                                                                            onPressed: () {
+                                                                            onPressed:
+                                                                                () {
                                                                               homePageProvider.moveFilesToDirectory(
                                                                                 targetDirectoryPath: directories[index],
                                                                                 filePaths: _selectedItems.toList(),
@@ -1739,24 +1915,35 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               Navigator.pop(context);
                                                                               allFiles = homePageProvider.getFileList(widget.directoryPath);
                                                                             },
-                                                                            child:  Text(translation(context).duplicate),
+                                                                            child:
+                                                                                Text(translation(context).duplicate),
                                                                           ),
                                                                         ],
                                                                       );
                                                                     },
                                                                   );
-                                                                }
-                                                                else {
-                                                                  homePageProvider.moveFilesToDirectory(
-                                                                    targetDirectoryPath: directories[index],
-                                                                    filePaths: _selectedItems.toList(),
+                                                                } else {
+                                                                  homePageProvider
+                                                                      .moveFilesToDirectory(
+                                                                    targetDirectoryPath:
+                                                                        directories[
+                                                                            index],
+                                                                    filePaths:
+                                                                        _selectedItems
+                                                                            .toList(),
                                                                   );
                                                                   setState(() {
-                                                                    _selectedItems.clear();
-                                                                    _isLongPressed = false;
+                                                                    _selectedItems
+                                                                        .clear();
+                                                                    _isLongPressed =
+                                                                        false;
                                                                   });
-                                                                  Navigator.pop(context);
-                                                                  allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  allFiles = homePageProvider
+                                                                      .getFileList(
+                                                                          widget
+                                                                              .directoryPath);
                                                                 }
 
                                                                 // homePageProvider.moveFilesToDirectory(
@@ -1979,7 +2166,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         ],
                                       ),
                                     ),
-                                    widget.directoryPath.endsWith("QR Code") || widget.directoryPath.endsWith("Bar Code")
+                                    widget.directoryPath.endsWith("QR Code") ||
+                                            widget.directoryPath
+                                                .endsWith("Bar Code")
                                         ? GestureDetector(
                                             onTap: () async {
                                               if (_selectedItems.isNotEmpty) {
@@ -1999,8 +2188,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                             context)
                                                         .showSnackBar(
                                                       SnackBar(
-                                                        duration: Duration(
-                                                            seconds: 1),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
                                                         content: Text(
                                                           translation(context)
                                                               .textCopied,
@@ -2016,8 +2206,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     SnackBar(
-                                                      duration:
-                                                          Duration(seconds: 1),
+                                                      duration: const Duration(
+                                                          seconds: 1),
                                                       content: Text(
                                                         translation(context)
                                                             .pleaseSelectOneTextOnly,
@@ -2032,12 +2222,12 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
-                                                    duration:
-                                                        Duration(seconds: 1),
+                                                    duration: const Duration(
+                                                        seconds: 1),
                                                     content: Text(
                                                       translation(context)
                                                           .pleaseSelectFirst,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         color: Colors.white,
                                                       ),
                                                     ),
@@ -2099,7 +2289,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                       context: context,
                                                       builder: (context) {
                                                         TextEditingController
-                                                            _renameController =
+                                                            renameController =
                                                             TextEditingController();
                                                         return AlertDialog(
                                                           title:
@@ -2107,7 +2297,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                           content:
                                                               TextFormField(
                                                             controller:
-                                                                _renameController,
+                                                                renameController,
                                                             keyboardType:
                                                                 TextInputType
                                                                     .text,
@@ -2156,7 +2346,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                             TextButton(
                                                               onPressed:
                                                                   () async {
-                                                                if (_renameController
+                                                                if (renameController
                                                                     .text
                                                                     .isNotEmpty) {
                                                                   Navigator.pop(
@@ -2173,7 +2363,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     context:
                                                                         context,
                                                                     fileName:
-                                                                        _renameController
+                                                                        renameController
                                                                             .text,
                                                                   )
                                                                       .then(
@@ -2212,7 +2402,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           context)
                                                                       .showSnackBar(
                                                                     SnackBar(
-                                                                      duration: Duration(
+                                                                      duration: const Duration(
                                                                           seconds:
                                                                               1),
                                                                       content:
@@ -2276,8 +2466,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                             context)
                                                         .showSnackBar(
                                                       SnackBar(
-                                                        duration: Duration(
-                                                            seconds: 1),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
                                                         content: Text(
                                                           translation(context)
                                                               .pleaseSelectImagesOnly,
@@ -2390,28 +2581,55 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         .removeBarCode(item);
                                                   }
                                                   file.delete();
-                                                } else if (fileSystemEntity == FileSystemEntityType.directory) {
-                                                  Directory directory = Directory(item);
-                                                  List<FileSystemEntity>entities = directory.listSync();
+                                                } else if (fileSystemEntity ==
+                                                    FileSystemEntityType
+                                                        .directory) {
+                                                  Directory directory =
+                                                      Directory(item);
+                                                  List<FileSystemEntity>
+                                                      entities =
+                                                      directory.listSync();
                                                   if (entities.isEmpty) {
-                                                    await directory.delete(recursive: true);
+                                                    await directory.delete(
+                                                        recursive: true);
                                                   } else {
-                                                    for (var entity in entities) {
-                                                      if (entity.path.split("/").contains("Document")) {
-                                                        homePageProvider.removeDocumentImage(entity.path);
-                                                      } else if (entity.path.split("/").contains("ID Card")) {
-                                                        homePageProvider.removeIdCarImage(entity.path);
-                                                      } else if (entity.path.split("/").contains("QR Code")) {
-                                                        homePageProvider.removeQrCode(entity.path);
+                                                    for (var entity
+                                                        in entities) {
+                                                      if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "Document")) {
+                                                        homePageProvider
+                                                            .removeDocumentImage(
+                                                                entity.path);
+                                                      } else if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "ID Card")) {
+                                                        homePageProvider
+                                                            .removeIdCarImage(
+                                                                entity.path);
+                                                      } else if (entity.path
+                                                          .split("/")
+                                                          .contains(
+                                                              "QR Code")) {
+                                                        homePageProvider
+                                                            .removeQrCode(
+                                                                entity.path);
                                                       } else {
-                                                        homePageProvider.removeBarCode(entity.path);
+                                                        homePageProvider
+                                                            .removeBarCode(
+                                                                entity.path);
                                                       }
                                                     }
-                                                    await directory.delete(recursive: true);
+                                                    await directory.delete(
+                                                        recursive: true);
                                                   }
                                                 }
                                               }
-                                              allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                              allFiles =
+                                                  homePageProvider.getFileList(
+                                                      widget.directoryPath);
 
                                               setState(() {
                                                 _selectedItems.clear();
@@ -2546,7 +2764,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     );
   }
 
-
   List<String> getSubdirectoriesSyncForIos(String directoryPath) {
     Directory directory;
     if (directoryPath.contains("Doc Scanner/Document")) {
@@ -2560,9 +2777,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     }
     if (directory.existsSync()) {
       try {
-        final subdirectories = [
-          directory.path
-        ];
+        final subdirectories = [directory.path];
         final entities = directory.listSync();
         subdirectories.addAll(
           entities.whereType<Directory>().map((dir) => dir.path).toList(),

@@ -5,7 +5,6 @@ import 'package:doc_scanner/main.dart';
 import 'package:doc_scanner/settings_page/web_view_page.dart';
 import 'package:doc_scanner/settings_page/widgets/switch_item.dart';
 import 'package:doc_scanner/utils/app_constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:share_plus/share_plus.dart';
@@ -34,9 +33,9 @@ class _SettingsPageState extends State<SettingsPage> {
     beep = LocalStorage().getBool(AppConstant.BEEP_KEY);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Locale _locale = await getLocale();
-      _selectedLanguage = Language.languageList().firstWhere(
-          (element) => element.languageCode == _locale.languageCode);
+      Locale locale = await getLocale();
+      _selectedLanguage = Language.languageList()
+          .firstWhere((element) => element.languageCode == locale.languageCode);
       setState(() {});
     });
     super.initState();
@@ -96,9 +95,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         setState(() {
                           _selectedLanguage = newValue!;
                         });
-                        Locale _locale =
-                            await setLocale(newValue!.languageCode);
-                        MyApp.setLocale(context, _locale);
+                        Locale locale = await setLocale(newValue!.languageCode);
+                        MyApp.setLocale(context, locale);
                       },
                       selectedItemBuilder: (BuildContext context) {
                         return Language.languageList()
@@ -194,12 +192,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(6),
                       onTap: () {
-
-                        if(Platform.isIOS){
+                        if (Platform.isIOS) {
                           Share.share(
                             'https://apps.apple.com/app/id6472610820',
                           );
-                        }else if(Platform.isAndroid){
+                        } else if (Platform.isAndroid) {
                           Share.share(
                             'https://play.google.com/store/apps/details?id=com.documentscannerpdfscanner_',
                           );
@@ -387,8 +384,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => WebViewPage(
-                                  appBarTitleName: translation(context).termsAndConditions,
-                                  url: "https://sites.google.com/view/docum-scanner/home",
+                                  appBarTitleName:
+                                      translation(context).termsAndConditions,
+                                  url:
+                                      "https://sites.google.com/view/docum-scanner/home",
                                 ),
                               ),
                             );
@@ -398,8 +397,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => WebViewPage(
-                                  appBarTitleName: translation(context).termsAndConditions,
-                                  url: "https://sites.google.com/view/docu-scanne",
+                                  appBarTitleName:
+                                      translation(context).termsAndConditions,
+                                  url:
+                                      "https://sites.google.com/view/docu-scanne",
                                 ),
                               ),
                             );

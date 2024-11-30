@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:doc_scanner/camera_screen/provider/camera_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
 class HomePageProvider extends ChangeNotifier {
   List<Directory> _directories = [];
@@ -44,27 +40,27 @@ class HomePageProvider extends ChangeNotifier {
     required Directory rootDirectory,
     required String directoryName,
   }) async {
-    final Directory newDirectory = Directory('${rootDirectory.path}/$directoryName');
+    final Directory newDirectory =
+        Directory('${rootDirectory.path}/$directoryName');
     if (await newDirectory.exists()) {
-
-    }else{
+    } else {
       await newDirectory.create(recursive: true);
     }
   }
 
-  List<File> _documentImageFiles = [];
+  final List<File> _documentImageFiles = [];
 
   List<File> get documentImageFiles => _documentImageFiles.reversed.toList();
 
-  List<File> _idCardImageFiles = [];
+  final List<File> _idCardImageFiles = [];
 
   List<File> get idCardImageFiles => _idCardImageFiles.reversed.toList();
 
-  List<String> _qrCodeFiles = [];
+  final List<String> _qrCodeFiles = [];
 
   List<String> get qrCodeFiles => _qrCodeFiles.reversed.toList();
 
-  List<String> _barCodeFiles = [];
+  final List<String> _barCodeFiles = [];
 
   List<String> get barCodeFiles => _barCodeFiles.reversed.toList();
 
@@ -108,14 +104,15 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   void removeBarCode(String barCode) {
-    int index = _barCodeFiles.indexWhere((file) => file.split("/").last == barCode.split("/").last);
+    int index = _barCodeFiles
+        .indexWhere((file) => file.split("/").last == barCode.split("/").last);
     _barCodeFiles.removeAt(index);
     notifyListeners();
   }
 
   void removeQrCode(String qrCode) {
-
-    int index = _qrCodeFiles.indexWhere((file) => file.split("/").last == qrCode.split("/").last);
+    int index = _qrCodeFiles
+        .indexWhere((file) => file.split("/").last == qrCode.split("/").last);
     _qrCodeFiles.removeAt(index);
     notifyListeners();
   }
@@ -150,17 +147,17 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  bool _historyLoading=false;
-  bool get isHistoryLoading=>_historyLoading;
+  bool _historyLoading = false;
+  bool get isHistoryLoading => _historyLoading;
 
   Future<void> loadDocumentImage() async {
     try {
-      _historyLoading=true;
+      _historyLoading = true;
       notifyListeners();
 
       Directory appDir = await getApplicationDocumentsDirectory();
-      Directory documentDirectory = Directory('${appDir.path}/Doc Scanner/Document');
+      Directory documentDirectory =
+          Directory('${appDir.path}/Doc Scanner/Document');
       await for (FileSystemEntity entity in documentDirectory.list()) {
         if (entity is Directory) {
           await for (FileSystemEntity subEntity in entity.list()) {
@@ -184,7 +181,7 @@ class HomePageProvider extends ChangeNotifier {
           }
         }
       }
-      _historyLoading=false;
+      _historyLoading = false;
       notifyListeners();
     } catch (e) {
       print(e);
@@ -193,8 +190,7 @@ class HomePageProvider extends ChangeNotifier {
 
   Future<void> loadIdCardImage() async {
     try {
-
-      _historyLoading=true;
+      _historyLoading = true;
       notifyListeners();
       Directory appDir = await getApplicationDocumentsDirectory();
       Directory documentDirectory =
@@ -223,7 +219,7 @@ class HomePageProvider extends ChangeNotifier {
         }
       }
 
-      _historyLoading=false;
+      _historyLoading = false;
       notifyListeners();
     } catch (e) {
       print(e.toString());
@@ -231,11 +227,9 @@ class HomePageProvider extends ChangeNotifier {
   }
 
   Future<void> loadQRCode() async {
-
     try {
-      _historyLoading=true;
+      _historyLoading = true;
       notifyListeners();
-
 
       Directory appDir = await getApplicationDocumentsDirectory();
       Directory textFilesDir = Directory('${appDir.path}/Doc Scanner/QR Code');
@@ -246,7 +240,7 @@ class HomePageProvider extends ChangeNotifier {
         }
       }
 
-      _historyLoading=false;
+      _historyLoading = false;
       notifyListeners();
     } catch (e) {
       print('Error: $e');
@@ -255,7 +249,7 @@ class HomePageProvider extends ChangeNotifier {
 
   Future<void> loadBarCode() async {
     try {
-      _historyLoading=true;
+      _historyLoading = true;
       notifyListeners();
 
       Directory appDir = await getApplicationDocumentsDirectory();
@@ -266,7 +260,7 @@ class HomePageProvider extends ChangeNotifier {
           _barCodeFiles.add(entity.path);
         }
       }
-      _historyLoading=false;
+      _historyLoading = false;
       notifyListeners();
     } catch (e) {
       print('Error: $e');
@@ -276,7 +270,6 @@ class HomePageProvider extends ChangeNotifier {
   bool _isCreatingPDF = false;
 
   bool get isCreatingPDF => _isCreatingPDF;
-
 
   Future<List<String>> getFileList(String directoryPath) async {
     List<String> subdirectoryPaths = [];
@@ -308,9 +301,6 @@ class HomePageProvider extends ChangeNotifier {
     fileList.addAll(subdirectoryPaths);
     return fileList.reversed.toList();
   }
-
-
-
 
   Future<String> readTxtFile(String filePath) async {
     try {
@@ -403,8 +393,6 @@ class HomePageProvider extends ChangeNotifier {
   //   }
   // }
 
-
-
   void moveFilesToDirectory({
     required String targetDirectoryPath,
     required List<String> filePaths,
@@ -416,10 +404,12 @@ class HomePageProvider extends ChangeNotifier {
         String destinationFilePath = '$targetDirectoryPath/$fileName';
         if (File(destinationFilePath).existsSync()) {
           String baseName = fileName.split('.').first;
-          String extension = fileName.contains('.') ? '.${fileName.split('.').last}' : '';
+          String extension =
+              fileName.contains('.') ? '.${fileName.split('.').last}' : '';
           int count = 1;
           while (File(destinationFilePath).existsSync()) {
-            destinationFilePath = '$targetDirectoryPath/$baseName-$count$extension';
+            destinationFilePath =
+                '$targetDirectoryPath/$baseName-$count$extension';
             count++;
           }
         }
@@ -431,8 +421,6 @@ class HomePageProvider extends ChangeNotifier {
       }
     }
   }
-
-
 
   bool checkIfFilesExistInDirectory({
     required String targetDirectoryPath,
@@ -478,7 +466,7 @@ class HomePageProvider extends ChangeNotifier {
               filePath.toLowerCase().endsWith('.png') ||
               filePath.toLowerCase().endsWith('.pdf') ||
               filePath.toLowerCase().endsWith('.txt')) {
-              imageAndPdfPaths.add(filePath);
+            imageAndPdfPaths.add(filePath);
           }
         }
       }
@@ -512,8 +500,7 @@ class HomePageProvider extends ChangeNotifier {
 
   List<String> get filteredItems => _filteredItems;
 
-
-  void clearFilteredItems(){
+  void clearFilteredItems() {
     _filteredItems.clear();
     notifyListeners();
   }

@@ -1,9 +1,7 @@
-
 import 'dart:typed_data';
 
 import 'package:colorfilter_generator/colorfilter_generator.dart';
 import 'package:colorfilter_generator/presets.dart';
-import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
@@ -14,8 +12,6 @@ import '../../localaization/language_constant.dart';
 import '../provider/image_edit_provider.dart';
 
 class ImageFilters extends StatefulWidget {
-
-
   const ImageFilters({
     super.key,
   });
@@ -34,10 +30,7 @@ class _ImageFiltersState extends State<ImageFilters> {
 
   @override
   void initState() {
-    filters = [
-      PresetFilters.none,
-      ...(presetFiltersList.sublist(1))
-    ];
+    filters = [PresetFilters.none, ...(presetFiltersList.sublist(1))];
     super.initState();
   }
 
@@ -47,42 +40,41 @@ class _ImageFiltersState extends State<ImageFilters> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:  Text(translation(context).filters,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500
-          ),
+        title: Text(
+          translation(context).filters,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
         actions: [
           TextButton(
-            child:  Text(translation(context).done,style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: AppColor.primaryColor,
-            ),
+            child: Text(
+              translation(context).done,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: AppColor.primaryColor,
+              ),
             ),
             onPressed: () async {
               Uint8List? data = await screenshotController.capture();
-              if(data!=null) {
+              if (data != null) {
                 imageEditProvider.addState(data);
                 Navigator.pop(context);
               }
-
             },
           ),
         ],
       ),
       body: Center(
-          child: Screenshot(
-            controller: screenshotController,
-            child: FilterAppliedImage(
-              key: Key('selectedFilter:${selectedFilter.name}'),
-              image: imageEditProvider.currentState,
-              filter: selectedFilter,
-              fit: BoxFit.cover,
-              opacity: filterOpacity,
-            ),
+        child: Screenshot(
+          controller: screenshotController,
+          child: FilterAppliedImage(
+            key: Key('selectedFilter:${selectedFilter.name}'),
+            image: imageEditProvider.currentState,
+            filter: selectedFilter,
+            fit: BoxFit.cover,
+            opacity: filterOpacity,
           ),
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: SizedBox(
@@ -93,17 +85,17 @@ class _ImageFiltersState extends State<ImageFilters> {
               child: selectedFilter == PresetFilters.none
                   ? Container()
                   : selectedFilter.build(
-                Slider(
-                  min: 0,
-                  max: 1,
-                  divisions: 100,
-                  value: filterOpacity,
-                  onChanged: (value) {
-                    filterOpacity = value;
-                    setState(() {});
-                  },
-                ),
-              ),
+                      Slider(
+                        min: 0,
+                        max: 1,
+                        divisions: 100,
+                        value: filterOpacity,
+                        onChanged: (value) {
+                          filterOpacity = value;
+                          setState(() {});
+                        },
+                      ),
+                    ),
             ),
             SizedBox(
               height: 120,
@@ -114,7 +106,7 @@ class _ImageFiltersState extends State<ImageFilters> {
                     GestureDetector(
                       onTap: () {
                         selectedFilter = filter;
-                        filterOpacity=1;
+                        filterOpacity = 1;
                         setState(() {});
                       },
                       child: Column(children: [
@@ -226,9 +218,7 @@ class _FilterAppliedImageState extends State<FilterAppliedImage> {
         if (widget.onProcess != null && result != null) {
           widget.onProcess!(result);
         }
-      }).catchError((err, stack) {
-
-      });
+      }).catchError((err, stack) {});
     }
   }
 

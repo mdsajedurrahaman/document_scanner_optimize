@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "document_scanner_optimize",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "document_scanner_optimize (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "document_scanner_optimize (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "merge_image",
+            "cwd": "package\\merge_image",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "merge_image (profile mode)",
+            "cwd": "package\\merge_image",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "merge_image (release mode)",
+            "cwd": "package\\merge_image",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

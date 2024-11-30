@@ -30,13 +30,13 @@ class AddSignature extends StatefulWidget {
 
 class _AddSignatureState extends State<AddSignature> {
   String? signaturePath;
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
   bool initialShowActionIcons = true;
 
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    final size=MediaQuery.sizeOf(context);
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: const Color(0xFFECECEC),
       appBar: AppBar(
@@ -160,7 +160,7 @@ class _AddSignatureState extends State<AddSignature> {
                     ),
                     if (signaturePath != null)
                       InteractiveBox(
-                       initialPosition: const Offset(0, 50),
+                        initialPosition: const Offset(0, 50),
                         includedScaleDirections: const [
                           ScaleDirection.topRight,
                           ScaleDirection.bottomRight,
@@ -184,8 +184,8 @@ class _AddSignatureState extends State<AddSignature> {
                         },
                         initialShowActionIcons: initialShowActionIcons,
                         rotateIndicatorSpacing: 10,
-                        child: SvgPicture.string(signaturePath!, fit: BoxFit.cover),
-
+                        child: SvgPicture.string(signaturePath!,
+                            fit: BoxFit.cover),
                       ),
                   ],
                 ),
@@ -195,7 +195,7 @@ class _AddSignatureState extends State<AddSignature> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: size.width>=600?80: 70,
+        height: size.width >= 600 ? 80 : 70,
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: ImageEditButton(

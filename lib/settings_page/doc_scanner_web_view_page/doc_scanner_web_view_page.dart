@@ -4,15 +4,14 @@
 
 // ignore_for_file: public_member_api_docs
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DocScannerWebViewPage extends StatefulWidget {
   String appBarTitleName;
   String url;
-  DocScannerWebViewPage({super.key,required this.url,required this.appBarTitleName});
+  DocScannerWebViewPage(
+      {super.key, required this.url, required this.appBarTitleName});
 
   @override
   State<DocScannerWebViewPage> createState() => _DocScannerWebViewPageState();
@@ -21,7 +20,7 @@ class DocScannerWebViewPage extends StatefulWidget {
 class _DocScannerWebViewPageState extends State<DocScannerWebViewPage> {
   late final WebViewController controller;
 
-  bool internetDisconnected=false;
+  bool internetDisconnected = false;
   var loadingPercentage = 0;
   @override
   void initState() {
@@ -73,34 +72,35 @@ class _DocScannerWebViewPageState extends State<DocScannerWebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.appBarTitleName}')),
-      body:  Stack(
-        children: [
-          !internetDisconnected?WebViewWidget(controller: controller): const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // SvgPicture.asset(
-                //   "no_signal.svg",
-                //   width: MediaQuery.sizeOf(context).width / 2,
-                // ),
-                SizedBox(height: 20),
-                Text(
-                  "no network",
-                  style: TextStyle(
-                    fontSize: 24,
+        appBar: AppBar(title: Text(widget.appBarTitleName)),
+        body: Stack(
+          children: [
+            !internetDisconnected
+                ? WebViewWidget(controller: controller)
+                : const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SvgPicture.asset(
+                        //   "no_signal.svg",
+                        //   width: MediaQuery.sizeOf(context).width / 2,
+                        // ),
+                        SizedBox(height: 20),
+                        Text(
+                          "no network",
+                          style: TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          if (loadingPercentage < 100)
-            LinearProgressIndicator(
-              value: loadingPercentage / 100.0,
-            ),
-        ],
-      )
-    );
+            if (loadingPercentage < 100)
+              LinearProgressIndicator(
+                value: loadingPercentage / 100.0,
+              ),
+          ],
+        ));
   }
 // #enddocregion webview_widget
 }

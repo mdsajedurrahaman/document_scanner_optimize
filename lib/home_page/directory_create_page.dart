@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-
 class DirectoryCreatePage extends StatefulWidget {
   const DirectoryCreatePage({super.key});
 
@@ -16,10 +15,9 @@ class DirectoryCreatePage extends StatefulWidget {
 }
 
 class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
-
-
   Directory? selectedDirectory;
-  TextEditingController _directoryNameController = TextEditingController();
+  final TextEditingController _directoryNameController =
+      TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _directoryAlreadyExists = false;
 
@@ -67,7 +65,9 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
               TextFormField(
                 controller: _directoryNameController,
                 decoration: InputDecoration(
-                  errorText: _directoryAlreadyExists ? 'Directory already exists' : null,
+                  errorText: _directoryAlreadyExists
+                      ? 'Directory already exists'
+                      : null,
                   hintText: translation(context).enterDirectoryName,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -86,18 +86,19 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
                   backgroundColor: AppColor.primaryColor,
                   fixedSize: Size(MediaQuery.sizeOf(context).width, 50),
                 ),
-                onPressed: ()async {
+                onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     if (_directoryNameController.text.trim().isNotEmpty) {
                       FocusScope.of(context).unfocus();
-                      bool created = await createDirectory( targetDirectory: selectedDirectory!,directoryName: _directoryNameController.text);
-                      if(created){
+                      bool created = await createDirectory(
+                          targetDirectory: selectedDirectory!,
+                          directoryName: _directoryNameController.text);
+                      if (created) {
                         Navigator.pop(context);
                       }
                       setState(() {
                         _directoryAlreadyExists = !created;
                       });
-
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -127,19 +128,28 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
     required String directoryName,
   }) async {
     Directory rootDirectory = await getApplicationDocumentsDirectory();
-    final documentDirectory = Directory('${rootDirectory.path}/Doc Scanner/Document');
-    final idCardDirectory = Directory('${rootDirectory.path}/Doc Scanner/ID Card');
-    final qrCodeDirectory = Directory('${rootDirectory.path}/Doc Scanner/QR Code');
-    final barCodeDirectory = Directory('${rootDirectory.path}/Doc Scanner/Bar Code');
+    final documentDirectory =
+        Directory('${rootDirectory.path}/Doc Scanner/Document');
+    final idCardDirectory =
+        Directory('${rootDirectory.path}/Doc Scanner/ID Card');
+    final qrCodeDirectory =
+        Directory('${rootDirectory.path}/Doc Scanner/QR Code');
+    final barCodeDirectory =
+        Directory('${rootDirectory.path}/Doc Scanner/Bar Code');
 
     try {
-      if (await _directoryExistsWithCaseInsensitive(documentDirectory, directoryName) ||
-          await _directoryExistsWithCaseInsensitive(idCardDirectory, directoryName) ||
-          await _directoryExistsWithCaseInsensitive(qrCodeDirectory, directoryName) ||
-          await _directoryExistsWithCaseInsensitive(barCodeDirectory, directoryName)) {
+      if (await _directoryExistsWithCaseInsensitive(
+              documentDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(
+              idCardDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(
+              qrCodeDirectory, directoryName) ||
+          await _directoryExistsWithCaseInsensitive(
+              barCodeDirectory, directoryName)) {
         return false;
       } else {
-        final newCreatedDirectory = Directory('${targetDirectory.path}/$directoryName');
+        final newCreatedDirectory =
+            Directory('${targetDirectory.path}/$directoryName');
         await newCreatedDirectory.create(recursive: true);
         return true;
       }
@@ -148,11 +158,15 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
     }
   }
 
-  Future<bool> _directoryExistsWithCaseInsensitive(Directory parentDirectory, String directoryName) async {
+  Future<bool> _directoryExistsWithCaseInsensitive(
+      Directory parentDirectory, String directoryName) async {
     try {
-      final List<FileSystemEntity> entities = await parentDirectory.list().toList();
+      final List<FileSystemEntity> entities =
+          await parentDirectory.list().toList();
       for (final entity in entities) {
-        if (entity is Directory && entity.path.split('/').last.toLowerCase() == directoryName.toLowerCase()) {
+        if (entity is Directory &&
+            entity.path.split('/').last.toLowerCase() ==
+                directoryName.toLowerCase()) {
           return true;
         }
       }

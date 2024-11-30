@@ -82,7 +82,7 @@ Future<void> showQrAndBarCodeDialogue({
                           ),
                           label: Text(
                             translation(context).copy,
-                            style: TextStyle(color: Colors.blueAccent),
+                            style: const TextStyle(color: Colors.blueAccent),
                           ),
                         ),
                         ElevatedButton.icon(
@@ -98,7 +98,7 @@ Future<void> showQrAndBarCodeDialogue({
                           ),
                           label: Text(
                             translation(context).save,
-                            style: TextStyle(color: Colors.blueAccent),
+                            style: const TextStyle(color: Colors.blueAccent),
                           ),
                         ),
                       ],
@@ -198,7 +198,7 @@ Future<void> showNormalAlertDialogue({
 class TopSnackbar extends StatelessWidget {
   final String message;
 
-  const TopSnackbar({Key? key, required this.message}) : super(key: key);
+  const TopSnackbar({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

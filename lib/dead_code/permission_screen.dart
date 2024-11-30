@@ -10,16 +10,17 @@ class PermissionScreen extends StatefulWidget {
   State<PermissionScreen> createState() => _PermissionScreenState();
 }
 
-class _PermissionScreenState extends State<PermissionScreen> with WidgetsBindingObserver {
-
+class _PermissionScreenState extends State<PermissionScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 
   Future<void> _requestPermissions() async {
@@ -27,16 +28,23 @@ class _PermissionScreenState extends State<PermissionScreen> with WidgetsBinding
     var cameraResult = results[Permission.camera];
     var microphoneResult = results[Permission.microphone];
     if (cameraResult!.isGranted && microphoneResult!.isGranted) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CameraScreen(),));
-    }else if (cameraResult.isDenied || microphoneResult!.isDenied) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CameraScreen(),
+          ));
+    } else if (cameraResult.isDenied || microphoneResult!.isDenied) {
       var results = await [Permission.camera, Permission.microphone].request();
       var cameraResult = results[Permission.camera];
       var microphoneResult = results[Permission.microphone];
       if (cameraResult!.isGranted && microphoneResult!.isGranted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CameraScreen(),));
-      }
-      else if (cameraResult.isPermanentlyDenied || microphoneResult!.isPermanentlyDenied) {
-
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CameraScreen(),
+            ));
+      } else if (cameraResult.isPermanentlyDenied ||
+          microphoneResult!.isPermanentlyDenied) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -70,7 +78,8 @@ class _PermissionScreenState extends State<PermissionScreen> with WidgetsBinding
           },
         );
       }
-      }else if (cameraResult.isPermanentlyDenied || microphoneResult.isPermanentlyDenied) {
+    } else if (cameraResult.isPermanentlyDenied ||
+        microphoneResult.isPermanentlyDenied) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -104,8 +113,8 @@ class _PermissionScreenState extends State<PermissionScreen> with WidgetsBinding
         },
       );
     }
-
   }
+
   Future<bool> checkPermissions() async {
     var cameraStatus = await Permission.camera.status;
     var microphoneStatus = await Permission.microphone.status;
@@ -115,6 +124,7 @@ class _PermissionScreenState extends State<PermissionScreen> with WidgetsBinding
     }
     return false;
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {

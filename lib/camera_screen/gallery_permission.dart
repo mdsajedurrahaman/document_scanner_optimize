@@ -10,8 +10,6 @@ import 'package:provider/provider.dart';
 import '../image_edit/image_preview.dart';
 import 'model/image_model.dart';
 
-
-
 class GalleryPermission extends StatefulWidget {
   const GalleryPermission({super.key});
 
@@ -21,12 +19,9 @@ class GalleryPermission extends StatefulWidget {
 
 class _GalleryPermissionState extends State<GalleryPermission>
     with WidgetsBindingObserver {
-
-
   late PermissionStatus storageStatus;
   late PermissionStatus storageStatus1;
   late PermissionStatus storage;
-
 
   @override
   void initState() {
@@ -39,35 +34,43 @@ class _GalleryPermissionState extends State<GalleryPermission>
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      checkPermission().then((value) async{
+      checkPermission().then((value) async {
         if (value) {
-          final ImagePicker _picker = ImagePicker();
-          final List<XFile?> image = await _picker.pickMultiImage(imageQuality: 50);
+          final ImagePicker picker = ImagePicker();
+          final List<XFile?> image =
+              await picker.pickMultiImage(imageQuality: 50);
           if (image.isNotEmpty) {
             for (int i = 0; i < image.length; i++) {
-              String documentName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+              String documentName =
+                  DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
               if (image[i] != null) {
-                Provider.of<CameraProvider>(context,listen: false).addImage(
+                Provider.of<CameraProvider>(context, listen: false).addImage(
                   ImageModel(
-                  imageByte: await image[i]!.readAsBytes(),
-                  name: 'Doc-$documentName',
-                  docType: 'Document',
-                ),
-        );}
+                    imageByte: await image[i]!.readAsBytes(),
+                    name: 'Doc-$documentName',
+                    docType: 'Document',
+                  ),
+                );
+              }
             }
-        Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) =>const ImagePreviewScreen(),),(route) => false,);
-      }
-
-      }
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ImagePreviewScreen(),
+              ),
+              (route) => false,
+            );
+          }
+        }
       });
     }
   }
 
   Future<bool> checkPermission() async {
-
     if (Platform.isAndroid) {
       AndroidDeviceInfo build = await DeviceInfoPlugin().androidInfo;
       print("android");
@@ -117,18 +120,17 @@ class _GalleryPermissionState extends State<GalleryPermission>
                 storageStatus = await Permission.photos.request();
               }
               if (storageStatus.isGranted) {
-                final ImagePicker _picker = ImagePicker();
-                final List<XFile?> image = await _picker.pickMultiImage(
-                    imageQuality: 50);
+                final ImagePicker picker = ImagePicker();
+                final List<XFile?> image =
+                    await picker.pickMultiImage(imageQuality: 50);
                 if (image.isNotEmpty) {
                   for (int i = 0; i < image.length; i++) {
-                    String documentName = DateFormat('yyyyMMdd_SSSS').format(
-                        DateTime.now());
+                    String documentName =
+                        DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
                     if (image[i] != null) {
                       cameraProvider.addImage(
                         ImageModel(
-                          imageByte:
-                          await image[i]!.readAsBytes(),
+                          imageByte: await image[i]!.readAsBytes(),
                           name: 'Doc-$documentName',
                           docType: 'Document',
                         ),
@@ -138,43 +140,32 @@ class _GalleryPermissionState extends State<GalleryPermission>
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                      const ImagePreviewScreen(),
+                      builder: (context) => const ImagePreviewScreen(),
                     ),
-                        (route) => false,
+                    (route) => false,
                   );
                 }
-              }
-              else if (storageStatus.isPermanentlyDenied) {
+              } else if (storageStatus.isPermanentlyDenied) {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text(
-                          translation(context)
-                              .permissionDenied),
-                      content: Text(translation(
-                          context)
+                      title: Text(translation(context).permissionDenied),
+                      content: Text(translation(context)
                           .pleaseAllowStoragePermissionToAccessGallery),
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(
-                                context);
+                            Navigator.pop(context);
                           },
-                          child: Text(
-                              translation(context)
-                                  .cancel),
+                          child: Text(translation(context).cancel),
                         ),
                         TextButton(
                           onPressed: () async {
-                            Navigator.pop(
-                                context);
+                            Navigator.pop(context);
                             await openAppSettings();
                           },
-                          child: Text(
-                              translation(context)
-                                  .openSettings),
+                          child: Text(translation(context).openSettings),
                         )
                       ],
                     );
@@ -188,19 +179,17 @@ class _GalleryPermissionState extends State<GalleryPermission>
                 }
                 if (storageStatus1.isGranted) {
                   Navigator.pop(context);
-                  final ImagePicker _picker = ImagePicker();
-                  final List<XFile?> image = await _picker.pickMultiImage(
-                      limit: 5, imageQuality: 50);
+                  final ImagePicker picker = ImagePicker();
+                  final List<XFile?> image =
+                      await picker.pickMultiImage(limit: 5, imageQuality: 50);
                   if (image.isNotEmpty) {
                     for (int i = 0; i < image.length; i++) {
                       String documentName =
-                      DateFormat('yyyyMMdd_SSSS')
-                          .format(DateTime.now());
+                          DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
                       if (image[i] != null) {
                         cameraProvider.addImage(
                           ImageModel(
-                            imageByte:
-                            await image[i]!.readAsBytes(),
+                            imageByte: await image[i]!.readAsBytes(),
                             name: 'Doc-$documentName',
                             docType: 'Document',
                           ),
@@ -210,10 +199,9 @@ class _GalleryPermissionState extends State<GalleryPermission>
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                        const ImagePreviewScreen(),
+                        builder: (context) => const ImagePreviewScreen(),
                       ),
-                          (route) => false,
+                      (route) => false,
                     );
                   }
                 } else {
@@ -221,154 +209,8 @@ class _GalleryPermissionState extends State<GalleryPermission>
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text(translation(
-                            context)
-                            .permissionDenied),
-                        content: Text(translation(
-                            context)
-                            .pleaseAllowStoragePermissionToAccessGallery),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(
-                                  context);
-                            },
-                            child: Text(
-                                translation(
-                                    context)
-                                    .cancel),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(
-                                  context);
-                              await openAppSettings();
-                            },
-                            child: Text(
-                                translation(
-                                    context)
-                                    .openSettings),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                }
-              }
-            }
-
-
-            else {
-              // this for ios implementation
-                storageStatus = await Permission.photos.request();
-
-              if (storageStatus.isGranted) {
-                final ImagePicker _picker = ImagePicker();
-                final List<XFile?> image = await _picker.pickMultiImage(
-                    imageQuality: 50);
-                if (image.isNotEmpty) {
-                  for (int i = 0; i < image.length; i++) {
-                    String documentName = DateFormat('yyyyMMdd_SSSS').format(
-                        DateTime.now());
-                    if (image[i] != null) {
-                      cameraProvider.addImage(
-                        ImageModel(
-                          imageByte:
-                          await image[i]!.readAsBytes(),
-                          name: 'Doc-$documentName',
-                          docType: 'Document',
-                        ),
-                      );
-                    }
-                  }
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                      const ImagePreviewScreen(),
-                    ),
-                        (route) => false,
-                  );
-                }
-              }
-              else if (storageStatus.isPermanentlyDenied) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text(
-                          translation(context)
-                              .permissionDenied),
-                      content: Text(translation(
-                          context)
-                          .pleaseAllowStoragePermissionToAccessGallery),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(
-                                context);
-                          },
-                          child: Text(
-                              translation(context)
-                                  .cancel),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            Navigator.pop(
-                                context);
-                            await openAppSettings();
-                          },
-                          child: Text(
-                              translation(context)
-                                  .openSettings),
-                        )
-                      ],
-                    );
-                  },
-                );
-              }
-              else {
-                  storageStatus1 = await Permission.photos.request();
-                if (storageStatus1.isGranted) {
-                  Navigator.pop(context);
-                  final ImagePicker _picker = ImagePicker();
-                  final List<XFile?> image = await _picker.pickMultiImage(
-                      limit: 5, imageQuality: 50);
-                  if (image.isNotEmpty) {
-                    for (int i = 0; i < image.length; i++) {
-                      String documentName =
-                      DateFormat('yyyyMMdd_SSSS')
-                          .format(DateTime.now());
-                      if (image[i] != null) {
-                        cameraProvider.addImage(
-                          ImageModel(
-                            imageByte:
-                            await image[i]!.readAsBytes(),
-                            name: 'Doc-$documentName',
-                            docType: 'Document',
-                          ),
-                        );
-                      }
-                    }
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const ImagePreviewScreen(),
-                      ),
-                          (route) => false,
-                    );
-                  }
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(translation(
-                            context)
-                            .permissionDenied),
-                        content: Text(translation(
-                            context)
+                        title: Text(translation(context).permissionDenied),
+                        content: Text(translation(context)
                             .pleaseAllowStoragePermissionToAccessGallery),
                         actions: [
                           TextButton(
@@ -379,7 +221,121 @@ class _GalleryPermissionState extends State<GalleryPermission>
                           ),
                           TextButton(
                             onPressed: () async {
-                              Navigator.pop(context);await openAppSettings();
+                              Navigator.pop(context);
+                              await openAppSettings();
+                            },
+                            child: Text(translation(context).openSettings),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                }
+              }
+            } else {
+              // this for ios implementation
+              storageStatus = await Permission.photos.request();
+
+              if (storageStatus.isGranted) {
+                final ImagePicker picker = ImagePicker();
+                final List<XFile?> image =
+                    await picker.pickMultiImage(imageQuality: 50);
+                if (image.isNotEmpty) {
+                  for (int i = 0; i < image.length; i++) {
+                    String documentName =
+                        DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                    if (image[i] != null) {
+                      cameraProvider.addImage(
+                        ImageModel(
+                          imageByte: await image[i]!.readAsBytes(),
+                          name: 'Doc-$documentName',
+                          docType: 'Document',
+                        ),
+                      );
+                    }
+                  }
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ImagePreviewScreen(),
+                    ),
+                    (route) => false,
+                  );
+                }
+              } else if (storageStatus.isPermanentlyDenied) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(translation(context).permissionDenied),
+                      content: Text(translation(context)
+                          .pleaseAllowStoragePermissionToAccessGallery),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(translation(context).cancel),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await openAppSettings();
+                          },
+                          child: Text(translation(context).openSettings),
+                        )
+                      ],
+                    );
+                  },
+                );
+              } else {
+                storageStatus1 = await Permission.photos.request();
+                if (storageStatus1.isGranted) {
+                  Navigator.pop(context);
+                  final ImagePicker picker = ImagePicker();
+                  final List<XFile?> image =
+                      await picker.pickMultiImage(limit: 5, imageQuality: 50);
+                  if (image.isNotEmpty) {
+                    for (int i = 0; i < image.length; i++) {
+                      String documentName =
+                          DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
+                      if (image[i] != null) {
+                        cameraProvider.addImage(
+                          ImageModel(
+                            imageByte: await image[i]!.readAsBytes(),
+                            name: 'Doc-$documentName',
+                            docType: 'Document',
+                          ),
+                        );
+                      }
+                    }
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ImagePreviewScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  }
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(translation(context).permissionDenied),
+                        content: Text(translation(context)
+                            .pleaseAllowStoragePermissionToAccessGallery),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(translation(context).cancel),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await openAppSettings();
                             },
                             child: Text(translation(context).openSettings),
                           )

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
@@ -33,14 +32,13 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     return WillPopScope(
-
-
       onWillPop: () async {
         cameraProvider.clearIdCardImages();
-        Navigator.pushAndRemoveUntil(
-           context, MaterialPageRoute(builder: (context) {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+          builder: (context) {
             return const BottomBar();
-          },), (route) => false);
+          },
+        ), (route) => false);
         return true;
       },
 
@@ -58,9 +56,11 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () {
               cameraProvider.clearIdCardImages();
-               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-                return const BottomBar();
-              },), (route) => false);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) {
+                  return const BottomBar();
+                },
+              ), (route) => false);
             },
           ),
           centerTitle: true,
@@ -70,59 +70,66 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           ),
           actions: [
             TextButton(
-              onPressed:isLoading?null: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                var imageFront = await MergeImageHelper.loadImageFromFile(
-                    File(cameraProvider.idCardImages.first),
-                );
-                var imageBack = await MergeImageHelper.loadImageFromFile(
-                    File(cameraProvider.idCardImages.last));
-                await MergeImageHelper.margeImages([imageFront, imageBack],
-                        fit: true,
-                        direction: Axis.vertical,
-                        backgroundColor: Colors.white).then((image) async {
-                  await MergeImageHelper.imageToUint8List(image).then((imageFile) async{
-                    var result = await FlutterImageCompress.compressWithList(
-                      imageFile!,
-                      quality: 50,
-                    );
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      var imageFront = await MergeImageHelper.loadImageFromFile(
+                        File(cameraProvider.idCardImages.first),
+                      );
+                      var imageBack = await MergeImageHelper.loadImageFromFile(
+                          File(cameraProvider.idCardImages.last));
+                      await MergeImageHelper.margeImages(
+                              [imageFront, imageBack],
+                              fit: true,
+                              direction: Axis.vertical,
+                              backgroundColor: Colors.white)
+                          .then((image) async {
+                        await MergeImageHelper.imageToUint8List(image)
+                            .then((imageFile) async {
+                          var result =
+                              await FlutterImageCompress.compressWithList(
+                            imageFile!,
+                            quality: 50,
+                          );
 
-                    String idCardName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
-                    if (widget.isCameFromRetake == true &&
-                        widget.isCameFromRetake != null &&
-                        widget.imageIndex != null) {
-                      cameraProvider.updateImage(
-                          index: widget.imageIndex!,
-                          image: ImageModel(
-                              imageByte: result,
-                              name: "IDCard-$idCardName",
-                              docType: 'ID Card'),
-                      );
-                    } else {
-                      cameraProvider.addImage(
-                          ImageModel(
-                          imageByte: result!,
-                          name: "IDCard-$idCardName",
-                          docType: 'ID Card'),
-                      );
-                    }
-                    cameraProvider.clearIdCardImages();
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ImagePreviewScreen(
-                           isCameFromIdCard: true,
-                          ),
-                        ),
-                        (route) => false);
-                  });
-                });
-              },
+                          String idCardName = DateFormat('yyyyMMdd_SSSS')
+                              .format(DateTime.now());
+                          if (widget.isCameFromRetake == true &&
+                              widget.isCameFromRetake != null &&
+                              widget.imageIndex != null) {
+                            cameraProvider.updateImage(
+                              index: widget.imageIndex!,
+                              image: ImageModel(
+                                  imageByte: result,
+                                  name: "IDCard-$idCardName",
+                                  docType: 'ID Card'),
+                            );
+                          } else {
+                            cameraProvider.addImage(
+                              ImageModel(
+                                  imageByte: result,
+                                  name: "IDCard-$idCardName",
+                                  docType: 'ID Card'),
+                            );
+                          }
+                          cameraProvider.clearIdCardImages();
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ImagePreviewScreen(
+                                  isCameFromIdCard: true,
+                                ),
+                              ),
+                              (route) => false);
+                        });
+                      });
+                    },
               child: Text(
                 translation(context).done,
                 style: const TextStyle(fontSize: 16),
@@ -139,8 +146,10 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                     return Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 20),
-                          child: Image.file(File(cameraProvider.idCardImages[index])),
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 20),
+                          child: Image.file(
+                              File(cameraProvider.idCardImages[index])),
                         ),
                         Positioned(
                           bottom: 20,
@@ -174,14 +183,15 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                               height: 30,
                             ),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder:
-                              (context) {
-                                return  CameraScreen(
-                                  initialPage: 1,
-                                  isComeFromIdCardRetake: true,
-                                  isFront: index == 0 ? true : false,
-                                );
-                              },));
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return CameraScreen(
+                                    initialPage: 1,
+                                    isComeFromIdCardRetake: true,
+                                    isFront: index == 0 ? true : false,
+                                  );
+                                },
+                              ));
                             },
                           ),
                         ),

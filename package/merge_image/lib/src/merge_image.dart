@@ -4,11 +4,10 @@ import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 part "merge_painter.dart";
 
-
-
 class MergeImage extends StatelessWidget {
   MergeImage(this.imageList,
-      {super.key, this.direction = Axis.vertical,
+      {super.key,
+      this.direction = Axis.vertical,
       this.controller,
       this.fit = true,
       this.backgroundColor});
@@ -44,7 +43,7 @@ class MergeImage extends StatelessWidget {
       builder: (context, constraint) {
         _calculate(constraint);
         return RepaintBoundary(
-          key: controller?.key ?? ValueKey(0),
+          key: controller?.key ?? const ValueKey(0),
           child: ClipRRect(
             child: Container(
               color: backgroundColor,
@@ -62,13 +61,13 @@ class MergeImage extends StatelessWidget {
   ///calculating width and height of canvas
   _calculate(BoxConstraints constraint) {
     //calculate the max width/height of images
-    imageList.forEach((image) {
+    for (var image in imageList) {
       if (direction == Axis.vertical) {
         if (totalWidth < image.width) totalWidth = image.width;
       } else {
         if (totalHeight < image.height) totalHeight = image.height;
       }
-    });
+    }
     //calculate the constraint of parent
     if (direction == Axis.vertical &&
         constraint.hasBoundedWidth &&
@@ -82,27 +81,29 @@ class MergeImage extends StatelessWidget {
       totalHeight = constraint.maxHeight.floor();
     }
     //calculate the opposite
-    imageList.forEach((image) {
+    for (var image in imageList) {
       if (direction == Axis.vertical) {
         if (image.width < totalWidth && !fit) {
           totalHeight += image.height;
         } else {
-          if (!fit)
+          if (!fit) {
             totalHeight += (image.height * scale).floor();
-          else
+          } else {
             totalHeight += (image.height * totalWidth / image.width).floor();
+          }
         }
       } else {
         if (image.height < totalHeight && !fit) {
           totalWidth += image.width;
         } else {
-          if (!fit)
+          if (!fit) {
             totalWidth += (image.width * scale).floor();
-          else
+          } else {
             totalWidth += (image.width * totalHeight / image.height).floor();
+          }
         }
       }
-    });
+    }
   }
 }
 
@@ -119,7 +120,8 @@ class CaptureController {
           key.currentContext!.findRenderObject() as RenderRepaintBoundary;
       double dpr = ui.window.devicePixelRatio;
       ui.Image image = await boundary.toImage(pixelRatio: dpr);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List? pngBytes = byteData?.buffer.asUint8List();
       return pngBytes;
     } catch (e) {
