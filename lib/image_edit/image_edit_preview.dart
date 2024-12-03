@@ -60,7 +60,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
         backgroundColor: const Color(0xff1E1F20),
         centerTitle: true,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: Icon(
               Icons.arrow_back,
               color: Color(0xffffffff),
