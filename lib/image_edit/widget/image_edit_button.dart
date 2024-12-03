@@ -21,7 +21,7 @@ class _ImageEditButtonState extends State<ImageEditButton> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Material(
-      color: Colors.transparent,
+      color: const Color(0xff1E1F20),
       child: InkWell(
         onTap: widget.onTap,
         child: Container(
@@ -35,13 +35,13 @@ class _ImageEditButtonState extends State<ImageEditButton> {
                 height: size.width >= 600 ? 30 : 20,
                 width: size.width >= 600 ? 30 : 20,
                 fit: BoxFit.cover,
-                color: Colors.black,
+                color: Colors.white,
               ),
               const SizedBox(height: 5),
               Text(
                 widget.title,
                 style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),

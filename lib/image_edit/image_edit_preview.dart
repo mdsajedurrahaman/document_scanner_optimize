@@ -55,23 +55,30 @@ class _EditImagePreviewState extends State<EditImagePreview> {
     final cameraProvider = context.watch<CameraProvider>();
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFECECEC),
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         title: cameraProvider.imageList.isEmpty
             ? Text(
                 translation(context).pleaseTakePhoto,
                 style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               )
             : Text(
                 cameraProvider.imageList[_currentIndex].name,
                 style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               ),
         titleTextStyle: const TextStyle(
           color: Colors.black,
@@ -638,7 +645,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
             child: Text(
               '${_currentIndex + 1}/${cameraProvider.imageList.length}',
               style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w400),
             ),
@@ -646,8 +653,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
+        color: const Color(0xff1E1F20),
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: const Color(0xff1E1F20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
