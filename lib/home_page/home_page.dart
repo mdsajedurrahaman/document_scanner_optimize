@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
@@ -7,20 +8,24 @@ import 'package:doc_scanner/home_page/directory_create_page.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/home_page/search_page.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
+import 'package:doc_scanner/image_edit/image_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 import '../camera_screen/provider/camera_provider.dart';
 import '../localaization/language_constant.dart';
 import '../utils/utils.dart';
 import 'directory_view.dart';
 import 'model/camera_item_model.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -71,6 +76,45 @@ class _HomePageState extends State<HomePage> {
         return translation(context).barCode;
       default:
         return "";
+    }
+  }
+
+  List<String> searchResults = [];
+
+  // Function to launch Google search URL
+  Future<void> _launchGoogleSearch(String query) async {
+    final url = 'https://www.google.com/search?q=$query';
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  // Function to fetch Google search results using SerpApi
+  Future<void> _fetchSearchResults(String query) async {
+    final apiKey = dotenv.env[
+        'SERP_API_KEY']; // Assuming you use .env file to store your API key
+    final url = 'https://serpapi.com/search?q=$query&api_key=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          searchResults = List<String>.from(
+              data['organic_results'].map((result) => result['title']));
+        });
+      } else {
+        throw 'Failed to load search results';
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+        searchResults = [];
+      });
     }
   }
 
@@ -203,14 +247,70 @@ class _HomePageState extends State<HomePage> {
                                       }
                                     });
                                   })
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CameraScreen(
-                                        initialPage: index,
-                                      ),
-                                    ),
-                                  );
+                                : cameraItem.name == "ID Card"
+                                    ? await AppHelper.handlePermissions()
+                                        .then((_) async {
+                                        await CunningDocumentScanner
+                                                .getPictures(
+                                                    isGalleryImportAllowed:
+                                                        true,
+                                                    noOfPages: 2)
+                                            .then((pictures) {
+                                          if (pictures!.isNotEmpty) {
+                                            if (pictures.length == 1) {
+                                              String imageName =
+                                                  DateFormat('yyyyMMdd_SSSS')
+                                                      .format(DateTime.now());
+                                              cameraProvider.addImage(ImageModel(
+                                                  docType: 'ID Card',
+                                                  imageByte:
+                                                      File(pictures.first)
+                                                          .readAsBytesSync(),
+                                                  name: "ID card-$imageName"));
+                                              Navigator.pushAndRemoveUntil(
+                                                  context, MaterialPageRoute(
+                                                builder: (context) {
+                                                  return const EditImagePreview();
+                                                },
+                                              ), (route) => true);
+                                            } else {
+                                              pictures.forEach((element) async {
+                                                cameraProvider
+                                                    .addIdCardImage(element);
+                                              });
+
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ImagePreviewScreen(
+                                                    isCameFromIdCard: true,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        });
+                                      })
+                                    : cameraItem.name == "QR Code"
+                                        ? Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CameraScreen(
+                                                initialPage: 0,
+                                              ),
+                                            ),
+                                          )
+                                        : Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CameraScreen(
+                                                initialPage: 1,
+                                              ),
+                                            ),
+                                          );
                           },
                           child: Column(
                             children: [
@@ -547,10 +647,18 @@ class _HomePageState extends State<HomePage> {
                                         homePageProvider.qrCodeFiles[index];
                                     return GestureDetector(
                                       onTap: () async {
+                                        var urlLink = await homePageProvider
+                                            .readTxtFile(qrCode);
                                         showQrAndBarCodeViewDialogue(
                                             context: context,
                                             text: await homePageProvider
-                                                .readTxtFile(qrCode));
+                                                .readTxtFile(qrCode),
+                                            browserView: () {
+                                              if (urlLink.isNotEmpty) {
+                                                _fetchSearchResults(
+                                                    urlLink); // Fetch search results from SerpApi
+                                              }
+                                            });
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -602,10 +710,16 @@ class _HomePageState extends State<HomePage> {
                                         homePageProvider.barCodeFiles[index];
                                     return GestureDetector(
                                       onTap: () async {
+                                        var urlLink = await homePageProvider
+                                            .readTxtFile(barCode);
                                         showQrAndBarCodeViewDialogue(
-                                            context: context,
-                                            text: await homePageProvider
-                                                .readTxtFile(barCode));
+                                          context: context,
+                                          text: await homePageProvider
+                                              .readTxtFile(barCode),
+                                          // browserView: () {
+                                          //   _launchSearch(urlLink);
+                                          // },
+                                        );
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),

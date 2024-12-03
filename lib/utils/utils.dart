@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future<void> showQrAndBarCodeDialogue({
   required BuildContext context,
@@ -276,7 +277,9 @@ Future<void> flutterGenralDialogue({
 }
 
 Future<void> showQrAndBarCodeViewDialogue(
-    {required BuildContext context, required String text}) async {
+    {required BuildContext context,
+    required String text,
+    VoidCallback? browserView}) async {
   showDialog(
     context: context,
     builder: (context) {
@@ -291,12 +294,12 @@ Future<void> showQrAndBarCodeViewDialogue(
             padding: const EdgeInsets.all(15),
             child: Column(
               mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(""),
                     const Text(
                       "Content",
                       style:
@@ -318,6 +321,57 @@ Future<void> showQrAndBarCodeViewDialogue(
                     ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.zero,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () async {
+                          Clipboard.setData(ClipboardData(text: text));
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  translation(context).copiedToClipboard)));
+                        },
+                        icon: const Icon(
+                          Icons.copy,
+                          color: Colors.blueAccent,
+                        ),
+                        label: Text(
+                          translation(context).copy,
+                          style: const TextStyle(color: Colors.blueAccent),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                        child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.zero,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      onPressed: browserView,
+                      icon: const Icon(
+                        Icons.language,
+                        color: Colors.blueAccent,
+                      ),
+                      label: const Text(
+                        "Browser",
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ))
+                  ],
+                )
               ],
             )),
       );

@@ -216,15 +216,15 @@ class _BottomBarState extends State<BottomBar> {
         //         color: Colors.transparent,
         //         child: InkWell(
         //           borderRadius: BorderRadius.circular(10),
-        //           onTap: () {
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                 builder: (context) =>
-        //                     const CameraScreen(),
-        //               ),
-        //             );
-        //           },
+        // onTap: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //         const CameraScreen(),
+        //   ),
+        // );
+        // },
         //           child: Container(
         //             height: size.width >= 600 ? 150 : 110,
         //             width: size.width >= 600 ? 150 : 110,
@@ -518,15 +518,77 @@ class _BottomBarState extends State<BottomBar> {
               //     });
               //   },
               // ),
-
-              //visting card
+              // Bar Code
               SpeedDialChild(
-                backgroundColor: const Color(0xFFFBF3F2),
+                backgroundColor: const Color(0xFF7B5EFF),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(AppAssets.barCode,
+                        color: Colors.white,
+                        height: size.width >= 600 ? 30 : 25,
+                        width: size.width >= 600 ? 30 : 25),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      'Bar Code',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CameraScreen(
+                        initialPage: 3,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // QR Code
+              SpeedDialChild(
+                backgroundColor: const Color(0xFFF95658),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(AppAssets.qrcode,
+                        color: Colors.white,
+                        height: size.width >= 600 ? 30 : 25,
+                        width: size.width >= 600 ? 30 : 25),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      'QR Code',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CameraScreen(
+                        initialPage: 2,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              //ID Card
+              SpeedDialChild(
+                backgroundColor: const Color(0xffa9715e),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(AppAssets.idCard,
+                        color: Colors.white,
                         height: size.width >= 600 ? 30 : 25,
                         width: size.width >= 600 ? 30 : 25),
                     const SizedBox(
@@ -534,38 +596,58 @@ class _BottomBarState extends State<BottomBar> {
                     ),
                     const Text(
                       'ID Card',
-                      // style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ],
                 ),
                 onTap: () async {
                   await AppHelper.handlePermissions().then((_) async {
                     await CunningDocumentScanner.getPictures(
-                            noOfPages: 2, isGalleryImportAllowed: true)
+                            isGalleryImportAllowed: true, noOfPages: 2)
                         .then((pictures) {
-                      if (pictures!.isEmpty) {
-                      } else {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => BusinessCardPreview(
-                        //       imagesPath: pictures,
-                        //     ),
-                        //   ),
-                        // );
+                      if (pictures!.isNotEmpty) {
+                        if (pictures.length == 1) {
+                          String imageName = DateFormat('yyyyMMdd_SSSS')
+                              .format(DateTime.now());
+                          cameraProvider.addImage(ImageModel(
+                              docType: 'ID Card',
+                              imageByte: File(pictures.first).readAsBytesSync(),
+                              name: "ID card-$imageName"));
+                          Navigator.pushAndRemoveUntil(context,
+                              MaterialPageRoute(
+                            builder: (context) {
+                              return const EditImagePreview();
+                            },
+                          ), (route) => true);
+                        } else {
+                          pictures.forEach((element) async {
+                            cameraProvider.addIdCardImage(element);
+                          });
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ImagePreviewScreen(
+                                isCameFromIdCard: true,
+                              ),
+                            ),
+                          );
+                        }
                       }
                     });
                   });
                 },
               ),
+              // Documents
 
               SpeedDialChild(
-                backgroundColor: const Color(0xFFFFF7EB),
+                backgroundColor: const Color(0xFFFDAB35),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(AppAssets.documents,
+                        color: Colors.white,
                         height: size.width >= 600 ? 30 : 25,
                         width: size.width >= 600 ? 30 : 25),
                     const SizedBox(
@@ -573,7 +655,7 @@ class _BottomBarState extends State<BottomBar> {
                     ),
                     const Text(
                       'Document',
-                      // style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ],
                 ),
@@ -644,63 +726,6 @@ class _BottomBarState extends State<BottomBar> {
               //               MaterialPageRoute(
               //                 builder: (context) => const ImagePreviewScreen(),
               //               ));
-              //         }
-              //       });
-              //     });
-              //   },
-              // ),
-              // SpeedDialChild(
-              //   backgroundColor: const Color(0xFFFDAB35),
-              //   child: const Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       Icon(
-              //         Icons.camera_alt,
-              //         color: Colors.white,
-              //       ),
-              //       SizedBox(
-              //         width: 10,
-              //       ),
-              //       Text(
-              //         'ID Card',
-              //         style: TextStyle(color: Colors.white),
-              //       ),
-              //     ],
-              //   ),
-              //   onTap: () async {
-              //     await AppHelper.handlePermissions().then((_) async {
-              //       await CunningDocumentScanner.getPictures(
-              //               isGalleryImportAllowed: true, noOfPages: 2)
-              //           .then((pictures) {
-              //         if (pictures!.isNotEmpty) {
-              //
-              //           if(pictures.length==1){
-              //             String imageName = DateFormat('yyyyMMdd_SSSS').format(DateTime.now());
-              //             imageEditProvider.addImage(
-              //                 ImageModel(docType: 'ID Card', imageByte:  File(pictures.first).readAsBytesSync(),name: "ID card-$imageName" )
-              //             );
-              //             Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => const ImagePreviewScreen(),
-              //               ),
-              //             );
-              //           }else{
-              //             pictures.forEach((element) async {
-              //               imageEditProvider.addIdCardImage(element);
-              //
-              //             });
-              //
-              //             Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => const ImagePreviewScreen(
-              //                   isComeFromIdCard: true,
-              //                 ),
-              //               ),
-              //             );
-              //           }
               //         }
               //       });
               //     });

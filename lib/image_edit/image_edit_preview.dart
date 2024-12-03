@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:doc_scanner/image_edit/text_recognition_screen.dart';
@@ -62,8 +64,9 @@ class _EditImagePreviewState extends State<EditImagePreview> {
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
+              cameraProvider.clearImageList();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: Color(0xffffffff),
             )),
@@ -316,12 +319,12 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       height: size.width >= 600 ? 30 : 20,
                                       width: size.width >= 600 ? 30 : 20,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 20,
                                     ),
                                     Text(
                                       translation(context).renameFile,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -385,7 +388,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                     ),
                                     Text(
                                       translation(context).exportImages,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -520,7 +523,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                       color: Colors.black,
                                       size: size.width >= 600 ? 30 : 20,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 20,
                                     ),
                                     Text(

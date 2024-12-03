@@ -126,15 +126,15 @@ class _CameraScreenState extends State<CameraScreen> {
     beepValue = LocalStorage().getBool(AppConstant.BEEP_KEY);
     vibrationValue = LocalStorage().getBool(AppConstant.VIBRATION_KEY);
     audioPlayer = AudioPlayer();
-    if (widget.isComeFromIdCardRetake != null &&
-        widget.isFront != null &&
-        widget.initialPage == 1) {
-      if (!widget.isFront!) {
-        Future.delayed(const Duration(seconds: 1), () {
-          flipCardController.flipcard();
-        });
-      }
-    }
+    // if (widget.isComeFromIdCardRetake != null &&
+    //     widget.isFront != null &&
+    //     widget.initialPage == 1) {
+    //   if (!widget.isFront!) {
+    //     Future.delayed(const Duration(seconds: 1), () {
+    //       flipCardController.flipcard();
+    //     });
+    //   }
+    // }
 
     super.initState();
   }
@@ -316,345 +316,317 @@ class _CameraScreenState extends State<CameraScreen> {
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                activePage == 0
-                                    ? CameraPreview(cameraController)
-                                    : activePage == 1
-                                        ? FlipCard(
-                                            animationDuration:
-                                                const Duration(seconds: 2),
-                                            rotateSide: RotateSide.left,
-                                            controller: flipCardController,
-                                            axis: FlipAxis.vertical,
-                                            frontWidget: CameraPreview(
-                                              cameraController,
-                                              child: Container(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 40),
-                                                  decoration: ShapeDecoration(
-                                                    color: Colors.red,
-                                                    shape:
-                                                        CustomCutoutShapeBorder(
-                                                      CutoutScreenArea(
-                                                        borderColor: Colors.red,
-                                                        borderWidth: 3.0,
-                                                        overlayColor:
-                                                            const Color
-                                                                .fromRGBO(
-                                                                0, 0, 0, 80),
-                                                        borderRadius: 10.0,
-                                                        borderLength: 40.0,
-                                                        cutOutHeight: 250.0,
-                                                        cutOutWidth:
-                                                            MediaQuery.sizeOf(
-                                                                    context)
-                                                                .width,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    translation(context)
-                                                        .frontPart,
-                                                    style: const TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 20),
-                                                  )),
-                                            ),
-                                            backWidget: CameraPreview(
-                                              cameraController,
-                                              child: Container(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  decoration: ShapeDecoration(
-                                                    color: Colors.blue,
-                                                    shape:
-                                                        CustomCutoutShapeBorder(
-                                                      CutoutScreenArea(
-                                                        borderColor: Colors.red,
-                                                        borderWidth: 3.0,
-                                                        overlayColor:
-                                                            const Color
-                                                                .fromRGBO(
-                                                                0, 0, 0, 80),
-                                                        borderRadius: 10.0,
-                                                        borderLength: 40.0,
-                                                        cutOutHeight: 250.0,
-                                                        cutOutWidth:
-                                                            MediaQuery.sizeOf(
-                                                                    context)
-                                                                .width,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 40),
-                                                  child: Text(
-                                                    translation(context)
-                                                        .backPart,
-                                                    style: const TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 20),
-                                                  )),
-                                            ),
-                                          )
-                                        : activePage == 2 || activePage == 3
-                                            ? Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  QRView(
-                                                    key: qrKey,
-                                                    onQRViewCreated:
-                                                        (controller) {
-                                                      qrController = controller;
-                                                      controller
-                                                          .scannedDataStream
-                                                          .listen(
-                                                        (event) async {
+                                // activePage == 0
+                                //     ? CameraPreview(cameraController)
+                                //     : activePage == 1
+                                //         ? FlipCard(
+                                //             animationDuration:
+                                //                 const Duration(seconds: 2),
+                                //             rotateSide: RotateSide.left,
+                                //             controller: flipCardController,
+                                //             axis: FlipAxis.vertical,
+                                //             frontWidget: CameraPreview(
+                                //               cameraController,
+                                //               child: Container(
+                                //                   alignment:
+                                //                       Alignment.bottomCenter,
+                                //                   padding:
+                                //                       const EdgeInsets.only(
+                                //                           bottom: 40),
+                                //                   decoration: ShapeDecoration(
+                                //                     color: Colors.red,
+                                //                     shape:
+                                //                         CustomCutoutShapeBorder(
+                                //                       CutoutScreenArea(
+                                //                         borderColor: Colors.red,
+                                //                         borderWidth: 3.0,
+                                //                         overlayColor:
+                                //                             const Color
+                                //                                 .fromRGBO(
+                                //                                 0, 0, 0, 80),
+                                //                         borderRadius: 10.0,
+                                //                         borderLength: 40.0,
+                                //                         cutOutHeight: 250.0,
+                                //                         cutOutWidth:
+                                //                             MediaQuery.sizeOf(
+                                //                                     context)
+                                //                                 .width,
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                   child: Text(
+                                //                     translation(context)
+                                //                         .frontPart,
+                                //                     style: const TextStyle(
+                                //                         color: Colors.grey,
+                                //                         fontSize: 20),
+                                //                   )),
+                                //             ),
+                                //             backWidget: CameraPreview(
+                                //               cameraController,
+                                //               child: Container(
+                                //                   alignment:
+                                //                       Alignment.bottomCenter,
+                                //                   decoration: ShapeDecoration(
+                                //                     color: Colors.blue,
+                                //                     shape:
+                                //                         CustomCutoutShapeBorder(
+                                //                       CutoutScreenArea(
+                                //                         borderColor: Colors.red,
+                                //                         borderWidth: 3.0,
+                                //                         overlayColor:
+                                //                             const Color
+                                //                                 .fromRGBO(
+                                //                                 0, 0, 0, 80),
+                                //                         borderRadius: 10.0,
+                                //                         borderLength: 40.0,
+                                //                         cutOutHeight: 250.0,
+                                //                         cutOutWidth:
+                                //                             MediaQuery.sizeOf(
+                                //                                     context)
+                                //                                 .width,
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                   padding:
+                                //                       const EdgeInsets.only(
+                                //                           bottom: 40),
+                                //                   child: Text(
+                                //                     translation(context)
+                                //                         .backPart,
+                                //                     style: const TextStyle(
+                                //                         color: Colors.grey,
+                                //                         fontSize: 20),
+                                //                   )),
+                                //             ),
+                                //           )
+                                //         :
+                                activePage == 0 || activePage == 1
+                                    ? Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          QRView(
+                                            key: qrKey,
+                                            onQRViewCreated: (controller) {
+                                              qrController = controller;
+                                              controller.scannedDataStream
+                                                  .listen(
+                                                (event) async {
+                                                  setState(() {
+                                                    result = event;
+                                                  });
+                                                  if (result != null &&
+                                                      activePage == 1 &&
+                                                      barCodeList.contains(
+                                                          result!.format
+                                                              .formatName)) {
+                                                    if (beepValue) {
+                                                      await audioPlayer.play(
+                                                          AssetSource(
+                                                              'audio/beep_sound.mp3'));
+                                                    }
+                                                    if (vibrationValue) {
+                                                      Vibration.vibrate(
+                                                          duration: 100);
+                                                    }
+                                                    await qrController!
+                                                        .pauseCamera();
+                                                    if (activeDialog == false) {
+                                                      setState(() {
+                                                        activeDialog = true;
+                                                      });
+                                                      await showQrAndBarCodeDialogue(
+                                                        context: context,
+                                                        title: translation(
+                                                                context)
+                                                            .barCodeDetected,
+                                                        content: result!.code!,
+                                                        onCopy: () async {
+                                                          Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text: result!
+                                                                      .code!));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .clearSnackBars();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      translation(
+                                                                              context)
+                                                                          .copiedToClipboard)));
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
                                                           setState(() {
-                                                            result = event;
+                                                            activeDialog =
+                                                                false;
                                                           });
-                                                          if (result != null &&
-                                                              activePage == 3 &&
-                                                              barCodeList.contains(
-                                                                  result!.format
-                                                                      .formatName)) {
-                                                            if (beepValue) {
-                                                              await audioPlayer
-                                                                  .play(AssetSource(
-                                                                      'audio/beep_sound.mp3'));
-                                                            }
-                                                            if (vibrationValue) {
-                                                              Vibration.vibrate(
-                                                                  duration:
-                                                                      100);
-                                                            }
-                                                            await qrController!
-                                                                .pauseCamera();
-                                                            if (activeDialog ==
-                                                                false) {
-                                                              setState(() {
-                                                                activeDialog =
-                                                                    true;
-                                                              });
-                                                              await showQrAndBarCodeDialogue(
-                                                                context:
-                                                                    context,
-                                                                title: translation(
-                                                                        context)
-                                                                    .barCodeDetected,
-                                                                content: result!
-                                                                    .code!,
-                                                                onCopy:
-                                                                    () async {
-                                                                  Clipboard.setData(
-                                                                      ClipboardData(
-                                                                          text:
-                                                                              result!.code!));
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .clearSnackBars();
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(SnackBar(
-                                                                          content:
-                                                                              Text(translation(context).copiedToClipboard)));
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                },
-                                                                onSave:
-                                                                    () async {
-                                                                  cameraProvider
-                                                                      .saveBarCodeText(
-                                                                          result!
-                                                                              .code!,
-                                                                          context);
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                },
-                                                                closeTap:
-                                                                    () async {
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                },
-                                                              );
-                                                            }
-                                                          } else if (result !=
-                                                                  null &&
-                                                              activePage == 2 &&
-                                                              !barCodeList
-                                                                  .contains(result!
-                                                                      .format
-                                                                      .formatName)) {
-                                                            if (beepValue) {
-                                                              await audioPlayer
-                                                                  .play(AssetSource(
-                                                                      'audio/beep_sound.mp3'));
-                                                            }
-                                                            if (vibrationValue) {
-                                                              Vibration.vibrate(
-                                                                  duration:
-                                                                      100);
-                                                            }
-
-                                                            await qrController!
-                                                                .pauseCamera();
-                                                            if (activeDialog ==
-                                                                false) {
-                                                              setState(() {
-                                                                activeDialog =
-                                                                    true;
-                                                              });
-                                                              await showQrAndBarCodeDialogue(
-                                                                context:
-                                                                    context,
-                                                                title: translation(
-                                                                        context)
-                                                                    .qrCodeDetected,
-                                                                content: result!
-                                                                    .code!,
-                                                                onCopy:
-                                                                    () async {
-                                                                  Clipboard.setData(
-                                                                      ClipboardData(
-                                                                          text:
-                                                                              result!.code!));
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .clearSnackBars();
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                          SnackBar(
-                                                                              content: Text(
-                                                                    translation(
-                                                                            context)
-                                                                        .copiedToClipboard,
-                                                                  )));
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                },
-                                                                onSave:
-                                                                    () async {
-                                                                  cameraProvider
-                                                                      .saveQRCodeText(
-                                                                          result!
-                                                                              .code!,
-                                                                          context);
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                },
-                                                                closeTap:
-                                                                    () async {
-                                                                  setState(() {
-                                                                    activeDialog =
-                                                                        false;
-                                                                  });
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  await controller
-                                                                      .resumeCamera();
-                                                                },
-                                                              );
-                                                            }
-                                                          }
                                                         },
-                                                        onError: (error) {
-                                                          log("Error: $error");
+                                                        onSave: () async {
+                                                          cameraProvider
+                                                              .saveBarCodeText(
+                                                                  result!.code!,
+                                                                  context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
+                                                          setState(() {
+                                                            activeDialog =
+                                                                false;
+                                                          });
+                                                        },
+                                                        closeTap: () async {
+                                                          setState(() {
+                                                            activeDialog =
+                                                                false;
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
                                                         },
                                                       );
-                                                    },
-                                                    overlay:
-                                                        QrScannerOverlayShape(
-                                                      borderColor: Colors.red,
-                                                      borderLength: 30,
-                                                      borderWidth: 3,
-                                                      cutOutWidth: activePage ==
-                                                              3
-                                                          ? MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width *
-                                                              0.95
-                                                          : MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width *
-                                                              0.72,
-                                                      cutOutHeight: activePage ==
-                                                              3
-                                                          ? MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width *
-                                                              0.66
-                                                          : MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width *
-                                                              0.72,
-                                                    ),
-                                                    onPermissionSet:
-                                                        (ctrl, p) {},
-                                                  ),
-                                                  !activeDialog
-                                                      ? Lottie.asset(
-                                                          AppAssets.scanning,
-                                                          width: activePage == 3
-                                                              ? MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .width *
-                                                                  0.95
-                                                              : MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .width *
-                                                                  0.72,
-                                                          height: activePage ==
-                                                                  3
-                                                              ? MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .width *
-                                                                  0.66
-                                                              : MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .width *
-                                                                  0.72,
-                                                          fit: BoxFit.fill,
-                                                        )
-                                                      : const SizedBox.shrink(),
-                                                ],
-                                              )
-                                            : Container(
-                                                color: Colors.blue,
-                                              ),
+                                                    }
+                                                  } else if (result != null &&
+                                                      activePage == 0 &&
+                                                      !barCodeList.contains(
+                                                          result!.format
+                                                              .formatName)) {
+                                                    if (beepValue) {
+                                                      await audioPlayer.play(
+                                                          AssetSource(
+                                                              'audio/beep_sound.mp3'));
+                                                    }
+                                                    if (vibrationValue) {
+                                                      Vibration.vibrate(
+                                                          duration: 100);
+                                                    }
+
+                                                    await qrController!
+                                                        .pauseCamera();
+                                                    if (activeDialog == false) {
+                                                      setState(() {
+                                                        activeDialog = true;
+                                                      });
+                                                      await showQrAndBarCodeDialogue(
+                                                        context: context,
+                                                        title:
+                                                            translation(context)
+                                                                .qrCodeDetected,
+                                                        content: result!.code!,
+                                                        onCopy: () async {
+                                                          Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text: result!
+                                                                      .code!));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .clearSnackBars();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                                      content:
+                                                                          Text(
+                                                            translation(context)
+                                                                .copiedToClipboard,
+                                                          )));
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
+                                                          setState(() {
+                                                            activeDialog =
+                                                                false;
+                                                          });
+                                                        },
+                                                        onSave: () async {
+                                                          cameraProvider
+                                                              .saveQRCodeText(
+                                                                  result!.code!,
+                                                                  context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
+                                                          setState(() {
+                                                            activeDialog =
+                                                                false;
+                                                          });
+                                                        },
+                                                        closeTap: () async {
+                                                          setState(() {
+                                                            activeDialog =
+                                                                false;
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                          await controller
+                                                              .resumeCamera();
+                                                        },
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                onError: (error) {
+                                                  log("Error: $error");
+                                                },
+                                              );
+                                            },
+                                            overlay: QrScannerOverlayShape(
+                                              borderColor: Colors.red,
+                                              borderLength: 30,
+                                              borderWidth: 3,
+                                              cutOutWidth: activePage == 1
+                                                  ? MediaQuery.sizeOf(context)
+                                                          .width *
+                                                      0.95
+                                                  : MediaQuery.sizeOf(context)
+                                                          .width *
+                                                      0.72,
+                                              cutOutHeight: activePage == 1
+                                                  ? MediaQuery.sizeOf(context)
+                                                          .width *
+                                                      0.66
+                                                  : MediaQuery.sizeOf(context)
+                                                          .width *
+                                                      0.72,
+                                            ),
+                                            onPermissionSet: (ctrl, p) {},
+                                          ),
+                                          !activeDialog
+                                              ? Lottie.asset(
+                                                  AppAssets.scanning,
+                                                  width: activePage == 1
+                                                      ? MediaQuery.sizeOf(
+                                                                  context)
+                                                              .width *
+                                                          0.95
+                                                      : MediaQuery.sizeOf(
+                                                                  context)
+                                                              .width *
+                                                          0.72,
+                                                  height: activePage == 1
+                                                      ? MediaQuery.sizeOf(
+                                                                  context)
+                                                              .width *
+                                                          0.66
+                                                      : MediaQuery.sizeOf(
+                                                                  context)
+                                                              .width *
+                                                          0.72,
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : const SizedBox.shrink(),
+                                        ],
+                                      )
+                                    : Container(
+                                        color: Colors.blue,
+                                      ),
                                 gridview
                                     ? const Stack(
                                         children: [
@@ -717,19 +689,17 @@ class _CameraScreenState extends State<CameraScreen> {
                                         Vibration.vibrate(duration: 100);
                                       }
 
-                                      if (index == 0 || index == 1) {
-                                        initCamera();
-                                        setState(() {
-                                          flash = false;
-                                        });
-                                      }
-                                      if (index == 1) {
-                                        cameraProvider.clearIdCardImages();
-                                      }
+                                      // if (index == 0 || index == 1) {
+                                      //   initCamera();
+                                      //   setState(() {
+                                      //     flash = false;
+                                      //   });
+                                      // }
+                                      // if (index == 1) {
+                                      //   cameraProvider.clearIdCardImages();
+                                      // }
 
-                                      if (index == 1 ||
-                                          index == 2 ||
-                                          index == 3) {
+                                      if (index == 0 || index == 1) {
                                         setState(() {
                                           gridview = false;
                                         });
@@ -758,297 +728,297 @@ class _CameraScreenState extends State<CameraScreen> {
                                     },
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (widget.isComeFromRetake != null &&
-                                              widget.isComeFromRetake == true) {
-                                            Navigator.pop(context);
-                                          } else if (widget.isComeFromAdd !=
-                                                  null &&
-                                              widget.isComeFromAdd == true) {
-                                            Navigator.pop(context);
-                                          } else if (widget
-                                                      .isComeFromIdCardRetake !=
-                                                  null &&
-                                              widget.isComeFromIdCardRetake ==
-                                                  true) {
-                                            Navigator.pop(context);
-                                          } else {
-                                            cameraProvider.clearImageList();
-                                            cameraProvider.clearIdCardImages();
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: Text(
-                                          translation(context).cancel,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      Visibility(
-                                        maintainSize: true,
-                                        maintainAnimation: true,
-                                        maintainState: true,
-                                        visible:
-                                            activePage == 0 || activePage == 1
-                                                ? true
-                                                : false,
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            if (activePage == 0) {
-                                              if (widget.isComeFromRetake ==
-                                                  true) {
-                                                // XFile documentCapture =
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 10),
+                                //   child: Row(
+                                //     mainAxisAlignment:
+                                //         MainAxisAlignment.spaceBetween,
+                                //     children: [
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     if (widget.isComeFromRetake != null &&
+                                //         widget.isComeFromRetake == true) {
+                                //       Navigator.pop(context);
+                                //     } else if (widget.isComeFromAdd !=
+                                //             null &&
+                                //         widget.isComeFromAdd == true) {
+                                //       Navigator.pop(context);
+                                //     } else if (widget
+                                //                 .isComeFromIdCardRetake !=
+                                //             null &&
+                                //         widget.isComeFromIdCardRetake ==
+                                //             true) {
+                                //       Navigator.pop(context);
+                                //     } else {
+                                //       cameraProvider.clearImageList();
+                                //       cameraProvider.clearIdCardImages();
+                                //       Navigator.pop(context);
+                                //     }
+                                //   },
+                                //   child: Text(
+                                //     translation(context).cancel,
+                                //     style: const TextStyle(
+                                //         color: Colors.white),
+                                //   ),
+                                // ),
+                                // Visibility(
+                                //   maintainSize: true,
+                                //   maintainAnimation: true,
+                                //   maintainState: true,
+                                //   visible:
+                                //       activePage == 0 || activePage == 1
+                                //           ? true
+                                //           : false,
+                                //   child: GestureDetector(
+                                //     onTap: () async {
+                                //       if (activePage == 0) {
+                                //         if (widget.isComeFromRetake ==
+                                //             true) {
+                                //           // XFile documentCapture =
 
-                                                if (Platform.isAndroid) {
-                                                  if (beepValue) {
-                                                    await audioPlayer.play(
-                                                        AssetSource(
-                                                            "audio/sound.mp3"));
-                                                  }
-                                                }
+                                //           if (Platform.isAndroid) {
+                                //             if (beepValue) {
+                                //               await audioPlayer.play(
+                                //                   AssetSource(
+                                //                       "audio/sound.mp3"));
+                                //             }
+                                //           }
 
-                                                await cameraController
-                                                    .takePicture()
-                                                    .then((value) async {
-                                                  cameraProvider.updateImage(
-                                                    index: widget.imageIndex!,
-                                                    image: ImageModel(
-                                                      imageByte: await value
-                                                          .readAsBytes(),
-                                                      name: widget
-                                                          .imageModel!.name,
-                                                      docType: "Document",
-                                                    ),
-                                                  );
-                                                });
-                                                //Navigator.push(context,  MaterialPageRoute(builder: (context)=>const ImagePreviewScreen(),),);
+                                //           await cameraController
+                                //               .takePicture()
+                                //               .then((value) async {
+                                //             cameraProvider.updateImage(
+                                //               index: widget.imageIndex!,
+                                //               image: ImageModel(
+                                //                 imageByte: await value
+                                //                     .readAsBytes(),
+                                //                 name: widget
+                                //                     .imageModel!.name,
+                                //                 docType: "Document",
+                                //               ),
+                                //             );
+                                //           });
+                                //           //Navigator.push(context,  MaterialPageRoute(builder: (context)=>const ImagePreviewScreen(),),);
 
-                                                Navigator.pop(context);
-                                              } else if (widget.isComeFromAdd ==
-                                                  true) {
-                                                if (Platform.isAndroid) {
-                                                  if (beepValue) {
-                                                    await audioPlayer.play(
-                                                        AssetSource(
-                                                            "audio/sound.mp3"));
-                                                  }
-                                                }
+                                //           Navigator.pop(context);
+                                //         } else if (widget.isComeFromAdd ==
+                                //             true) {
+                                //           if (Platform.isAndroid) {
+                                //             if (beepValue) {
+                                //               await audioPlayer.play(
+                                //                   AssetSource(
+                                //                       "audio/sound.mp3"));
+                                //             }
+                                //           }
 
-                                                XFile documentCapture =
-                                                    await cameraController
-                                                        .takePicture();
-                                                String imageName =
-                                                    DateFormat('yyyyMMdd_SSSS')
-                                                        .format(DateTime.now());
-                                                cameraProvider
-                                                    .addImageSpecipicIndex([
-                                                  ImageModel(
-                                                    imageByte:
-                                                        await documentCapture
-                                                            .readAsBytes(),
-                                                    name: "Doc-$imageName",
-                                                    docType: "Document",
-                                                  )
-                                                ], widget.imageIndex! + 1);
-                                                Navigator.pop(context,
-                                                    widget.imageIndex! + 1);
-                                              } else {
-                                                if (Platform.isAndroid) {
-                                                  if (beepValue) {
-                                                    await audioPlayer.play(
-                                                        AssetSource(
-                                                            "audio/sound.mp3"));
-                                                  }
-                                                }
-                                                XFile documentCapture =
-                                                    await cameraController
-                                                        .takePicture();
-                                                String imageName =
-                                                    DateFormat('yyyyMMdd_SSSS')
-                                                        .format(DateTime.now());
-                                                cameraProvider.addImage(
-                                                  ImageModel(
-                                                    imageByte:
-                                                        await documentCapture
-                                                            .readAsBytes(),
-                                                    name: "Doc-$imageName",
-                                                    docType: "Document",
-                                                  ),
-                                                );
-                                              }
-                                            } else if (activePage == 1) {
-                                              if (Platform.isAndroid) {
-                                                if (beepValue) {
-                                                  await audioPlayer.play(
-                                                      AssetSource(
-                                                          "audio/sound.mp3"));
-                                                }
-                                              }
-                                              XFile idCardCapture =
-                                                  await cameraController
-                                                      .takePicture();
+                                //           XFile documentCapture =
+                                //               await cameraController
+                                //                   .takePicture();
+                                //           String imageName =
+                                //               DateFormat('yyyyMMdd_SSSS')
+                                //                   .format(DateTime.now());
+                                //           cameraProvider
+                                //               .addImageSpecipicIndex([
+                                //             ImageModel(
+                                //               imageByte:
+                                //                   await documentCapture
+                                //                       .readAsBytes(),
+                                //               name: "Doc-$imageName",
+                                //               docType: "Document",
+                                //             )
+                                //           ], widget.imageIndex! + 1);
+                                //           Navigator.pop(context,
+                                //               widget.imageIndex! + 1);
+                                //         } else {
+                                //           if (Platform.isAndroid) {
+                                //             if (beepValue) {
+                                //               await audioPlayer.play(
+                                //                   AssetSource(
+                                //                       "audio/sound.mp3"));
+                                //             }
+                                //           }
+                                //           XFile documentCapture =
+                                //               await cameraController
+                                //                   .takePicture();
+                                //           String imageName =
+                                //               DateFormat('yyyyMMdd_SSSS')
+                                //                   .format(DateTime.now());
+                                //           cameraProvider.addImage(
+                                //             ImageModel(
+                                //               imageByte:
+                                //                   await documentCapture
+                                //                       .readAsBytes(),
+                                //               name: "Doc-$imageName",
+                                //               docType: "Document",
+                                //             ),
+                                //           );
+                                //         }
+                                //       } else if (activePage == 1) {
+                                //         if (Platform.isAndroid) {
+                                //           if (beepValue) {
+                                //             await audioPlayer.play(
+                                //                 AssetSource(
+                                //                     "audio/sound.mp3"));
+                                //           }
+                                //         }
+                                //         XFile idCardCapture =
+                                //             await cameraController
+                                //                 .takePicture();
 
-                                              if (widget.isComeFromIdCardRetake !=
-                                                      null &&
-                                                  widget.isComeFromIdCardRetake ==
-                                                      true) {
-                                                if (widget.isFront != null &&
-                                                    widget.isFront == true) {
-                                                  cameraProvider
-                                                      .updateIdCardImage(
-                                                          index: 0,
-                                                          imagePath:
-                                                              idCardCapture
-                                                                  .path);
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const IdCardImagePreview(),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  cameraProvider
-                                                      .updateIdCardImage(
-                                                          index: 1,
-                                                          imagePath:
-                                                              idCardCapture
-                                                                  .path);
-                                                  flipCardController.flipcard();
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const IdCardImagePreview(),
-                                                    ),
-                                                  );
-                                                }
-                                              } else {
-                                                cameraProvider.addIdCardImage(
-                                                    idCardCapture.path);
-                                                flipCardController.flipcard();
-                                                if (cameraProvider
-                                                        .idCardImages.length ==
-                                                    2) {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          IdCardImagePreview(
-                                                        isCameFromRetake:
-                                                            widget.isComeFromRetake !=
-                                                                        null &&
-                                                                    widget.isComeFromRetake ==
-                                                                        true
-                                                                ? true
-                                                                : null,
-                                                        imageIndex:
-                                                            widget.imageIndex,
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              }
-                                            }
-                                          },
-                                          onTapDown: (details) {
-                                            setState(() {
-                                              _isCapturePressed = true;
-                                            });
-                                          },
-                                          onTapUp: (details) {
-                                            setState(() {
-                                              _isCapturePressed = false;
-                                            });
-                                          },
-                                          onTapCancel: () {
-                                            setState(() {
-                                              _isCapturePressed = false;
-                                            });
-                                          },
-                                          child: SvgPicture.asset(
-                                            AppAssets.cameraCaptureButton,
-                                            color: _isCapturePressed
-                                                ? AppColor.primaryColor
-                                                : Colors.white,
-                                            width: size.width >= 600 ? 70 : 55,
-                                            height: size.width >= 600 ? 70 : 55,
-                                          ),
-                                        ),
-                                      ),
-                                      Visibility(
-                                        maintainSize: true,
-                                        maintainAnimation: true,
-                                        maintainState: true,
-                                        visible: activePage == 0 ? true : false,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (cameraProvider
-                                                .imageList.isNotEmpty) {
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ImagePreviewScreen(),
-                                                ),
-                                                (route) => false,
-                                              );
-                                            }
-                                          },
-                                          child: badges.Badge(
-                                            badgeContent: Text(
-                                                cameraProvider.imageList.length
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12,
-                                                )),
-                                            badgeStyle: const badges.BadgeStyle(
-                                              badgeColor: Colors.white,
-                                            ),
-                                            showBadge: cameraProvider
-                                                .imageList.isNotEmpty,
-                                            child: Container(
-                                              height:
-                                                  size.width >= 600 ? 50 : 40,
-                                              width:
-                                                  size.width >= 600 ? 50 : 40,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              child: cameraProvider
-                                                      .imageList.isEmpty
-                                                  ? Icon(
-                                                      Icons.image_rounded,
-                                                      color: Colors.white,
-                                                      size: size.width >= 600
-                                                          ? 40
-                                                          : 30,
-                                                    )
-                                                  : Image.memory(
-                                                      cameraProvider.imageList
-                                                          .last.imageByte,
-                                                    ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                //         if (widget.isComeFromIdCardRetake !=
+                                //                 null &&
+                                //             widget.isComeFromIdCardRetake ==
+                                //                 true) {
+                                //           if (widget.isFront != null &&
+                                //               widget.isFront == true) {
+                                //             cameraProvider
+                                //                 .updateIdCardImage(
+                                //                     index: 0,
+                                //                     imagePath:
+                                //                         idCardCapture
+                                //                             .path);
+                                //             Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     const IdCardImagePreview(),
+                                //               ),
+                                //             );
+                                //           } else {
+                                //             cameraProvider
+                                //                 .updateIdCardImage(
+                                //                     index: 1,
+                                //                     imagePath:
+                                //                         idCardCapture
+                                //                             .path);
+                                //             flipCardController.flipcard();
+                                //             Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     const IdCardImagePreview(),
+                                //               ),
+                                //             );
+                                //           }
+                                //         } else {
+                                //           cameraProvider.addIdCardImage(
+                                //               idCardCapture.path);
+                                //           flipCardController.flipcard();
+                                //           if (cameraProvider
+                                //                   .idCardImages.length ==
+                                //               2) {
+                                //             Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     IdCardImagePreview(
+                                //                   isCameFromRetake:
+                                //                       widget.isComeFromRetake !=
+                                //                                   null &&
+                                //                               widget.isComeFromRetake ==
+                                //                                   true
+                                //                           ? true
+                                //                           : null,
+                                //                   imageIndex:
+                                //                       widget.imageIndex,
+                                //                 ),
+                                //               ),
+                                //             );
+                                //           }
+                                //         }
+                                //       }
+                                //     },
+                                //     onTapDown: (details) {
+                                //       setState(() {
+                                //         _isCapturePressed = true;
+                                //       });
+                                //     },
+                                //     onTapUp: (details) {
+                                //       setState(() {
+                                //         _isCapturePressed = false;
+                                //       });
+                                //     },
+                                //     onTapCancel: () {
+                                //       setState(() {
+                                //         _isCapturePressed = false;
+                                //       });
+                                //     },
+                                //     child: SvgPicture.asset(
+                                //       AppAssets.cameraCaptureButton,
+                                //       color: _isCapturePressed
+                                //           ? AppColor.primaryColor
+                                //           : Colors.white,
+                                //       width: size.width >= 600 ? 70 : 55,
+                                //       height: size.width >= 600 ? 70 : 55,
+                                //     ),
+                                //   ),
+                                // ),
+                                // Visibility(
+                                //   maintainSize: true,
+                                //   maintainAnimation: true,
+                                //   maintainState: true,
+                                //   visible: activePage == 0 ? true : false,
+                                //   child: GestureDetector(
+                                //     onTap: () {
+                                //       if (cameraProvider
+                                //           .imageList.isNotEmpty) {
+                                //         Navigator.pushAndRemoveUntil(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //             builder: (context) =>
+                                //                 const ImagePreviewScreen(),
+                                //           ),
+                                //           (route) => false,
+                                //         );
+                                //       }
+                                //     },
+                                //     child: badges.Badge(
+                                //       badgeContent: Text(
+                                //           cameraProvider.imageList.length
+                                //               .toString(),
+                                //           style: const TextStyle(
+                                //             color: Colors.black,
+                                //             fontSize: 12,
+                                //           )),
+                                //       badgeStyle: const badges.BadgeStyle(
+                                //         badgeColor: Colors.white,
+                                //       ),
+                                //       showBadge: cameraProvider
+                                //           .imageList.isNotEmpty,
+                                //       child: Container(
+                                //         height:
+                                //             size.width >= 600 ? 50 : 40,
+                                //         width:
+                                //             size.width >= 600 ? 50 : 40,
+                                //         decoration: BoxDecoration(
+                                //           borderRadius:
+                                //               BorderRadius.circular(10),
+                                //           border: Border.all(
+                                //             color: Colors.white,
+                                //             width: 2,
+                                //           ),
+                                //         ),
+                                //         child: cameraProvider
+                                //                 .imageList.isEmpty
+                                //             ? Icon(
+                                //                 Icons.image_rounded,
+                                //                 color: Colors.white,
+                                //                 size: size.width >= 600
+                                //                     ? 40
+                                //                     : 30,
+                                //               )
+                                //             : Image.memory(
+                                //                 cameraProvider.imageList
+                                //                     .last.imageByte,
+                                //               ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                //       // ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                           )
@@ -1062,10 +1032,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
   String getCameraModeName(String name, BuildContext context) {
     switch (name) {
-      case "Documents":
-        return translation(context).documents;
-      case "ID Card":
-        return translation(context).idCard;
       case "QR Code":
         return translation(context).qrCode;
       case "Bar Code":

@@ -13,12 +13,7 @@ import 'package:pdf_render/pdf_render.dart' as pdfRender;
 import '../model/image_model.dart';
 
 class CameraProvider extends ChangeNotifier {
-  final List<String> _documentType = [
-    'Documents',
-    'ID Card',
-    'QR Code',
-    'Bar Code'
-  ];
+  final List<String> _documentType = ['QR Code', 'Bar Code'];
   List<String> get documentTypes => _documentType;
 
   final List<ImageModel> _imageList = [];
