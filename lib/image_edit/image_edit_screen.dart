@@ -12,9 +12,6 @@ import '../utils/app_color.dart';
 import 'crop_screen.dart';
 import 'image_rotation.dart';
 
-
-
-
 class ImageEditScreen extends StatefulWidget {
   final ImageModel image;
   final int imageIndex;
@@ -41,16 +38,25 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
     final cameraProvider = context.watch<CameraProvider>();
     return PopScope(
       canPop: true,
-       onPopInvoked: (didPop) {
-         imageEditProvider.clearState();
-       },
+      onPopInvoked: (didPop) {
+        imageEditProvider.clearState();
+      },
       child: Scaffold(
-        backgroundColor: const Color(0xFFECECEC),
+        backgroundColor: const Color(0xFF131314),
         appBar: AppBar(
+          backgroundColor: const Color(0xff1E1F20),
           centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Color(0xffffffff),
+              )),
           title: Text(widget.image.name),
           titleTextStyle: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w500,
           ),
@@ -89,12 +95,13 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
         ),
         bottomNavigationBar: BottomAppBar(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          surfaceTintColor: Colors.white,
+          color: const Color(0xff1E1F20),
+          surfaceTintColor: const Color(0xff1E1F20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ImageEditButton(
-                title:  translation(context).crop,
+                title: translation(context).crop,
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
@@ -109,7 +116,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
                 iconPath: AppAssets.crop,
               ),
               ImageEditButton(
-                title:  translation(context).filters,
+                title: translation(context).filters,
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
@@ -120,7 +127,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
                 iconPath: AppAssets.filter,
               ),
               ImageEditButton(
-                title:  translation(context).size,
+                title: translation(context).size,
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
@@ -131,7 +138,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
                 iconPath: AppAssets.size,
               ),
               ImageEditButton(
-                title:  translation(context).rotate,
+                title: translation(context).rotate,
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
@@ -146,15 +153,15 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
                 iconPath: AppAssets.rotate,
               ),
               ImageEditButton(
-                title:  translation(context).undo,
+                title: translation(context).undo,
                 onTap: () {
                   if (imageEditProvider.canUndo) {
                     imageEditProvider.undo();
                   } else {
                     ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
-                        content: Text( translation(context).cannotUndoAnymore),
+                      SnackBar(
+                        content: Text(translation(context).cannotUndoAnymore),
                       ),
                     );
                   }

@@ -5,14 +5,14 @@ import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<void> showQrAndBarCodeDialogue({
-  required BuildContext context,
-  required String title,
-  required String content,
-  required VoidCallback onCopy,
-  required VoidCallback onSave,
-  required VoidCallback closeTap,
-}) async {
+Future<void> showQrAndBarCodeDialogue(
+    {required BuildContext context,
+    required String title,
+    required String content,
+    required VoidCallback onCopy,
+    required VoidCallback onSave,
+    required VoidCallback closeTap,
+    required VoidCallback browserView}) async {
   String text = content;
   List<String> parts = text.split(';');
   showDialog(
@@ -112,6 +112,8 @@ Future<void> showQrAndBarCodeDialogue({
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                               alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
@@ -128,6 +130,26 @@ Future<void> showQrAndBarCodeDialogue({
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                               alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          onPressed: browserView,
+                          icon: const Icon(
+                            Icons.language,
+                            color: Colors.blueAccent,
+                          ),
+                          label: const Text(
+                            "Open",
+                            style: TextStyle(color: Colors.blueAccent),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
@@ -442,7 +464,7 @@ Future<void> showQrAndBarCodeViewDialogue(
                         color: Colors.blueAccent,
                       ),
                       label: const Text(
-                        "Browser",
+                        "Open",
                         style: TextStyle(color: Colors.blueAccent),
                       ),
                     ))

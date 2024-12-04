@@ -15,7 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'localaization/language_constant.dart';
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -68,32 +68,30 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
         ChangeNotifierProvider(create: (_) => ImageEditProvider()),
       ],
-      child: Builder(
-        builder: (context) {
-          bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-          double textScaleFactor = isTablet ? 1.3 : 1.0;
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScaleFactor)),
-            child: MaterialApp(
-              title: 'Document Scanner - PDF Scanner',
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              locale: _locale,
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
-                textButtonTheme: TextButtonThemeData(
-                 style: TextButton.styleFrom(foregroundColor: AppColor.primaryColor),
-                ),
+      child: Builder(builder: (context) {
+        bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+        double textScaleFactor = isTablet ? 1.3 : 1.0;
+        return MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScaleFactor)),
+          child: MaterialApp(
+            title: 'Document Scanner - PDF Scanner',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: _locale,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                    foregroundColor: AppColor.primaryColor),
               ),
-              home: const SplashScreen(),
             ),
-          );
-        }
-      ),
+            home: const SplashScreen(),
+          ),
+        );
+      }),
     );
   }
 }
-
-

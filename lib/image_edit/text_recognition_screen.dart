@@ -25,11 +25,22 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         centerTitle: true,
         title: Text(
           translation(context).recognizeText,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
         ),
         actions: [
           TextButton(
@@ -137,6 +148,7 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
         child: TextField(
           controller: textEditingController,
           maxLines: null,
+          style: const TextStyle(color: Colors.white),
           decoration: const InputDecoration(
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,

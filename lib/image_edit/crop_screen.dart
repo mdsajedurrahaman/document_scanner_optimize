@@ -15,28 +15,41 @@ class CropScreen extends StatefulWidget {
   final int index;
   final bool? cameFromEdit;
 
-  const CropScreen({super.key, required this.imageModel, required this.index, this.cameFromEdit});
+  const CropScreen(
+      {super.key,
+      required this.imageModel,
+      required this.index,
+      this.cameFromEdit});
 
   @override
   State<CropScreen> createState() => _CropScreenState();
 }
 
 class _CropScreenState extends State<CropScreen> {
-  final GlobalKey<ExtendedImageEditorState> _controller = GlobalKey<ExtendedImageEditorState>();
+  final GlobalKey<ExtendedImageEditorState> _controller =
+      GlobalKey<ExtendedImageEditorState>();
 
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     final imageEditProvider = context.watch<ImageEditProvider>();
     return Scaffold(
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         centerTitle: true,
         title: Text(
           translation(context).crop,
-          style:  const TextStyle(
-              fontSize: 20,
-            fontWeight: FontWeight.w500
-          ),
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
         ),
         actions: [
           TextButton(
@@ -53,12 +66,9 @@ class _CropScreenState extends State<CropScreen> {
                     image: img,
                     imageEditorOption: option,
                   );
-                  if(widget.cameFromEdit == true){
-
+                  if (widget.cameFromEdit == true) {
                     imageEditProvider.addState(result!);
-
-
-                  }else{
+                  } else {
                     cameraProvider.updateImage(
                       index: widget.index,
                       image: ImageModel(
@@ -74,18 +84,17 @@ class _CropScreenState extends State<CropScreen> {
               child: Text(
                 translation(context).done,
                 style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: AppColor.primaryColor,
-              ),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.primaryColor,
+                ),
               ))
         ],
       ),
-      body:
-
-
-      ExtendedImage.memory(
-       widget.cameFromEdit==true? imageEditProvider.currentState: widget.imageModel.imageByte,
+      body: ExtendedImage.memory(
+        widget.cameFromEdit == true
+            ? imageEditProvider.currentState
+            : widget.imageModel.imageByte,
         cacheRawData: true,
         fit: BoxFit.contain,
         extendedImageEditorKey: _controller,

@@ -33,11 +33,22 @@ class _ImageRotationState extends State<ImageRotation> {
     final cameraProvider = context.watch<CameraProvider>();
     final imageEditProvider = context.watch<ImageEditProvider>();
     return Scaffold(
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
         centerTitle: true,
         title: Text(
           widget.imageModel.name,
-          style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.black),
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
         ),
         actions: [
           TextButton(
@@ -56,11 +67,8 @@ class _ImageRotationState extends State<ImageRotation> {
                     imageEditorOption: option,
                   );
                   if (widget.cameFromEdit == true) {
-
                     imageEditProvider.addState(result!);
-
-                  }else{
-
+                  } else {
                     cameraProvider.updateImage(
                       index: widget.index,
                       image: ImageModel(
@@ -73,12 +81,13 @@ class _ImageRotationState extends State<ImageRotation> {
                   Navigator.pop(context);
                 }
               },
-              child:  Text(
-                translation(context).done,style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: AppColor.primaryColor,
-              ),
+              child: Text(
+                translation(context).done,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.primaryColor,
+                ),
               ))
         ],
       ),
@@ -86,7 +95,9 @@ class _ImageRotationState extends State<ImageRotation> {
         child: ExtendedImage.memory(
           cacheRawData: true,
           extendedImageEditorKey: editorKey,
-          widget.cameFromEdit==true?imageEditProvider.currentState:  widget.imageModel.imageByte,
+          widget.cameFromEdit == true
+              ? imageEditProvider.currentState
+              : widget.imageModel.imageByte,
           mode: ExtendedImageMode.editor,
           fit: BoxFit.contain,
           initEditorConfigHandler: (state) {
@@ -94,10 +105,10 @@ class _ImageRotationState extends State<ImageRotation> {
               cornerColor: AppColor.primaryColor,
             );
           },
-
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        color: const Color(0xff1E1F20),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -106,24 +117,30 @@ class _ImageRotationState extends State<ImageRotation> {
               children: [
                 IconButton(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  icon: const Icon(Icons.rotate_left),
+                  icon: const Icon(Icons.rotate_left, color: Colors.white),
                   onPressed: () {
                     editorKey.currentState!.rotate(right: false);
                   },
                 ),
-                 Text(translation(context).rotateLeft)
+                Text(
+                  translation(context).rotateLeft,
+                  style: const TextStyle(color: Colors.white),
+                )
               ],
             ),
             Column(
               children: [
                 IconButton(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  icon: const Icon(Icons.rotate_right),
+                  icon: const Icon(Icons.rotate_right, color: Colors.white),
                   onPressed: () {
                     editorKey.currentState!.rotate(right: true);
                   },
                 ),
-                 Text(translation(context).rotateRight)
+                Text(
+                  translation(context).rotateRight,
+                  style: const TextStyle(color: Colors.white),
+                )
               ],
             ),
           ],

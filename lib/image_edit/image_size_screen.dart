@@ -35,11 +35,21 @@ class _ImageSizeScreenState extends State<ImageSizeScreen> {
     final imageEditProvider = context.watch<ImageEditProvider>();
 
     return Scaffold(
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         centerTitle: true,
         title: Text(translation(context).resize),
         titleTextStyle: const TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.w500,
         ),
@@ -47,10 +57,8 @@ class _ImageSizeScreenState extends State<ImageSizeScreen> {
           TextButton(
             onPressed: () async {
               Uint8List? data = await screenshotController.capture();
-              if (data != null) {
-                imageEditProvider.addState(data);
-                Navigator.pop(context);
-              }
+              imageEditProvider.addState(data!);
+              Navigator.pop(context);
             },
             child: Text(
               translation(context).done,
@@ -79,7 +87,9 @@ class _ImageSizeScreenState extends State<ImageSizeScreen> {
           child: Container(
         padding: const EdgeInsets.symmetric(vertical: 4),
         height: 80,
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(
+          color: Color(0xff1E1F20),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -99,7 +109,7 @@ class _ImageSizeScreenState extends State<ImageSizeScreen> {
                         SvgPicture.asset(
                           AppAssets.size_preview,
                           color: _selectedRatio == size.radio
-                              ? Colors.black
+                              ? Colors.white
                               : Colors.grey,
                         ),
                         Container(
@@ -109,7 +119,7 @@ class _ImageSizeScreenState extends State<ImageSizeScreen> {
                             getTitle(size, context),
                             style: TextStyle(
                               color: _selectedRatio == size.radio
-                                  ? Colors.black
+                                  ? Colors.white
                                   : Colors.grey,
                             ),
                           ),

@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:interactive_box/interactive_box.dart';
 import 'package:provider/provider.dart';
+
 import '../camera_screen/provider/camera_provider.dart';
 import '../localaization/language_constant.dart';
 import '../utils/app_assets.dart';
@@ -36,16 +37,22 @@ class _AddSignatureState extends State<AddSignature> {
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFECECEC),
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         title: Text(
           translation(context).addSignature,
           style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
-          ),
+              fontWeight: FontWeight.w500, fontSize: 20, color: Colors.white),
         ),
         centerTitle: true,
         actions: [
@@ -146,57 +153,50 @@ class _AddSignatureState extends State<AddSignature> {
         padding: const EdgeInsets.all(10.0),
         child: RepaintBoundary(
           key: _globalKey,
-          child: Center(
-            child: IntrinsicWidth(
-              child: IntrinsicHeight(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Center(
-                      child: Image.memory(
-                        widget.imageModel.imageByte,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    if (signaturePath != null)
-                      InteractiveBox(
-                        initialPosition: const Offset(0, 50),
-                        includedScaleDirections: const [
-                          ScaleDirection.topRight,
-                          ScaleDirection.bottomRight,
-                          ScaleDirection.bottomLeft,
-                          ScaleDirection.topLeft,
-                        ],
-                        initialSize: const Size(250, 150),
-                        includedActions: const [
-                          ControlActionType.move,
-                          ControlActionType.scale,
-                          ControlActionType.rotate,
-                          ControlActionType.delete,
-                        ],
-                        onActionSelected: (ControlActionType controlActionType,
-                            InteractiveBoxInfo interactiveBoxInfo) {
-                          if (controlActionType == ControlActionType.delete) {
-                            setState(() {
-                              signaturePath = null;
-                            });
-                          }
-                        },
-                        initialShowActionIcons: initialShowActionIcons,
-                        rotateIndicatorSpacing: 10,
-                        child: SvgPicture.string(signaturePath!,
-                            fit: BoxFit.cover),
-                      ),
-                  ],
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Center(
+                child: Image.memory(
+                  widget.imageModel.imageByte,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
+              if (signaturePath != null)
+                InteractiveBox(
+                  initialPosition: const Offset(50, 200),
+                  includedScaleDirections: const [
+                    ScaleDirection.topRight,
+                    ScaleDirection.bottomRight,
+                    ScaleDirection.bottomLeft,
+                    ScaleDirection.topLeft,
+                  ],
+                  initialSize: const Size(250, 150),
+                  includedActions: const [
+                    ControlActionType.move,
+                    ControlActionType.scale,
+                    ControlActionType.rotate,
+                    ControlActionType.delete,
+                  ],
+                  onActionSelected: (ControlActionType controlActionType,
+                      InteractiveBoxInfo interactiveBoxInfo) {
+                    if (controlActionType == ControlActionType.delete) {
+                      setState(() {
+                        signaturePath = null;
+                      });
+                    }
+                  },
+                  initialShowActionIcons: initialShowActionIcons,
+                  rotateIndicatorSpacing: 10,
+                  child: SvgPicture.string(signaturePath!, fit: BoxFit.cover),
+                ),
+            ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        height: size.width >= 600 ? 80 : 70,
-        color: Colors.white,
+        color: const Color(0xff1E1F20),
+        height: 70,
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: ImageEditButton(
           title: translation(context).draw,
@@ -228,7 +228,7 @@ class _AddSignatureState extends State<AddSignature> {
       ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      return byteData?.buffer.asUint8List();
+      return byteData!.buffer.asUint8List();
     } catch (e) {
       return null;
     }

@@ -31,6 +31,7 @@ class _ImageFiltersState extends State<ImageFilters> {
   @override
   void initState() {
     filters = [PresetFilters.none, ...(presetFiltersList.sublist(1))];
+
     super.initState();
   }
 
@@ -38,11 +39,22 @@ class _ImageFiltersState extends State<ImageFilters> {
   Widget build(BuildContext context) {
     final imageEditProvider = context.watch<ImageEditProvider>();
     return Scaffold(
+      backgroundColor: const Color(0xFF131314),
       appBar: AppBar(
+        backgroundColor: const Color(0xff1E1F20),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xffffffff),
+            )),
         centerTitle: true,
         title: Text(
           translation(context).filters,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
         ),
         actions: [
           TextButton(
@@ -56,10 +68,8 @@ class _ImageFiltersState extends State<ImageFilters> {
             ),
             onPressed: () async {
               Uint8List? data = await screenshotController.capture();
-              if (data != null) {
-                imageEditProvider.addState(data);
-                Navigator.pop(context);
-              }
+              imageEditProvider.addState(data!);
+              Navigator.pop(context);
             },
           ),
         ],
@@ -106,7 +116,6 @@ class _ImageFiltersState extends State<ImageFilters> {
                     GestureDetector(
                       onTap: () {
                         selectedFilter = filter;
-                        filterOpacity = 1;
                         setState(() {});
                       },
                       child: Column(children: [
@@ -135,7 +144,8 @@ class _ImageFiltersState extends State<ImageFilters> {
                         ),
                         Text(
                           filter.name,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
                         ),
                       ]),
                     ),
