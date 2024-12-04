@@ -30,8 +30,8 @@ class EditImagePreview extends StatefulWidget {
 
 class _EditImagePreviewState extends State<EditImagePreview> {
   int _currentIndex = 0;
-  PageController _pageController = PageController();
-  TextEditingController _renameController = TextEditingController();
+  final PageController _pageController = PageController();
+  final TextEditingController _renameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void showTopSnackbar(BuildContext context, String message) {
@@ -413,7 +413,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                   builder: (context) {
                                     final cameProvider =
                                         context.watch<CameraProvider>();
-                                    TextEditingController _renameController =
+                                    TextEditingController renameController =
                                         TextEditingController();
                                     return StatefulBuilder(
                                       builder: (context, setState) {
@@ -436,7 +436,7 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                   ),
                                                 )
                                               : TextFormField(
-                                                  controller: _renameController,
+                                                  controller: renameController,
                                                   keyboardType:
                                                       TextInputType.text,
                                                   textInputAction:
@@ -469,13 +469,13 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                if (_renameController
+                                                if (renameController
                                                     .text.isNotEmpty) {
                                                   cameProvider
                                                       .createPDFFromByte(
                                                           context: context,
                                                           fileName:
-                                                              _renameController
+                                                              renameController
                                                                   .text)
                                                       .then((value) {
                                                     cameraProvider

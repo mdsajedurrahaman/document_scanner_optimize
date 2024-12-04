@@ -13,6 +13,8 @@ Future<void> showQrAndBarCodeDialogue({
   required VoidCallback onSave,
   required VoidCallback closeTap,
 }) async {
+  String text = content;
+  List<String> parts = text.split(';');
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -58,11 +60,48 @@ Future<void> showQrAndBarCodeDialogue({
                         color: const Color(0xFFC5C7D3),
                       ),
                       child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Text(
-                            content,
-                            style: const TextStyle(color: Colors.black),
-                          )),
+                        scrollDirection: Axis.vertical,
+                        child: content.startsWith('https')
+                            ? Text(content)
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: parts
+                                    .where((part) =>
+                                        part.isNotEmpty) // Remove empty parts
+                                    .map((part) {
+                                  // Split each part into key and value
+                                  List<String> keyValue = part.split(':');
+                                  String key = keyValue[0];
+                                  String value = keyValue.length > 1
+                                      ? keyValue.sublist(1).join(':')
+                                      : '';
+
+                                  // Check if the value starts with 'https'
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          key == "WIFI" ||
+                                                  key == "Wifi" ||
+                                                  key == "wifi"
+                                              ? "WIFI NAME : "
+                                              : key == "T"
+                                                  ? "TYPE : "
+                                                  : key == "P"
+                                                      ? "PASSWORD : "
+                                                      : "",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(value),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                      ),
                     ),
                     // const SizedBox(
                     //   height: 10,
@@ -280,20 +319,21 @@ Future<void> showQrAndBarCodeViewDialogue(
     {required BuildContext context,
     required String text,
     VoidCallback? browserView}) async {
+  String content = text;
+  List<String> parts = text.split(';');
   showDialog(
     context: context,
     builder: (context) {
       return Dialog(
         alignment: Alignment.center,
         child: Container(
-            height: 200,
+            height: text.startsWith('https') ? 200 : 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.grey.shade200,
             ),
             padding: const EdgeInsets.all(15),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -315,10 +355,46 @@ Future<void> showQrAndBarCodeViewDialogue(
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.start,
-                    ),
+                    child: text.startsWith('https')
+                        ? Text(text)
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: parts
+                                .where((part) =>
+                                    part.isNotEmpty) // Remove empty parts
+                                .map((part) {
+                              // Split each part into key and value
+                              List<String> keyValue = part.split(':');
+                              String key = keyValue[0];
+                              String value = keyValue.length > 1
+                                  ? keyValue.sublist(1).join(':')
+                                  : '';
+
+                              // Check if the value starts with 'https'
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      key == "WIFI" ||
+                                              key == "Wifi" ||
+                                              key == "wifi"
+                                          ? "WIFI NAME : "
+                                          : key == "T"
+                                              ? "TYPE : "
+                                              : key == "P"
+                                                  ? "PASSWORD : "
+                                                  : "",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(value),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
                   ),
                 ),
                 Row(

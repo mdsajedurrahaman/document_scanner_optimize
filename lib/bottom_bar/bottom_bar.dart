@@ -44,7 +44,7 @@ class _BottomBarState extends State<BottomBar> {
     });
   }
 
-  GlobalKey _scaffoldKey = GlobalKey();
+  final GlobalKey _scaffoldKey = GlobalKey();
   late PermissionStatus storage;
 
   Future<bool> checkPermission() async {
@@ -744,7 +744,7 @@ class _BottomBarState extends State<BottomBar> {
           clipBehavior: Clip.antiAlias,
           child: NavigationBarTheme(
             data: NavigationBarThemeData(
-              labelTextStyle: MaterialStateProperty.all(
+              labelTextStyle: WidgetStateProperty.all(
                 const TextStyle(
                   fontSize: 14,
                   color: Colors.black,
@@ -753,9 +753,9 @@ class _BottomBarState extends State<BottomBar> {
             ),
             child: NavigationBarTheme(
               data: NavigationBarThemeData(
-                labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
-                  (Set<MaterialState> states) =>
-                      states.contains(MaterialState.selected)
+                labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+                  (Set<WidgetState> states) =>
+                      states.contains(WidgetState.selected)
                           ? const TextStyle(color: AppColor.primaryColor)
                           : const TextStyle(color: Colors.black),
                 ),

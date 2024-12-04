@@ -35,18 +35,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // @override
-  // void didChangeDependencies() {
-  //   context.read<HomePageProvider>().clearDocumentImageFiles();
-  //   context.read<HomePageProvider>().clearIdCardImageFiles();
-  //   context.read<HomePageProvider>().clearQRCodeFiles();
-  //   context.read<HomePageProvider>().clearBarCodeFiles();
-  //   context.read<HomePageProvider>().loadDocumentImage();
-  //   context.read<HomePageProvider>().loadIdCardImage();
-  //   context.read<HomePageProvider>().loadQRCode();
-  //   context.read<HomePageProvider>().loadBarCode();
-  //   super.didChangeDependencies();
-  // }
+  Future<void>? _launched;
 
   @override
   void initState() {
@@ -79,42 +68,17 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  List<String> searchResults = [];
+  void _openBrowserWithSearch(String query) async {
+    // Encode the query to make it URL-safe
+    final encodedQuery = Uri.encodeComponent(query);
+    // Form the Google search URL
+    final url = 'https://www.google.com/search?q=$encodedQuery';
 
-  // Function to launch Google search URL
-  Future<void> _launchGoogleSearch(String query) async {
-    final url = 'https://www.google.com/search?q=$query';
-
+    // Check if the URL can be launched
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
-    }
-  }
-
-  // Function to fetch Google search results using SerpApi
-  Future<void> _fetchSearchResults(String query) async {
-    final apiKey = dotenv.env[
-        'SERP_API_KEY']; // Assuming you use .env file to store your API key
-    final url = 'https://serpapi.com/search?q=$query&api_key=$apiKey';
-
-    try {
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          searchResults = List<String>.from(
-              data['organic_results'].map((result) => result['title']));
-        });
-      } else {
-        throw 'Failed to load search results';
-      }
-    } catch (e) {
-      print(e);
-      setState(() {
-        searchResults = [];
-      });
     }
   }
 
@@ -654,10 +618,7 @@ class _HomePageState extends State<HomePage> {
                                             text: await homePageProvider
                                                 .readTxtFile(qrCode),
                                             browserView: () {
-                                              if (urlLink.isNotEmpty) {
-                                                _fetchSearchResults(
-                                                    urlLink); // Fetch search results from SerpApi
-                                              }
+                                              _openBrowserWithSearch(urlLink);
                                             });
                                       },
                                       child: Padding(
@@ -713,13 +674,12 @@ class _HomePageState extends State<HomePage> {
                                         var urlLink = await homePageProvider
                                             .readTxtFile(barCode);
                                         showQrAndBarCodeViewDialogue(
-                                          context: context,
-                                          text: await homePageProvider
-                                              .readTxtFile(barCode),
-                                          // browserView: () {
-                                          //   _launchSearch(urlLink);
-                                          // },
-                                        );
+                                            context: context,
+                                            text: await homePageProvider
+                                                .readTxtFile(barCode),
+                                            browserView: () {
+                                              _openBrowserWithSearch(urlLink);
+                                            });
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),

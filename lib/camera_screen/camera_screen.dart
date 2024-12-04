@@ -67,7 +67,7 @@ class _CameraScreenState extends State<CameraScreen> {
   bool beepValue = false;
   bool vibrationValue = false;
   bool isCameraPermissionGranted = false;
-  bool _isCapturePressed = false;
+  final bool _isCapturePressed = false;
   List<String> barCodeList = [
     "CODABAR",
     "CODE_39",
