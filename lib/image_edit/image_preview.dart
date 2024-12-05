@@ -64,9 +64,10 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFECECEC),
+        backgroundColor: const Color(0xFF131314),
         appBar: AppBar(
           centerTitle: true,
+          backgroundColor: const Color(0xff1E1F20),
           leading: IconButton(
               onPressed: () {
                 if (cameraProvider.imageList.isEmpty) {
@@ -102,15 +103,15 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
               },
               icon: Icon(
                 Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
-                color: Colors.black,
+                color: Colors.white,
               )),
           title: cameraProvider.imageList.isEmpty
               ? Text(
                   translation(context).pleaseTakePhoto,
                   style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 )
               : Text(
                   cameraProvider.imageList[currentIndex].name,
@@ -205,7 +206,8 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          surfaceTintColor: Colors.white,
+          color: const Color(0xff1E1F20),
+          surfaceTintColor: const Color(0xff1E1F20),
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -362,11 +364,14 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            SvgPicture.asset(AppAssets.gallery),
+                                            SvgPicture.asset(
+                                              AppAssets.gallery,
+                                              color: Colors.white,
+                                            ),
                                             Text(
                                               translation(context).gallery,
                                               style: const TextStyle(
-                                                  color: Colors.black,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 20),
                                             )
@@ -402,7 +407,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                               Text(
                                 translation(context).addPage,
                                 style: const TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -459,12 +464,15 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(AppAssets.delete),
+                        SvgPicture.asset(
+                          AppAssets.delete,
+                          color: Colors.white,
+                        ),
                         const SizedBox(height: 5),
                         Text(
                           translation(context).delete,
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),

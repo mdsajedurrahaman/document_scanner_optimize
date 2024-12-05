@@ -9,6 +9,7 @@ import 'package:doc_scanner/settings_page/settings_page.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/helper.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -514,6 +515,85 @@ class _BottomBarState extends State<BottomBar> {
               //     });
               //   },
               // ),
+              // PDF
+              SpeedDialChild(
+                backgroundColor: const Color(0xFFc61a0e),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(AppAssets.pdf,
+                        color: Colors.white,
+                        height: size.width >= 600 ? 30 : 25,
+                        width: size.width >= 600 ? 30 : 25),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text(
+                      'PDF',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                onTap: () async {
+                  // await FilePicker.platform.pickFiles(
+                  //   type: FileType.custom,
+                  //   allowedExtensions: ['pdf'],
+                  // ).then((value) async{
+                  //   File pdfFile=File(value!.paths.first!);
+                  //       cameraProvider.convertPdfToImage(pdfFile).then((value) {
+                  //              Navigator.pushAndRemoveUntil(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                     builder: (context) =>
+                  //                         const ImagePreviewScreen(),
+                  //                   ),
+                  //                   (route) => false,
+                  //                 );
+                  //
+                  //
+                  //       });
+                  // });
+                  //
+
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['pdf'],
+                  );
+                  if (result != null) {
+                    File file = File(result.paths.first!);
+                    // int fileSizeInBytes = await file.length();
+                    // double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                    // if (fileSizeInMB <= 5) {
+                    cameraProvider.convertPdfToImage(file).then((value) {
+                      if (value) {
+                        BuildContext context = _scaffoldKey.currentContext!;
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ImagePreviewScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    });
+                    // }
+                    // else {
+                    //     BuildContext context =
+                    //         _scaffoldKey.currentContext!;
+                    //     ScaffoldMessenger.of(context)
+                    //         .showSnackBar(const SnackBar(
+                    //       content: Text('File size exceeds 5 MB. Please select a smaller file.'),
+                    //     ));
+                    //   }
+                  } else {
+                    BuildContext context = _scaffoldKey.currentContext!;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Something Went Wrong")));
+                  }
+                },
+              ),
               // Bar Code
               SpeedDialChild(
                 backgroundColor: const Color(0xFF7B5EFF),

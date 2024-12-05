@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
 import '../localaization/language_constant.dart';
 
 class TextRecognitionScreen extends StatefulWidget {
@@ -15,11 +17,31 @@ class TextRecognitionScreen extends StatefulWidget {
 
 class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
   TextEditingController textEditingController = TextEditingController();
-
+  TextEditingController renameController = TextEditingController();
   @override
   void initState() {
     textEditingController.text = widget.recognisedText;
     super.initState();
+  }
+
+  Future<void> savePdfFile(String path, String content) async {
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Center(
+          child: pw.Text(content),
+        ),
+      ),
+    );
+
+    // Ensure the directory exists
+    final directory = Directory(path).parent;
+    if (!await directory.exists()) {
+      await directory.create(recursive: true);
+    }
+
+    final file = File(path);
+    await file.writeAsBytes(await pdf.save(), flush: true);
   }
 
   @override
@@ -82,45 +104,102 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
                       TextButton(
                         onPressed: () async {
                           if (renameController.text.isNotEmpty) {
-                            Navigator.pop(context);
-                            final pdf = pw.Document();
-                            pdf.addPage(
-                              pw.Page(
-                                build: (pw.Context context) => pw.Center(
-                                  child: pw.Text(textEditingController.text),
-                                ),
-                              ),
-                            );
+                            // Get application directory
                             final applicationDirectory =
                                 await getApplicationDocumentsDirectory();
-                            final savePath =
-                                '${applicationDirectory.path}/Doc Scanner/Document/${renameController.text}.pdf';
-                            final file = File(savePath);
-                            await file
-                                .writeAsBytes(await pdf.save(), flush: true)
-                                .then((value) {
-                              Navigator.pop(context);
+                            String baseSavePath =
+                                '${applicationDirectory.path}/Doc Scanner/Document';
+                            String initialSavePath =
+                                '$baseSavePath/${renameController.text}.pdf';
+
+                            Navigator.pop(context);
+
+                            // Check if file exists
+                            File file = File(initialSavePath);
+                            if (await file.exists()) {
+                              String uniqueSavePath = await getUniqueFileName(
+                                baseSavePath,
+                                renameController.text,
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text("File Exists"),
+                                    content: const Text(
+                                      "This file already exists. Do you want to create a duplicate file?",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                        },
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                          Navigator.pop(context);
+
+                                          // Save the PDF with a unique name
+                                          await savePdfFile(uniqueSavePath,
+                                              textEditingController.text);
+
+                                          // Save the PDF to Downloads folder
+                                          await saveToDownloadsFolder(
+                                              renameController.text,
+                                              textEditingController.text);
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                "Duplicate file saved as ${uniqueSavePath.split('/').last}",
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("Create Duplicate"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              // Save the PDF if the file doesn't exist
+                              await savePdfFile(
+                                  initialSavePath, textEditingController.text);
+
+                              // Save the PDF to Downloads folder
+                              await saveToDownloadsFolder(renameController.text,
+                                  textEditingController.text);
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                      translation(context)
-                                          .pdfFileSavedAtDocumentDirectory,
-                                      style:
-                                          const TextStyle(color: Colors.white)),
+                                    "PDF file saved at $initialSavePath",
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
                                   duration: const Duration(seconds: 2),
                                 ),
                               );
-                            });
+                            }
                           } else {
+                            // Show an error message if the file name is empty
                             ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
+                              const SnackBar(
+                                duration: Duration(seconds: 1),
                                 content: Text(
-                                  translation(context).pleaseEnterFileName,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                  "Please enter a file name",
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             );
@@ -158,5 +237,59 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
         ),
       ),
     );
+  }
+
+  Future<String> getUniqueFileName(String baseSavePath, String fileName) async {
+    int counter = 1;
+    String uniqueFileName = fileName;
+    String uniqueSavePath = '$baseSavePath/$uniqueFileName.pdf';
+
+    while (await File(uniqueSavePath).exists()) {
+      uniqueFileName = '${fileName}_$counter';
+      uniqueSavePath = '$baseSavePath/$uniqueFileName.pdf';
+      counter++;
+    }
+
+    return uniqueSavePath;
+  }
+
+  Future<void> saveToDownloadsFolder(String fileName, String content) async {
+    // Request storage permission
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      // Get Downloads directory path
+      Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
+      if (downloadsDirectory.existsSync()) {
+        String downloadFilePath = '${downloadsDirectory.path}/$fileName.pdf';
+
+        // Generate PDF content
+        Uint8List pdfBytes = await generatePdfContent(content);
+
+        // Save the PDF
+        File file = File(downloadFilePath);
+        await file.writeAsBytes(pdfBytes);
+
+        debugPrint("PDF saved to Downloads: $downloadFilePath");
+      } else {
+        debugPrint("Downloads folder not found");
+      }
+    } else {
+      debugPrint("Permission denied to access external storage");
+    }
+  }
+
+// Method to generate PDF content
+  Future<Uint8List> generatePdfContent(String textContent) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Center(
+          child: pw.Text(textContent),
+        ),
+      ),
+    );
+
+    return pdf.save();
   }
 }
