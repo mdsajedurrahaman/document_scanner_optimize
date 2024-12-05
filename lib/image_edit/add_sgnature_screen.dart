@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:interactive_box/interactive_box.dart';
 import 'package:provider/provider.dart';
 
@@ -188,7 +189,10 @@ class _AddSignatureState extends State<AddSignature> {
                   },
                   initialShowActionIcons: initialShowActionIcons,
                   rotateIndicatorSpacing: 10,
-                  child: SvgPicture.string(signaturePath!, fit: BoxFit.cover),
+                  child: Image.memory(
+                    Uint8List.fromList(signaturePath!.codeUnits),
+                    fit: BoxFit.cover,
+                  ),
                 ),
             ],
           ),
@@ -198,22 +202,35 @@ class _AddSignatureState extends State<AddSignature> {
         color: const Color(0xff1E1F20),
         height: 70,
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: ImageEditButton(
-          title: translation(context).draw,
-          onTap: () async {
-            var signature = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DrawingScreen(),
-              ),
-            );
-            if (signature != null) {
-              setState(() {
-                signaturePath = signature;
-              });
-            }
-          },
-          iconPath: AppAssets.sign,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ImageEditButton(
+              title: translation(context).draw,
+              onTap: () async {
+                var signature = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DrawingScreen(),
+                  ),
+                );
+                if (signature != null) {
+                  setState(() {
+                    signaturePath = signature;
+                  });
+                }
+              },
+              iconPath: AppAssets.sign,
+            ),
+            ImageEditButton(
+              title: translation(context).gallery,
+              onTap: () async {
+                await importFromGallery();
+              },
+              iconPath:
+                  AppAssets.gallery, // Replace with your desired gallery icon
+            ),
+          ],
         ),
       ),
     );
@@ -231,6 +248,24 @@ class _AddSignatureState extends State<AddSignature> {
       return byteData!.buffer.asUint8List();
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<void> importFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        signaturePath =
+            null; // Clear any SVG path (optional, if only one image at a time is allowed)
+      });
+
+      // Display the imported image using InteractiveBox
+      setState(() {
+        signaturePath = String.fromCharCodes(bytes);
+      });
     }
   }
 }

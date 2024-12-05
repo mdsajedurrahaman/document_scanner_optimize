@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:gal/gal.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:flutter/material.dart';
@@ -85,11 +86,13 @@ class CameraProvider extends ChangeNotifier {
             '$idCardDirectoryPath/${_imageList[i].name}.jpg';
         final File imageFile = File(imagePath);
         await imageFile.writeAsBytes(bytes);
+        Gal.putImage(imageFile.path);
       } else {
         final String imagePath =
             '$documentDirectoryPath/${_imageList[i].name}.jpg';
         final File imageFile = File(imagePath);
         await imageFile.writeAsBytes(bytes);
+        Gal.putImage(imageFile.path);
       }
     }
   }
