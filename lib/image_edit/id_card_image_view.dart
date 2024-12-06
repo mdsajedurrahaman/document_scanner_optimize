@@ -1,19 +1,20 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
-import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
-import 'package:doc_scanner/image_edit/image_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
+import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:merge_image/merge_image.dart';
+import 'package:flutter/rendering.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:interactive_box/interactive_box.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../camera_screen/provider/camera_provider.dart';
 import '../localaization/language_constant.dart';
-import 'id_card_crop.dart';
 
 class IdCardImagePreview extends StatefulWidget {
   final bool? isCameFromRetake;
@@ -27,180 +28,388 @@ class IdCardImagePreview extends StatefulWidget {
 
 class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   bool isLoading = false;
+  List<Map<String, dynamic>> imageProperties = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final cameraProvider = context.read<CameraProvider>();
+    imageProperties = cameraProvider.idCardImages.map((imagePath) {
+      int index = cameraProvider.idCardImages.indexOf(imagePath);
+      return {
+        'path': imagePath,
+        'position': Offset(25 + (index * 150), 150),
+        'size': const Size(150, 150), // Initial size
+      };
+    }).toList();
+  }
+
+  final GlobalKey _globalKey = GlobalKey();
+  int _currentIndex = 0;
+  final PageController _pageController = PageController();
+  final TextEditingController _renameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
-    return WillPopScope(
-      onWillPop: () async {
-        cameraProvider.clearIdCardImages();
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+    final size = MediaQuery.sizeOf(context);
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) async {
+        await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
           builder: (context) {
             return const BottomBar();
           },
-        ), (route) => false);
-        return true;
+        ), (route) => false)
+            .then((value) => cameraProvider.clearIdCardImages());
       },
-
-      // canPop: true,
-      // onPopInvoked: (didPop) {
-      //   cameraProvider.clearIdCardImages();
-      //   Navigator.pushAndRemoveUntil(
-      //      context, MaterialPageRoute(builder: (context) {
-      //     return const BottomBar();
-      //   },), (route) => false);
-      // },
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xff1E1F20),
+          centerTitle: true,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () {
-              cameraProvider.clearIdCardImages();
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                 builder: (context) {
                   return const BottomBar();
                 },
-              ), (route) => false);
+              ), (route) => false)
+                  .then((value) => cameraProvider.clearIdCardImages());
             },
           ),
-          centerTitle: true,
           title: Text(
             translation(context).idCardImagePreview,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
           ),
           actions: [
-            TextButton(
-              onPressed: isLoading
-                  ? null
-                  : () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      var imageFront = await MergeImageHelper.loadImageFromFile(
-                        File(cameraProvider.idCardImages.first),
-                      );
-                      var imageBack = await MergeImageHelper.loadImageFromFile(
-                          File(cameraProvider.idCardImages.last));
-                      await MergeImageHelper.margeImages(
-                              [imageFront, imageBack],
-                              fit: true,
-                              direction: Axis.vertical,
-                              backgroundColor: Colors.white)
-                          .then((image) async {
-                        await MergeImageHelper.imageToUint8List(image)
-                            .then((imageFile) async {
-                          var result =
-                              await FlutterImageCompress.compressWithList(
-                            imageFile!,
-                            quality: 50,
-                          );
+            GestureDetector(
+              onTap: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      height: MediaQuery.sizeOf(context).height * 0.3,
+                      width: MediaQuery.sizeOf(context).width,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10)
+                                .copyWith(top: 20, bottom: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(''),
+                                Text(
+                                  translation(context).documentFiles,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Container(
+                                  height: size.width >= 600 ? 40 : 30,
+                                  width: size.width >= 600 ? 40 : 30,
+                                  alignment: Alignment.center,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFF4F4F4),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(30),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.close_rounded,
+                                        size: size.width >= 600 ? 30 : 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    final cameProvider =
+                                        context.watch<CameraProvider>();
+                                    TextEditingController renameController =
+                                        TextEditingController();
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return AlertDialog(
+                                          title: Text(
+                                              translation(context).savePdf),
+                                          content: cameraProvider
+                                                  .isCreatingPDFLoader
+                                              ? ConstrainedBox(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          maxHeight: 40,
+                                                          maxWidth: 40),
+                                                  child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color:
+                                                          AppColor.primaryColor,
+                                                    ),
+                                                  ),
+                                                )
+                                              : TextFormField(
+                                                  controller: renameController,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  textInputAction:
+                                                      TextInputAction.done,
+                                                  autofocus: true,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return translation(
+                                                              context)
+                                                          .pleaseEnterFileName;
+                                                    }
+                                                    return null;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    hintText:
+                                                        translation(context)
+                                                            .enterFileName,
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: AppColor
+                                                              .primaryColor),
+                                                    ),
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 10),
+                                                  ),
+                                                ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                if (renameController
+                                                    .text.isNotEmpty) {
+                                                  await exportToPdf(
+                                                      renameController.text
+                                                          .trim());
 
-                          String idCardName = DateFormat('yyyyMMdd_SSSS')
-                              .format(DateTime.now());
-                          if (widget.isCameFromRetake == true &&
-                              widget.isCameFromRetake != null &&
-                              widget.imageIndex != null) {
-                            cameraProvider.updateImage(
-                              index: widget.imageIndex!,
-                              image: ImageModel(
-                                  imageByte: result,
-                                  name: "IDCard-$idCardName",
-                                  docType: 'ID Card'),
-                            );
-                          } else {
-                            cameraProvider.addImage(
-                              ImageModel(
-                                  imageByte: result,
-                                  name: "IDCard-$idCardName",
-                                  docType: 'ID Card'),
-                            );
-                          }
-                          cameraProvider.clearIdCardImages();
-                          setState(() {
-                            isLoading = false;
-                          });
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ImagePreviewScreen(
-                                  isCameFromIdCard: true,
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return const BottomBar(
+                                                        shouldShowReview: true,
+                                                      );
+                                                    },
+                                                  ), (route) => false);
+                                                  // showTopSnackbar(context,
+                                                  //     "PDF successfully saved");
+                                                }
+                                              },
+                                              child:
+                                                  Text(translation(context).ok),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                  translation(context).cancel),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 5),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.picture_as_pdf_outlined,
+                                      color: Colors.black,
+                                      size: size.width >= 600 ? 30 : 20,
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      translation(context).exportAsPdf,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              (route) => false);
-                        });
-                      });
-                    },
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
               child: Text(
-                translation(context).done,
-                style: const TextStyle(fontSize: 16),
+                translation(context).option,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.primaryColor,
+                ),
               ),
             ),
           ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
-            : ListView(
-                children: List.generate(
-                  cameraProvider.idCardImages.length,
-                  (index) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 5, bottom: 20),
-                          child: Image.file(
-                              File(cameraProvider.idCardImages[index])),
-                        ),
-                        Positioned(
-                          bottom: 20,
-                          left: 10,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.crop,
-                              color: AppColor.primaryColor,
-                              size: 30,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImageCropping(
-                                      imageFile: File(
-                                          cameraProvider.idCardImages[index]),
-                                      index: index),
-                                ),
-                              );
+            : RepaintBoundary(
+                key: _globalKey, // Assign the global key
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: 1 / 1.41, // A4 aspect ratio
+                    child: Container(
+                      color: Colors.grey[200],
+                      child: Stack(
+                        children: imageProperties.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final imageProps = entry.value;
+
+                          return InteractiveBox(
+                            initialPosition: imageProps['position'],
+                            initialSize: imageProps['size'],
+                            includedScaleDirections: const [
+                              ScaleDirection.topRight,
+                              ScaleDirection.bottomRight,
+                              ScaleDirection.bottomLeft,
+                              ScaleDirection.topLeft,
+                            ],
+                            includedActions: const [
+                              ControlActionType.move,
+                              ControlActionType.scale,
+                              ControlActionType.rotate,
+                            ],
+                            onActionSelected: (ControlActionType actionType,
+                                InteractiveBoxInfo info) {
+                              setState(() {
+                                if (actionType == ControlActionType.delete) {
+                                  imageProperties.removeAt(index);
+                                } else {
+                                  imageProperties[index]['position'] =
+                                      info.position;
+                                  imageProperties[index]['size'] = info.size;
+                                }
+                              });
                             },
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 20,
-                          right: 10,
-                          child: IconButton(
-                            icon: SvgPicture.asset(
-                              AppAssets.retake,
-                              color: AppColor.primaryColor,
-                              height: 30,
+                            child: Image.file(
+                              File(imageProps['path']),
+                              fit: BoxFit.fill,
                             ),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return CameraScreen(
-                                    initialPage: 1,
-                                    isComeFromIdCardRetake: true,
-                                    isFront: index == 0 ? true : false,
-                                  );
-                                },
-                              ));
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                 ),
               ),
       ),
     );
+  }
+
+  Future<Uint8List> captureWidgetToImage() async {
+    try {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+      return byteData!.buffer.asUint8List();
+    } catch (e) {
+      throw Exception("Error capturing image: $e");
+    }
+  }
+
+  Future<void> exportToPdf(String fileName) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Capture the widget as an image
+      Uint8List imageBytes = await captureWidgetToImage();
+
+      // Create a PDF document
+      final pdf = pw.Document();
+
+      // Add the captured image to the PDF
+      final image = pw.MemoryImage(imageBytes);
+      pdf.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) {
+            return pw.Center(
+              child: pw.Image(image, fit: pw.BoxFit.cover),
+            );
+          },
+        ),
+      );
+
+      // Get the directory to save the PDF
+      final rootDirectory = await getApplicationDocumentsDirectory();
+      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
+      File file = File("$path/${_renameController.text}.pdf");
+
+      // Ensure the directory exists
+      if (!await file.parent.exists()) {
+        await file.parent.create(recursive: true);
+      }
+
+      // Save the PDF file
+      await file.writeAsBytes(await pdf.save());
+
+      setState(() {
+        isLoading = false;
+      });
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('PDF saved at ${file.path}')),
+      );
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save PDF: $e')),
+      );
+    }
   }
 }

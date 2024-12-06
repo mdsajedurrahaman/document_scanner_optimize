@@ -1,7 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:doc_scanner/home_page/home_page.dart';
+import 'package:doc_scanner/image_edit/id_card_image_view.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
 import 'package:doc_scanner/image_edit/provider/image_edit_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
@@ -530,7 +533,7 @@ class _BottomBarState extends State<BottomBar> {
                       width: 10,
                     ),
                     const Text(
-                      'PDF',
+                      'Import PDF',
                       style: TextStyle(color: Colors.white),
                     ),
                   ],
@@ -679,37 +682,38 @@ class _BottomBarState extends State<BottomBar> {
                 onTap: () async {
                   await AppHelper.handlePermissions().then((_) async {
                     await CunningDocumentScanner.getPictures(
-                            isGalleryImportAllowed: true, noOfPages: 2)
-                        .then((pictures) {
-                      if (pictures!.isNotEmpty) {
-                        if (pictures.length == 1) {
-                          String imageName = DateFormat('yyyyMMdd_SSSS')
-                              .format(DateTime.now());
-                          cameraProvider.addImage(ImageModel(
-                              docType: 'ID Card',
-                              imageByte: File(pictures.first).readAsBytesSync(),
-                              name: "ID card-$imageName"));
-                          Navigator.pushAndRemoveUntil(context,
-                              MaterialPageRoute(
-                            builder: (context) {
-                              return const EditImagePreview();
-                            },
-                          ), (route) => true);
-                        } else {
-                          pictures.forEach((element) async {
-                            cameraProvider.addIdCardImage(element);
-                          });
+                      isGalleryImportAllowed: true,
+                    ).then((pictures) {
+                      // if (pictures!.isNotEmpty) {
+                      //   if (pictures.length == 1) {
+                      //     String imageName = DateFormat('yyyyMMdd_SSSS')
+                      //         .format(DateTime.now());
+                      //     cameraProvider.addImage(ImageModel(
+                      //         docType: 'ID Card',
+                      //         imageByte: File(pictures.first).readAsBytesSync(),
+                      //         name: "ID card-$imageName"));
+                      //     Navigator.pushAndRemoveUntil(context,
+                      //         MaterialPageRoute(
+                      //       builder: (context) {
+                      //         return const EditImagePreview();
+                      //       },
+                      //     ), (route) => true);
+                      //   } else {
+                      pictures?.forEach((element) async {
+                        cameraProvider.addIdCardImage(element);
+                      });
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ImagePreviewScreen(
-                                isCameFromIdCard: true,
-                              ),
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const IdCardImagePreview(
+                              imageIndex: 2,
+                              isCameFromRetake: false,
                             ),
-                          );
-                        }
-                      }
+                          ),
+                          (route) => false);
+                      // }
+                      // }
                     });
                   });
                 },

@@ -6,6 +6,7 @@ import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/home_page/directory_create_page.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/home_page/search_page.dart';
+import 'package:doc_scanner/image_edit/id_card_image_view.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
 import 'package:doc_scanner/image_edit/image_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
@@ -212,45 +213,44 @@ class _HomePageState extends State<HomePage> {
                                     ? await AppHelper.handlePermissions()
                                         .then((_) async {
                                         await CunningDocumentScanner
-                                                .getPictures(
-                                                    isGalleryImportAllowed:
-                                                        true,
-                                                    noOfPages: 2)
-                                            .then((pictures) {
-                                          if (pictures!.isNotEmpty) {
-                                            if (pictures.length == 1) {
-                                              String imageName =
-                                                  DateFormat('yyyyMMdd_SSSS')
-                                                      .format(DateTime.now());
-                                              cameraProvider.addImage(ImageModel(
-                                                  docType: 'ID Card',
-                                                  imageByte:
-                                                      File(pictures.first)
-                                                          .readAsBytesSync(),
-                                                  name: "ID card-$imageName"));
-                                              Navigator.pushAndRemoveUntil(
-                                                  context, MaterialPageRoute(
-                                                builder: (context) {
-                                                  return const EditImagePreview();
-                                                },
-                                              ), (route) => true);
-                                            } else {
-                                              pictures.forEach((element) async {
-                                                cameraProvider
-                                                    .addIdCardImage(element);
-                                              });
+                                            .getPictures(
+                                          isGalleryImportAllowed: true,
+                                        ).then((pictures) {
+                                          // if (pictures!.isNotEmpty) {
+                                          //   if (pictures.length == 1) {
+                                          //     String imageName =
+                                          //         DateFormat('yyyyMMdd_SSSS')
+                                          //             .format(DateTime.now());
+                                          //     cameraProvider.addImage(ImageModel(
+                                          //         docType: 'ID Card',
+                                          //         imageByte:
+                                          //             File(pictures.first)
+                                          //                 .readAsBytesSync(),
+                                          //         name: "ID card-$imageName"));
+                                          //     Navigator.pushAndRemoveUntil(
+                                          //         context, MaterialPageRoute(
+                                          //       builder: (context) {
+                                          //         return const EditImagePreview();
+                                          //       },
+                                          //     ), (route) => true);
+                                          //   } else {
+                                          pictures?.forEach((element) async {
+                                            cameraProvider
+                                                .addIdCardImage(element);
+                                          });
 
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ImagePreviewScreen(
-                                                    isCameFromIdCard: true,
-                                                  ),
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const IdCardImagePreview(
+                                                  imageIndex: 2,
+                                                  isCameFromRetake: false,
                                                 ),
-                                              );
-                                            }
-                                          }
+                                              ),
+                                              (route) => false);
+                                          // }
+                                          // }
                                         });
                                       })
                                     : cameraItem.name == "QR Code"

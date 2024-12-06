@@ -64,7 +64,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFF131314),
+        backgroundColor: Colors.white, //const Color(0xFF131314),
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: const Color(0xff1E1F20),
@@ -148,6 +148,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
             ),
           ],
         ),
+
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
