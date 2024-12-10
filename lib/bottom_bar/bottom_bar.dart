@@ -682,28 +682,13 @@ class _BottomBarState extends State<BottomBar> {
                 onTap: () async {
                   await AppHelper.handlePermissions().then((_) async {
                     await CunningDocumentScanner.getPictures(
-                      isGalleryImportAllowed: true,
-                    ).then((pictures) {
-                      // if (pictures!.isNotEmpty) {
-                      //   if (pictures.length == 1) {
-                      //     String imageName = DateFormat('yyyyMMdd_SSSS')
-                      //         .format(DateTime.now());
-                      //     cameraProvider.addImage(ImageModel(
-                      //         docType: 'ID Card',
-                      //         imageByte: File(pictures.first).readAsBytesSync(),
-                      //         name: "ID card-$imageName"));
-                      //     Navigator.pushAndRemoveUntil(context,
-                      //         MaterialPageRoute(
-                      //       builder: (context) {
-                      //         return const EditImagePreview();
-                      //       },
-                      //     ), (route) => true);
-                      //   } else {
+                            isGalleryImportAllowed: true, noOfPages: 2)
+                        .then((pictures) {
                       pictures?.forEach((element) async {
                         cameraProvider.addIdCardImage(element);
                       });
-
-                      Navigator.pushAndRemoveUntil(
+                      if (cameraProvider.idCardImages.isNotEmpty) {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const IdCardImagePreview(
@@ -711,13 +696,13 @@ class _BottomBarState extends State<BottomBar> {
                               isCameFromRetake: false,
                             ),
                           ),
-                          (route) => false);
-                      // }
-                      // }
+                        );
+                      }
                     });
                   });
                 },
               ),
+
               // Documents
 
               SpeedDialChild(
@@ -742,8 +727,8 @@ class _BottomBarState extends State<BottomBar> {
                 onTap: () async {
                   await AppHelper.handlePermissions().then((_) async {
                     await CunningDocumentScanner.getPictures(
-                            isGalleryImportAllowed: true)
-                        .then((pictures) {
+                      isGalleryImportAllowed: true,
+                    ).then((pictures) {
                       if (pictures!.isNotEmpty) {
                         pictures.forEach((element) async {
                           String imageName = DateFormat('yyyyMMdd_SSSS')
@@ -755,12 +740,14 @@ class _BottomBarState extends State<BottomBar> {
                         });
 
                         if (cameraProvider.imageList.isNotEmpty) {
-                          Navigator.pushAndRemoveUntil(context,
-                              MaterialPageRoute(
-                            builder: (context) {
-                              return const EditImagePreview();
-                            },
-                          ), (route) => true);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const EditImagePreview();
+                              },
+                            ),
+                          );
                         }
                       }
                     });

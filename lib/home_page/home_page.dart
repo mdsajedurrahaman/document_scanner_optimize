@@ -8,7 +8,6 @@ import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/home_page/search_page.dart';
 import 'package:doc_scanner/image_edit/id_card_image_view.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
-import 'package:doc_scanner/image_edit/image_preview.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/helper.dart';
@@ -199,12 +198,14 @@ class _HomePageState extends State<HomePage> {
 
                                         if (cameraProvider
                                             .imageList.isNotEmpty) {
-                                          Navigator.pushAndRemoveUntil(context,
-                                              MaterialPageRoute(
-                                            builder: (context) {
-                                              return const EditImagePreview();
-                                            },
-                                          ), (route) => true);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return const EditImagePreview();
+                                              },
+                                            ),
+                                          );
                                         }
                                       }
                                     });
@@ -238,8 +239,9 @@ class _HomePageState extends State<HomePage> {
                                             cameraProvider
                                                 .addIdCardImage(element);
                                           });
-
-                                          Navigator.pushAndRemoveUntil(
+                                          if (cameraProvider
+                                              .idCardImages.isNotEmpty) {
+                                            Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
@@ -248,8 +250,8 @@ class _HomePageState extends State<HomePage> {
                                                   isCameFromRetake: false,
                                                 ),
                                               ),
-                                              (route) => false);
-                                          // }
+                                            );
+                                          }
                                           // }
                                         });
                                       })

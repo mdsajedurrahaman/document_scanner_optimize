@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
-import 'package:doc_scanner/camera_screen/model/image_model.dart';
-import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +43,123 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   }
 
   final GlobalKey _globalKey = GlobalKey();
-  int _currentIndex = 0;
-  final PageController _pageController = PageController();
-  final TextEditingController _renameController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+
+  void showTopSnackbar(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 10.0,
+        left: 0,
+        right: 0,
+        child: TopSnackbar(message: message),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+
+  Future<Uint8List> captureWidgetToImage() async {
+    try {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+
+      // Determine pixel ratio for high-resolution output
+      double pixelRatio =
+          1080 / boundary.size.width; // A4 height in pixels / widget height
+      var image = await boundary.toImage(
+        pixelRatio: pixelRatio,
+      );
+      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+      if (byteData == null) {
+        throw Exception("Failed to capture widget to image.");
+      }
+      return byteData.buffer.asUint8List();
+    } catch (e) {
+      throw Exception("Error capturing image: $e");
+    }
+  }
+
+  Future<void> exportToPdf(String fileName) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      // Capture the widget as an image
+      Uint8List imageBytes = await captureWidgetToImage();
+      // Create a PDF document
+      final pdf = pw.Document();
+      final image = pw.MemoryImage(imageBytes);
+      // Define A4 dimensions with zero margins
+      final pageFormat = PdfPageFormat.a4.copyWith(
+        marginLeft: 0,
+        marginRight: 0,
+        marginTop: 0,
+        marginBottom: 0,
+      );
+      // Add an A4 page with the captured image
+      pdf.addPage(
+        pw.Page(
+          pageFormat: pageFormat,
+          build: (context) {
+            return pw.Center(
+              widthFactor: double.infinity,
+              child: pw.Image(
+                image,
+                fit: pw.BoxFit.contain, // Ensures full fit without cropping
+              ),
+            );
+          },
+        ),
+      );
+      // Define file path and save PDF
+      final rootDirectory = await getApplicationDocumentsDirectory();
+      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
+      File file = File("$path/$fileName.pdf");
+
+      // Create directories if they don't exist
+      if (!await file.parent.exists()) {
+        await file.parent.create(recursive: true);
+      }
+      await file.writeAsBytes(await pdf.save());
+      setState(() {
+        isLoading = false;
+      });
+      // Notify user of successful save
+      showTopSnackbar(context, "PDF successfully saved");
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Notify user of failure
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save PDF: $e')),
+      );
+    }
+  }
+
+  Future<void> saveImageToFile(Uint8List imageBytes) async {
+    try {
+      final rootDirectory = await getApplicationDocumentsDirectory();
+      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
+      Directory directory = Directory(path);
+
+      // Ensure the directory exists
+      if (!directory.existsSync()) {
+        directory.createSync(recursive: true);
+      }
+
+      // Save the file as JPG
+      File file = File('$path/exported_image.jpg');
+      await file.writeAsBytes(imageBytes);
+      print('Image saved at ${file.path}');
+    } catch (e) {
+      print("Error saving image: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +185,12 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
               color: Colors.white,
             ),
             onPressed: () async {
+              cameraProvider.clearIdCardImages();
               await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                 builder: (context) {
                   return const BottomBar();
                 },
-              ), (route) => false)
-                  .then((value) => cameraProvider.clearIdCardImages());
+              ), (route) => false);
             },
           ),
           title: Text(
@@ -145,6 +256,66 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                               ],
                             ),
                           ),
+                          Divider(
+                            color: Colors.grey[200],
+                            thickness: 1,
+                            // indent: MediaQuery.sizeOf(context).width * 0.15,
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                showNormalAlertDialogue(
+                                  context: context,
+                                  title: translation(context).saveImages,
+                                  content: translation(context)
+                                      .doYouWantSaveAllImages,
+                                  onOkText: translation(context).save,
+                                  onCancelText: translation(context).cancel,
+                                  onOk: () async {
+                                    try {
+                                      Uint8List imageBytes =
+                                          await captureWidgetToImage();
+                                      await saveImageToFile(imageBytes);
+                                      Navigator.pop(context);
+                                    } catch (e) {
+                                      print("Error: $e");
+                                    }
+                                  },
+                                  onCancel: () => Navigator.pop(context),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 5),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.ios_share_outlined,
+                                      color: Colors.black,
+                                      size: size.width >= 600 ? 30 : 20,
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      translation(context).exportImages,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey[200],
+                            thickness: 1,
+                            // indent: MediaQuery.sizeOf(context).width * 0.15,
+                          ),
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
@@ -152,8 +323,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    final cameProvider =
-                                        context.watch<CameraProvider>();
+                                    // final cameProvider =
+                                    //     context.watch<CameraProvider>();
                                     TextEditingController renameController =
                                         TextEditingController();
                                     return StatefulBuilder(
@@ -215,6 +386,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                   await exportToPdf(
                                                       renameController.text
                                                           .trim());
+                                                  cameraProvider
+                                                      .clearIdCardImages();
 
                                                   Navigator.pushAndRemoveUntil(
                                                       context,
@@ -294,122 +467,50 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
             : RepaintBoundary(
                 key: _globalKey, // Assign the global key
                 child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 1 / 1.41, // A4 aspect ratio
-                    child: Container(
-                      color: Colors.grey[200],
-                      child: Stack(
-                        children: imageProperties.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final imageProps = entry.value;
+                  child: Container(
+                    color: Colors.white,
+                    child: Stack(
+                      children: imageProperties.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final imageProps = entry.value;
 
-                          return InteractiveBox(
-                            initialPosition: imageProps['position'],
-                            initialSize: imageProps['size'],
-                            includedScaleDirections: const [
-                              ScaleDirection.topRight,
-                              ScaleDirection.bottomRight,
-                              ScaleDirection.bottomLeft,
-                              ScaleDirection.topLeft,
-                            ],
-                            includedActions: const [
-                              ControlActionType.move,
-                              ControlActionType.scale,
-                              ControlActionType.rotate,
-                            ],
-                            onActionSelected: (ControlActionType actionType,
-                                InteractiveBoxInfo info) {
-                              setState(() {
-                                if (actionType == ControlActionType.delete) {
-                                  imageProperties.removeAt(index);
-                                } else {
-                                  imageProperties[index]['position'] =
-                                      info.position;
-                                  imageProperties[index]['size'] = info.size;
-                                }
-                              });
-                            },
-                            child: Image.file(
-                              File(imageProps['path']),
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                        return InteractiveBox(
+                          initialPosition: imageProps['position'],
+                          initialSize: imageProps['size'],
+                          includedScaleDirections: const [
+                            ScaleDirection.topRight,
+                            ScaleDirection.bottomRight,
+                            ScaleDirection.bottomLeft,
+                            ScaleDirection.topLeft,
+                          ],
+                          includedActions: const [
+                            ControlActionType.move,
+                            ControlActionType.scale,
+                            ControlActionType.rotate,
+                          ],
+                          onActionSelected: (ControlActionType actionType,
+                              InteractiveBoxInfo info) {
+                            setState(() {
+                              if (actionType == ControlActionType.delete) {
+                                imageProperties.removeAt(index);
+                              } else {
+                                imageProperties[index]['position'] =
+                                    info.position;
+                                imageProperties[index]['size'] = info.size;
+                              }
+                            });
+                          },
+                          child: Image.file(
+                            File(imageProps['path']),
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),
               ),
       ),
     );
-  }
-
-  Future<Uint8List> captureWidgetToImage() async {
-    try {
-      RenderRepaintBoundary boundary = _globalKey.currentContext!
-          .findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-      return byteData!.buffer.asUint8List();
-    } catch (e) {
-      throw Exception("Error capturing image: $e");
-    }
-  }
-
-  Future<void> exportToPdf(String fileName) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      // Capture the widget as an image
-      Uint8List imageBytes = await captureWidgetToImage();
-
-      // Create a PDF document
-      final pdf = pw.Document();
-
-      // Add the captured image to the PDF
-      final image = pw.MemoryImage(imageBytes);
-      pdf.addPage(
-        pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          build: (context) {
-            return pw.Center(
-              child: pw.Image(image, fit: pw.BoxFit.cover),
-            );
-          },
-        ),
-      );
-
-      // Get the directory to save the PDF
-      final rootDirectory = await getApplicationDocumentsDirectory();
-      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
-      File file = File("$path/${_renameController.text}.pdf");
-
-      // Ensure the directory exists
-      if (!await file.parent.exists()) {
-        await file.parent.create(recursive: true);
-      }
-
-      // Save the PDF file
-      await file.writeAsBytes(await pdf.save());
-
-      setState(() {
-        isLoading = false;
-      });
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('PDF saved at ${file.path}')),
-      );
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save PDF: $e')),
-      );
-    }
   }
 }
