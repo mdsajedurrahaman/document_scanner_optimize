@@ -195,6 +195,8 @@ class CameraProvider extends ChangeNotifier {
     }
   }
 
+  bool isSavePDFLoader = false;
+
   bool _isCreatingPDFLoader = false;
   bool get isCreatingPDFLoader => _isCreatingPDFLoader;
 

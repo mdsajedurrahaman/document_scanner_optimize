@@ -14,6 +14,7 @@ Future<void> showQrAndBarCodeDialogue(
     required VoidCallback closeTap,
     required VoidCallback browserView}) async {
   String text = content;
+
   List<String> parts = text.split(';');
   showDialog(
     context: context,
@@ -63,44 +64,56 @@ Future<void> showQrAndBarCodeDialogue(
                         scrollDirection: Axis.vertical,
                         child: content.startsWith('https')
                             ? Text(content)
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: parts
-                                    .where((part) =>
-                                        part.isNotEmpty) // Remove empty parts
-                                    .map((part) {
-                                  // Split each part into key and value
-                                  List<String> keyValue = part.split(':');
-                                  String key = keyValue[0];
-                                  String value = keyValue.length > 1
-                                      ? keyValue.sublist(1).join(':')
-                                      : '';
+                            : RegExp(r'^[A-Z]').hasMatch(content)
+                                ? Text(content)
+                                : RegExp(r'^[a-z]').hasMatch(text)
+                                    ? Text(content)
+                                    : RegExp(r'^[0-9]').hasMatch(text)
+                                        ? Text(content)
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: parts
+                                                .where((part) => part
+                                                    .isNotEmpty) // Remove empty parts
+                                                .map((part) {
+                                              // Split each part into key and value
+                                              List<String> keyValue =
+                                                  part.split(':');
+                                              String key = keyValue[0];
+                                              String value = keyValue.length > 1
+                                                  ? keyValue
+                                                      .sublist(1)
+                                                      .join(':')
+                                                  : '';
 
-                                  // Check if the value starts with 'https'
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          key == "WIFI" ||
-                                                  key == "Wifi" ||
-                                                  key == "wifi"
-                                              ? "WIFI NAME : "
-                                              : key == "T"
-                                                  ? "TYPE : "
-                                                  : key == "P"
-                                                      ? "PASSWORD : "
-                                                      : "",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(value),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
+                                              // Check if the value starts with 'https'
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      key == "WIFI" ||
+                                                              key == "Wifi" ||
+                                                              key == "wifi"
+                                                          ? "WIFI NAME : "
+                                                          : key == "T"
+                                                              ? "TYPE : "
+                                                              : key == "P"
+                                                                  ? "PASSWORD : "
+                                                                  : "",
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Text(value),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
                       ),
                     ),
                     // const SizedBox(
@@ -109,58 +122,67 @@ Future<void> showQrAndBarCodeDialogue(
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          onPressed: onCopy,
-                          icon: const Icon(
-                            Icons.copy,
-                            color: Colors.blueAccent,
-                          ),
-                          label: Text(
-                            translation(context).copy,
-                            style: const TextStyle(color: Colors.blueAccent),
-                          ),
-                        ),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          onPressed: browserView,
-                          icon: const Icon(
-                            Icons.language,
-                            color: Colors.blueAccent,
-                          ),
-                          label: const Text(
-                            "Open",
-                            style: TextStyle(color: Colors.blueAccent),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            onPressed: browserView,
+                            icon: const Icon(
+                              Icons.language,
+                              color: Colors.blueAccent,
+                            ),
+                            label: const Text(
+                              "Open",
+                              style: TextStyle(color: Colors.blueAccent),
+                            ),
                           ),
                         ),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          onPressed: onSave,
-                          icon: const Icon(
-                            Icons.save_alt_outlined,
-                            color: Colors.blueAccent,
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                backgroundColor: Colors.white,
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            onPressed: onCopy,
+                            icon: const Icon(
+                              Icons.copy,
+                              color: Colors.blueAccent,
+                            ),
+                            label: Text(
+                              translation(context).copy,
+                              style: const TextStyle(color: Colors.blueAccent),
+                            ),
                           ),
-                          label: Text(
-                            translation(context).save,
-                            style: const TextStyle(color: Colors.blueAccent),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            onPressed: onSave,
+                            icon: const Icon(
+                              Icons.save_alt_outlined,
+                              color: Colors.blueAccent,
+                            ),
+                            label: Text(
+                              translation(context).save,
+                              style: const TextStyle(color: Colors.blueAccent),
+                            ),
                           ),
                         ),
                       ],
@@ -349,12 +371,12 @@ Future<void> showQrAndBarCodeViewDialogue(
       return Dialog(
         alignment: Alignment.center,
         child: Container(
-            height: text.startsWith('https') ? 200 : 250,
+            height: text.startsWith('https') ? 220 : 270,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.grey.shade200,
             ),
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -364,8 +386,8 @@ Future<void> showQrAndBarCodeViewDialogue(
                   children: [
                     const Text(
                       "Content",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
                     ),
                     IconButton(
                         onPressed: () {
@@ -374,50 +396,72 @@ Future<void> showQrAndBarCodeViewDialogue(
                         icon: const Icon(Icons.close))
                   ],
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: text.startsWith('https')
-                        ? Text(text)
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: parts
-                                .where((part) =>
-                                    part.isNotEmpty) // Remove empty parts
-                                .map((part) {
-                              // Split each part into key and value
-                              List<String> keyValue = part.split(':');
-                              String key = keyValue[0];
-                              String value = keyValue.length > 1
-                                  ? keyValue.sublist(1).join(':')
-                                  : '';
-
-                              // Check if the value starts with 'https'
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      key == "WIFI" ||
-                                              key == "Wifi" ||
-                                              key == "wifi"
-                                          ? "WIFI NAME : "
-                                          : key == "T"
-                                              ? "TYPE : "
-                                              : key == "P"
-                                                  ? "PASSWORD : "
-                                                  : "",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(value),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFFC5C7D3),
                   ),
+                  child: Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: text.startsWith('https')
+                          ? Text(text)
+                          : RegExp(r'^[A-Z]').hasMatch(content)
+                              ? Text(content)
+                              : RegExp(r'^[a-z]').hasMatch(text)
+                                  ? Text(content)
+                                  : RegExp(r'^[0-9]').hasMatch(text)
+                                      ? Text(content)
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: parts
+                                              .where((part) => part
+                                                  .isNotEmpty) // Remove empty parts
+                                              .map((part) {
+                                            // Split each part into key and value
+                                            List<String> keyValue =
+                                                part.split(':');
+                                            String key = keyValue[0];
+                                            String value = keyValue.length > 1
+                                                ? keyValue.sublist(1).join(':')
+                                                : '';
+
+                                            // Check if the value starts with 'https'
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    key == "WIFI" ||
+                                                            key == "Wifi" ||
+                                                            key == "wifi"
+                                                        ? "WIFI NAME : "
+                                                        : key == "T"
+                                                            ? "TYPE : "
+                                                            : key == "P"
+                                                                ? "PASSWORD : "
+                                                                : "",
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(value),
+                                                ],
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -428,6 +472,7 @@ Future<void> showQrAndBarCodeViewDialogue(
                             alignment: Alignment.center,
                             padding: EdgeInsets.zero,
                             backgroundColor: Colors.white,
+                            minimumSize: Size(90, 50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         onPressed: () async {
@@ -448,7 +493,7 @@ Future<void> showQrAndBarCodeViewDialogue(
                       ),
                     ),
                     const SizedBox(
-                      width: 5,
+                      width: 50,
                     ),
                     Expanded(
                         child: ElevatedButton.icon(
@@ -456,6 +501,7 @@ Future<void> showQrAndBarCodeViewDialogue(
                           alignment: Alignment.center,
                           padding: EdgeInsets.zero,
                           backgroundColor: Colors.white,
+                          minimumSize: const Size(90, 50),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       onPressed: browserView,

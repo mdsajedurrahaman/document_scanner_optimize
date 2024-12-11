@@ -13,6 +13,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../utils/utils.dart';
 import 'fixed_size_delegate_grid.dart';
 import 'package:path/path.dart' as path;
@@ -35,6 +36,20 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
   bool isDeleteLoading = false;
   bool isShareIng = false;
   late Directory rootDirectory;
+
+  void _openBrowserWithSearch(String query) async {
+    // Encode the query to make it URL-safe
+    final encodedQuery = Uri.encodeComponent(query);
+    // Form the Google search URL
+    final url = 'https://www.google.com/search?q=$encodedQuery';
+
+    // Check if the URL can be launched
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   void initState() {
@@ -1046,10 +1061,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                         .endsWith('.txt')) {
                                       return GestureDetector(
                                         onTap: () async {
+                                          var urlLink = await homePageProvider
+                                              .readTxtFile(filePath);
                                           showQrAndBarCodeViewDialogue(
                                               context: context,
                                               text: await homePageProvider
-                                                  .readTxtFile(filePath));
+                                                  .readTxtFile(filePath),
+                                              browserView: () {
+                                                _openBrowserWithSearch(urlLink);
+                                              });
                                         },
                                         child: Stack(
                                           alignment: Alignment.topRight,
@@ -1731,7 +1751,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           // Show success message
                                                                           ScaffoldMessenger.of(context)
                                                                               .showSnackBar(
-                                                                            SnackBar(content: Text('File saved to $newPath')),
+                                                                            const SnackBar(content: Text('PDF File saved to Documents Folder')),
                                                                           );
                                                                         } catch (e) {
                                                                           // Handle any errors

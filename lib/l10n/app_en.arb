@@ -148,7 +148,7 @@
   "notNow": "Not Now",
   "pleaseAllowCameraMicrophonePermissionToUseThisFeature": "Please allow camera microphone permission to use this feature",
   "allowCameraPermission": "Allow Camera Permission",
-  "barCodeDetected": "BarCode Detected",
+  "barCodeDetected": "Barcode Detected",
   "copiedToClipboard": "Copied to Clipboard",
   "qrCodeDetected": "QR Code Detected",
   "copy" : "Copy",

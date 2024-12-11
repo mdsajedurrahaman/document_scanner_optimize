@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/image_edit/widget/image_edit_button.dart';
 import 'package:doc_scanner/utils/app_color.dart';
+import 'package:doc_scanner/utils/helper.dart';
 import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -116,9 +118,9 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
               : Text(
                   cameraProvider.imageList[currentIndex].name,
                   style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
           titleTextStyle: const TextStyle(
             color: Colors.black,
@@ -217,21 +219,35 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                 title: translation(context).retake,
                 onTap: () async {
                   if (cameraProvider.imageList.isNotEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CameraScreen(
-                          initialPage:
-                              cameraProvider.imageList[currentIndex].docType ==
-                                      "Document"
-                                  ? 0
-                                  : 1,
-                          isComeFromRetake: true,
-                          imageIndex: currentIndex,
-                          imageModel: cameraProvider.imageList[currentIndex],
-                        ),
-                      ),
-                    );
+                    await AppHelper.handlePermissions().then((_) async {
+                      await CunningDocumentScanner.getPictures(
+                        isGalleryImportAllowed: true,
+                      ).then((pictures) {
+                        if (pictures!.isNotEmpty) {
+                          pictures.forEach((element) async {
+                            String imageName = DateFormat('yyyyMMdd_SSSS')
+                                .format(DateTime.now());
+                            cameraProvider.updateImage(
+                                image: ImageModel(
+                                    docType: 'Document',
+                                    imageByte: File(element).readAsBytesSync(),
+                                    name: "Document-$imageName"),
+                                index: 1);
+                          });
+
+                          if (cameraProvider.imageList.isNotEmpty) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const ImagePreviewScreen();
+                                },
+                              ),
+                            );
+                          }
+                        }
+                      });
+                    });
                   } else {
                     ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -249,142 +265,135 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () async {
-                          await showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20))),
-                            builder: (context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 30),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        var result = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => CameraScreen(
-                                              isComeFromAdd: true,
-                                              initialPage: 0,
-                                              imageIndex: currentIndex,
-                                            ),
-                                          ),
-                                        );
+                          final ImagePicker picker = ImagePicker();
+                          final List<XFile?> image =
+                              await picker.pickMultiImage(imageQuality: 50);
+                          if (image.isNotEmpty) {
+                            List<ImageModel> imageList = [];
+                            for (int i = 0; i < image.length; i++) {
+                              String documentName = DateFormat('yyyyMMdd_SSSS')
+                                  .format(DateTime.now());
+                              if (image[i] != null) {
+                                imageList.add(
+                                  ImageModel(
+                                    imageByte: await image[i]!.readAsBytes(),
+                                    name: 'Doc-$documentName',
+                                    docType: 'Document',
+                                  ),
+                                );
+                              }
+                            }
+                            cameraProvider.addImageSpecipicIndex(
+                                imageList, currentIndex + 1);
+                            // setState(() {
+                            //   currentIndex=currentIndex+1;
+                            // });
 
-                                        pageController.animateToPage(result,
-                                            duration:
-                                                const Duration(milliseconds: 1),
-                                            curve: Curves.easeIn);
-                                      },
-                                      child: Container(
-                                        height: 100,
-                                        width: 160,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(AppAssets.camera),
-                                            Text(
-                                              translation(context).camera,
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        final ImagePicker picker =
-                                            ImagePicker();
-                                        final List<XFile?> image = await picker
-                                            .pickMultiImage(imageQuality: 50);
-                                        if (image.isNotEmpty) {
-                                          List<ImageModel> imageList = [];
-                                          for (int i = 0;
-                                              i < image.length;
-                                              i++) {
-                                            String documentName =
-                                                DateFormat('yyyyMMdd_SSSS')
-                                                    .format(DateTime.now());
-                                            if (image[i] != null) {
-                                              imageList.add(
-                                                ImageModel(
-                                                  imageByte: await image[i]!
-                                                      .readAsBytes(),
-                                                  name: 'Doc-$documentName',
-                                                  docType: 'Document',
-                                                ),
-                                              );
-                                            }
-                                          }
-                                          cameraProvider.addImageSpecipicIndex(
-                                              imageList, currentIndex + 1);
-                                          // setState(() {
-                                          //   currentIndex=currentIndex+1;
-                                          // });
+                            pageController.animateToPage(currentIndex + 1,
+                                duration: const Duration(milliseconds: 1),
+                                curve: Curves.easeIn);
+                            Navigator.of(context);
+                          }
+                          // await showModalBottomSheet(
+                          //   context: context,
+                          //   shape: const RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.only(
+                          //           topLeft: Radius.circular(20),
+                          //           topRight: Radius.circular(20))),
+                          //   builder: (context) {
+                          //     return Container(
+                          //       width: MediaQuery.of(context).size.width,
+                          //       padding: const EdgeInsets.symmetric(
+                          //           horizontal: 5, vertical: 30),
+                          //       child: Row(
+                          //         mainAxisAlignment:
+                          //             MainAxisAlignment.spaceAround,
+                          //         children: [
+                          //           InkWell(
+                          //             onTap: () async {
+                          //               Navigator.pop(context);
+                          //               var result = await Navigator.push(
+                          //                 context,
+                          //                 MaterialPageRoute(
+                          //                   builder: (context) => CameraScreen(
+                          //                     isComeFromAdd: true,
+                          //                     initialPage: 0,
+                          //                     imageIndex: currentIndex,
+                          //                   ),
+                          //                 ),
+                          //               );
 
-                                          pageController.animateToPage(
-                                              currentIndex + 1,
-                                              duration: const Duration(
-                                                  milliseconds: 1),
-                                              curve: Curves.easeIn);
-                                          Navigator.of(context);
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 100,
-                                        width: 160,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              AppAssets.gallery,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              translation(context).gallery,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
+                          //               pageController.animateToPage(result,
+                          //                   duration:
+                          //                       const Duration(milliseconds: 1),
+                          //                   curve: Curves.easeIn);
+                          //             },
+                          //             child: Container(
+                          //               height: 100,
+                          //               width: 160,
+                          //               decoration: BoxDecoration(
+                          //                 color: Colors.white,
+                          //                 borderRadius:
+                          //                     BorderRadius.circular(10),
+                          //               ),
+                          //               alignment: Alignment.center,
+                          //               child: Column(
+                          //                 mainAxisAlignment:
+                          //                     MainAxisAlignment.center,
+                          //                 crossAxisAlignment:
+                          //                     CrossAxisAlignment.center,
+                          //                 children: [
+                          //                   SvgPicture.asset(AppAssets.camera),
+                          //                   Text(
+                          //                     translation(context).camera,
+                          //                     style: const TextStyle(
+                          //                         color: Colors.black,
+                          //                         fontWeight: FontWeight.w500,
+                          //                         fontSize: 20),
+                          //                   )
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //           ),
+                          //           InkWell(
+                          //             onTap: () async {
+
+                          //             },
+                          //             child: Container(
+                          //               height: 100,
+                          //               width: 160,
+                          //               decoration: BoxDecoration(
+                          //                 color: Colors.white,
+                          //                 borderRadius:
+                          //                     BorderRadius.circular(10),
+                          //               ),
+                          //               alignment: Alignment.center,
+                          //               child: Column(
+                          //                 mainAxisAlignment:
+                          //                     MainAxisAlignment.center,
+                          //                 crossAxisAlignment:
+                          //                     CrossAxisAlignment.center,
+                          //                 children: [
+                          //                   SvgPicture.asset(
+                          //                     AppAssets.gallery,
+                          //                     color: Colors.white,
+                          //                   ),
+                          //                   Text(
+                          //                     translation(context).gallery,
+                          //                     style: const TextStyle(
+                          //                         color: Colors.white,
+                          //                         fontWeight: FontWeight.w500,
+                          //                         fontSize: 20),
+                          //                   )
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   },
+                          // );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),

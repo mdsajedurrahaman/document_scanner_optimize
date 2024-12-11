@@ -539,26 +539,6 @@ class _BottomBarState extends State<BottomBar> {
                   ],
                 ),
                 onTap: () async {
-                  // await FilePicker.platform.pickFiles(
-                  //   type: FileType.custom,
-                  //   allowedExtensions: ['pdf'],
-                  // ).then((value) async{
-                  //   File pdfFile=File(value!.paths.first!);
-                  //       cameraProvider.convertPdfToImage(pdfFile).then((value) {
-                  //              Navigator.pushAndRemoveUntil(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                     builder: (context) =>
-                  //                         const ImagePreviewScreen(),
-                  //                   ),
-                  //                   (route) => false,
-                  //                 );
-                  //
-                  //
-                  //       });
-                  // });
-                  //
-
                   FilePickerResult? result =
                       await FilePicker.platform.pickFiles(
                     type: FileType.custom,
@@ -622,7 +602,7 @@ class _BottomBarState extends State<BottomBar> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CameraScreen(
-                        initialPage: 3,
+                        initialPage: 1,
                       ),
                     ),
                   );
@@ -653,7 +633,7 @@ class _BottomBarState extends State<BottomBar> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CameraScreen(
-                        initialPage: 2,
+                        initialPage: 0,
                       ),
                     ),
                   );

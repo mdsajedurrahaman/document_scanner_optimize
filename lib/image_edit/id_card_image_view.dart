@@ -227,7 +227,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      height: MediaQuery.sizeOf(context).height * 0.25,
+                      height: MediaQuery.sizeOf(context).height * 0.29,
                       width: MediaQuery.sizeOf(context).width,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -374,7 +374,14 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                       Uint8List imageBytes =
                                           await captureWidgetToImage();
                                       await saveImageToFile(imageBytes);
-                                      Navigator.pop(context);
+                                      Navigator.pushAndRemoveUntil(context,
+                                          MaterialPageRoute(
+                                        builder: (context) {
+                                          return const BottomBar(
+                                            shouldShowReview: true,
+                                          );
+                                        },
+                                      ), (route) => false);
                                     } catch (e) {
                                       print("Error: $e");
                                     }
@@ -430,7 +437,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                           title: Text(
                                               translation(context).savePdf),
                                           content: cameraProvider
-                                                  .isCreatingPDFLoader
+                                                  .isSavePDFLoader
                                               ? ConstrainedBox(
                                                   constraints:
                                                       const BoxConstraints(
@@ -477,24 +484,32 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                 ),
                                           actions: [
                                             TextButton(
-                                              onPressed: () async {
+                                              onPressed: () {
                                                 if (renameController
                                                     .text.isNotEmpty) {
-                                                  await exportToPdf(
-                                                      renameController.text
-                                                          .trim());
+                                                  exportToPdf(renameController
+                                                      .text
+                                                      .trim());
                                                   cameraProvider
                                                       .clearIdCardImages();
 
+                                                  setState(() {
+                                                    cameraProvider
+                                                        .isSavePDFLoader = true;
+                                                  });
+
                                                   Navigator.pushAndRemoveUntil(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return const BottomBar(
-                                                        shouldShowReview: true,
-                                                      );
-                                                    },
-                                                  ), (route) => false);
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return const BottomBar(
+                                                          shouldShowReview:
+                                                              true,
+                                                        );
+                                                      },
+                                                    ),
+                                                    (route) => false,
+                                                  );
                                                   // showTopSnackbar(context,
                                                   //     "PDF successfully saved");
                                                 }
@@ -549,7 +564,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                 );
               },
               child: Text(
-                translation(context).option,
+                "${translation(context).option}   ",
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
