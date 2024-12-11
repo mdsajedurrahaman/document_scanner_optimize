@@ -6,6 +6,8 @@ import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gal/gal.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:interactive_box/interactive_box.dart';
@@ -27,7 +29,8 @@ class IdCardImagePreview extends StatefulWidget {
 class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   bool isLoading = false;
   List<Map<String, dynamic>> imageProperties = [];
-
+  String fileName =
+      "IDCard_${DateFormat('yyyyMMdd_SSSS').format(DateTime.now())}";
   @override
   void initState() {
     super.initState();
@@ -90,9 +93,11 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
     try {
       // Capture the widget as an image
       Uint8List imageBytes = await captureWidgetToImage();
+
       // Create a PDF document
       final pdf = pw.Document();
       final image = pw.MemoryImage(imageBytes);
+
       // Define A4 dimensions with zero margins
       final pageFormat = PdfPageFormat.a4.copyWith(
         marginLeft: 0,
@@ -100,13 +105,13 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
         marginTop: 0,
         marginBottom: 0,
       );
+
       // Add an A4 page with the captured image
       pdf.addPage(
         pw.Page(
           pageFormat: pageFormat,
           build: (context) {
             return pw.Center(
-              widthFactor: double.infinity,
               child: pw.Image(
                 image,
                 fit: pw.BoxFit.contain, // Ensures full fit without cropping
@@ -115,20 +120,36 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           },
         ),
       );
-      // Define file path and save PDF
+
+      // Save the PDF in the app-specific directory
       final rootDirectory = await getApplicationDocumentsDirectory();
-      String path = "${rootDirectory.path}/Doc Scanner/ID Card";
-      File file = File("$path/$fileName.pdf");
+      String appSpecificPath = "${rootDirectory.path}/Doc Scanner/ID Card";
+      File appSpecificFile = File("$appSpecificPath/$fileName.pdf");
 
       // Create directories if they don't exist
-      if (!await file.parent.exists()) {
-        await file.parent.create(recursive: true);
+      if (!await appSpecificFile.parent.exists()) {
+        await appSpecificFile.parent.create(recursive: true);
       }
-      await file.writeAsBytes(await pdf.save());
+
+      // Save the PDF in the general "Documents" folder
+      final externalStorageDirectory =
+          Directory('/storage/emulated/0/Documents');
+      if (!await externalStorageDirectory.exists()) {
+        await externalStorageDirectory.create(recursive: true);
+      }
+      File externalFile =
+          File("${externalStorageDirectory.path}/$fileName.pdf");
+
+      // Write to both locations
+      final pdfBytes = await pdf.save();
+      await appSpecificFile.writeAsBytes(pdfBytes);
+      await externalFile.writeAsBytes(pdfBytes);
+
       setState(() {
         isLoading = false;
       });
-      // Notify user of successful save
+
+      // Notify the user of successful save
       showTopSnackbar(context, "PDF successfully saved");
     } catch (e) {
       setState(() {
@@ -153,8 +174,9 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
       }
 
       // Save the file as JPG
-      File file = File('$path/exported_image.jpg');
+      File file = File('$path/$fileName.jpg');
       await file.writeAsBytes(imageBytes);
+      Gal.putImage(file.path);
       print('Image saved at ${file.path}');
     } catch (e) {
       print("Error saving image: $e");
@@ -205,7 +227,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                   context: context,
                   builder: (context) {
                     return Container(
-                      height: MediaQuery.sizeOf(context).height * 0.3,
+                      height: MediaQuery.sizeOf(context).height * 0.25,
                       width: MediaQuery.sizeOf(context).width,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -254,6 +276,81 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey[200],
+                            thickness: 1,
+                            // indent: MediaQuery.sizeOf(context).width * 0.15,
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                TextEditingController renameController =
+                                    TextEditingController(text: fileName);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title:
+                                        Text(translation(context).renameFile),
+                                    content: TextFormField(
+                                      controller: renameController,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
+                                      autofocus: true,
+                                      decoration: const InputDecoration(
+                                        hintText: "",
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          if (renameController
+                                              .text.isNotEmpty) {
+                                            setState(() {
+                                              fileName =
+                                                  renameController.text.trim();
+                                            });
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text(translation(context).ok),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child:
+                                            Text(translation(context).cancel),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 5),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.edit_outlined,
+                                      color: Colors.black,
+                                      size: size.width >= 600 ? 30 : 20,
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      translation(context).renameFile,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           Divider(

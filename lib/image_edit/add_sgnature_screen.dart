@@ -6,6 +6,7 @@ import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:interactive_box/interactive_box.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class AddSignature extends StatefulWidget {
 
 class _AddSignatureState extends State<AddSignature> {
   String? signaturePath;
+  bool drawSignature = false;
   final GlobalKey _globalKey = GlobalKey();
   bool initialShowActionIcons = true;
 
@@ -73,70 +75,6 @@ class _AddSignatureState extends State<AddSignature> {
                   Navigator.pop(context);
                 }
               });
-
-              // showDialog(
-              //   context: context,
-              //   builder: (context) {
-              //     return AlertDialog(
-              //       title: Text(
-              //         translation(context).alert,
-              //         style: const TextStyle(
-              //           fontSize: 18,
-              //           fontWeight: FontWeight.w500,
-              //         ),
-              //       ),
-              //       content:  Text(
-              //         translation(context).drawAlert,
-              //         style: TextStyle(
-              //           fontSize: 14,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //
-              //       actions: [
-              //         TextButton(
-              //           onPressed: () {
-              //             Navigator.pop(context);
-              //           },
-              //           child: Text(
-              //             translation(context).no,
-              //             style: const TextStyle(
-              //               fontSize: 15,
-              //               fontWeight: FontWeight.w500,
-              //               color: AppColor.primaryColor,
-              //             ),
-              //           ),
-              //         ),
-              //         TextButton(
-              //           onPressed: () async {
-              //             setState(() {
-              //               initialShowActionIcons = false;
-              //             });
-              //             // var image = await captureImage();
-              //             // if (image != null) {
-              //             //   cameraProvider.updateImage(
-              //             //       image: ImageModel(
-              //             //           imageByte: image,
-              //             //           name: widget.imageModel.name,
-              //             //           docType: widget.imageModel.docType),
-              //             //       index: widget.imageIndex);
-              //             //   Navigator.pop(context);
-              //             //   Navigator.pop(context);
-              //             // }
-              //           },
-              //           child: Text(
-              //             translation(context).yes,
-              //             style: const TextStyle(
-              //               fontSize: 15,
-              //               fontWeight: FontWeight.w500,
-              //               color: AppColor.primaryColor,
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     );
-              //   },
-              // );
             },
             child: Text(
               translation(context).done,
@@ -188,10 +126,12 @@ class _AddSignatureState extends State<AddSignature> {
                   },
                   initialShowActionIcons: initialShowActionIcons,
                   rotateIndicatorSpacing: 10,
-                  child: Image.memory(
-                    Uint8List.fromList(signaturePath!.codeUnits),
-                    fit: BoxFit.cover,
-                  ),
+                  child: drawSignature == true
+                      ? SvgPicture.string(signaturePath!, fit: BoxFit.cover)
+                      : Image.memory(
+                          Uint8List.fromList(signaturePath!.codeUnits),
+                          fit: BoxFit.cover,
+                        ),
                 ),
             ],
           ),
@@ -216,6 +156,7 @@ class _AddSignatureState extends State<AddSignature> {
                 if (signature != null) {
                   setState(() {
                     signaturePath = signature;
+                    drawSignature = true;
                   });
                 }
               },
@@ -225,6 +166,7 @@ class _AddSignatureState extends State<AddSignature> {
               title: translation(context).gallery,
               onTap: () async {
                 await importFromGallery();
+                drawSignature = false;
               },
               iconPath:
                   AppAssets.gallery, // Replace with your desired gallery icon
@@ -244,6 +186,7 @@ class _AddSignatureState extends State<AddSignature> {
       ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
+
       return byteData!.buffer.asUint8List();
     } catch (e) {
       return null;
