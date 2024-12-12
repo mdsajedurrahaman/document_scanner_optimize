@@ -2365,7 +2365,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     .isNotEmpty) {
                                                                   Navigator.pop(
                                                                       context);
-                                                                  homePageProvider
+                                                                  String
+                                                                      targetPath =
+                                                                      '/storage/emulated/0/Documents'; // Set target path
+                                                                  String
+                                                                      fileName =
+                                                                      renameController
+                                                                          .text;
+
+                                                                  await homePageProvider
                                                                       .createPDFFromImages(
                                                                     images: _selectedItems
                                                                         .map((e) =>
@@ -2377,36 +2385,54 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     context:
                                                                         context,
                                                                     fileName:
-                                                                        renameController
-                                                                            .text,
+                                                                        fileName,
                                                                   )
                                                                       .then(
-                                                                          (value) {
-                                                                    allFiles = homePageProvider
-                                                                        .getFileList(
-                                                                            widget.directoryPath);
+                                                                          (value) async {
                                                                     if (value !=
-                                                                            null &&
-                                                                        widget.directoryPath.split("/").last ==
-                                                                            "ID Card") {
-                                                                      homePageProvider
-                                                                          .addIdCardImage(
-                                                                              value);
-                                                                    } else if (value !=
-                                                                            null &&
-                                                                        widget.directoryPath.split("/").last ==
-                                                                            "Document") {
-                                                                      homePageProvider
-                                                                          .addDocumentImage(
-                                                                              value);
+                                                                        null) {
+                                                                      // Save the PDF in the target folder
+                                                                      File
+                                                                          pdfFile =
+                                                                          File(
+                                                                              '$targetPath/$fileName.pdf');
+                                                                      await pdfFile
+                                                                          .writeAsBytes(
+                                                                              await value.readAsBytes());
+
+                                                                      // Update the UI or perform any additional actions
+                                                                      allFiles =
+                                                                          homePageProvider
+                                                                              .getFileList(widget.directoryPath);
+
+                                                                      if (widget
+                                                                              .directoryPath
+                                                                              .split(
+                                                                                  "/")
+                                                                              .last ==
+                                                                          "ID Card") {
+                                                                        homePageProvider
+                                                                            .addIdCardImage(pdfFile);
+                                                                      } else if (widget
+                                                                              .directoryPath
+                                                                              .split("/")
+                                                                              .last ==
+                                                                          "Document") {
+                                                                        homePageProvider
+                                                                            .addDocumentImage(pdfFile);
+                                                                      }
+
+                                                                      // Clear selections and update state
+                                                                      setState(
+                                                                          () {
+                                                                        _selectedItems
+                                                                            .clear();
+                                                                        _isLongPressed =
+                                                                            false;
+                                                                      });
+
+                                                                      // Show success snackbar
                                                                     }
-                                                                    setState(
-                                                                        () {
-                                                                      _selectedItems
-                                                                          .clear();
-                                                                      _isLongPressed =
-                                                                          false;
-                                                                    });
                                                                   });
                                                                 } else {
                                                                   ScaffoldMessenger.of(
@@ -2423,11 +2449,9 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           Text(
                                                                         translation(context)
                                                                             .pleaseEnterFileName,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                Colors.white),
                                                                       ),
                                                                     ),
                                                                   );
@@ -2442,36 +2466,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         );
                                                       },
                                                     );
-
-                                                    // showNormalAlertDialogue(
-                                                    //   context: context,
-                                                    //   title: translation(context).alert,
-                                                    //   content: translation(context).areYouSureYouWantToMergeTheSelectedImages,
-                                                    //   onOkText: translation(context).cancel,
-                                                    //   onCancelText: translation(context).ok,
-                                                    //   onOk: () async {
-                                                    //     Navigator.pop(context);
-                                                    //     homePageProvider.createPDFFromImages(
-                                                    //       images: _selectedItems.map((e) => File(e)).toList(),
-                                                    //       directoryPath: widget.directoryPath,
-                                                    //       context: context,
-                                                    //     ).then((value) {
-                                                    //       allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                    //       if (value != null && widget.directoryPath.split("/").last == "ID Card") {
-                                                    //         homePageProvider.addIdCardImage(value);
-                                                    //       } else if (value != null && widget.directoryPath.split("/").last =="Document") {
-                                                    //         homePageProvider.addDocumentImage(value);
-                                                    //       }
-                                                    //       setState(() {
-                                                    //         _selectedItems.clear();
-                                                    //         _isLongPressed = false;
-                                                    //       });
-                                                    //     });
-                                                    //   },
-                                                    //   onCancel: () {
-                                                    //     Navigator.pop(context);
-                                                    //   },
-                                                    // );
                                                   } else {
                                                     ScaffoldMessenger.of(
                                                             context)
@@ -2651,59 +2645,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                 isDeleteLoading = false;
                                               });
                                             },
-
-                                            // onOk: () async {
-                                            //   for (int i = 0; i < _selectedItems.length; i++) {
-                                            //     var item = _selectedItems.elementAt(i);
-                                            //     var fileSystemEntity = FileSystemEntity.typeSync(item);
-                                            //     if (fileSystemEntity == FileSystemEntityType.file) {
-                                            //       File file = File(item);
-                                            //       if (item.split("/").last.startsWith("Bar")) {
-                                            //         await homePageProvider.readTxtFile(item).then((value) {
-                                            //           homePageProvider
-                                            //               .removeBarCode(value);
-                                            //         });
-                                            //       } else if (item
-                                            //           .split("/")
-                                            //           .last
-                                            //           .startsWith("QrCode")) {
-                                            //         await homePageProvider
-                                            //             .readTxtFile(item)
-                                            //             .then((value) {
-                                            //           homePageProvider
-                                            //               .removeQrCode(value);
-                                            //         });
-                                            //       } else if (item.split("/").last.startsWith("Doc")) {
-                                            //         homePageProvider.removeDocumentImage(item);
-                                            //       } else if (item.split("/").last.startsWith("IDCard")) {
-                                            //         homePageProvider.removeIdCarImage(item);
-                                            //       } else if (item.split("/").last.startsWith("PDF")) {
-                                            //         if (item.split("/").contains("ID Card")) {
-                                            //           homePageProvider.removeIdCarImage(item);
-                                            //         } else if (item.split("/").contains("Document")) {
-                                            //           homePageProvider.removeDocumentImage(item);
-                                            //         }
-                                            //       }
-                                            //
-                                            //       file.deleteSync();
-                                            //       setState(() {
-                                            //         _selectedItems.clear();
-                                            //         _isLongPressed = false;
-                                            //       });
-                                            //       allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                            //     } else if (fileSystemEntity == FileSystemEntityType.directory) {
-                                            //       Directory directory = Directory(item);
-                                            //       directory.deleteSync(recursive: true);
-                                            //       allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                            //     }
-                                            //   }
-                                            //
-                                            //   setState(() {
-                                            //     _isLongPressed = false;
-                                            //   });
-                                            //   Navigator.pop(context);
-                                            // },
-
                                             onCancel: () {
                                               Navigator.pop(context);
                                             },
@@ -2804,17 +2745,4 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
       throw Exception("Directory does not exist");
     }
   }
-
-// List<String> getSubdirectoriesSync() {
-//   final directory = Directory("/data/user/0/com.documentscannerpdfscanner_/app_flutter/Doc Scanner/Document");
-//   if (directory.existsSync()) {
-//     final entities = directory.listSync();
-//     return entities
-//         .whereType<Directory>()
-//         .map((dir) => dir.path)
-//         .toList();
-//   } else {
-//     throw Exception("Directory does not exist");
-//   }
-// }
 }
