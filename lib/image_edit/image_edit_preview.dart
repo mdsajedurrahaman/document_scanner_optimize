@@ -53,6 +53,20 @@ class _EditImagePreviewState extends State<EditImagePreview> {
     });
   }
 
+  Future<String> getUniqueFileName(String baseSavePath, String fileName) async {
+    int counter = 1;
+    String uniqueFileName = fileName;
+    String uniqueSavePath = '$baseSavePath/$uniqueFileName.pdf';
+
+    while (await File(uniqueSavePath).exists()) {
+      uniqueFileName = '${fileName}_$counter';
+      uniqueSavePath = '$baseSavePath/$uniqueFileName.pdf';
+      counter++;
+    }
+
+    return uniqueSavePath;
+  }
+
   @override
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
@@ -230,11 +244,75 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                                   _currentIndex]);
 
                                                   if (isNameAlreadyExists) {
-                                                    setState(() {
-                                                      errorMessage =
-                                                          translation(context)
-                                                              .fileAlreadyExists;
-                                                    });
+                                                    // Show confirmation popup for creating a duplicate name
+                                                    bool allowDuplicate =
+                                                        await showDialog<bool>(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return AlertDialog(
+                                                                  title: const Text(
+                                                                      "File Already Exist"),
+                                                                  content:
+                                                                      const Text(
+                                                                          "This file already exists. Do you want to create a duplicate file?"),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          context,
+                                                                          false),
+                                                                      child: Text(
+                                                                          translation(context)
+                                                                              .cancel),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          context,
+                                                                          true),
+                                                                      child: const Text(
+                                                                          "Allow Duplicate"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            ) ??
+                                                            false;
+
+                                                    if (allowDuplicate) {
+                                                      // Generate a unique name
+                                                      String uniqueName =
+                                                          _renameController
+                                                              .text;
+                                                      int counter = 1;
+                                                      while (cameraProvider
+                                                          .imageList
+                                                          .any((image) =>
+                                                              image.name ==
+                                                              uniqueName)) {
+                                                        uniqueName =
+                                                            "${_renameController.text}$counter";
+                                                        counter++;
+                                                      }
+
+                                                      // Update image with the unique name
+                                                      cameraProvider
+                                                          .updateImage(
+                                                        index: _currentIndex,
+                                                        image: ImageModel(
+                                                          imageByte: cameraProvider
+                                                              .imageList[
+                                                                  _currentIndex]
+                                                              .imageByte,
+                                                          name: uniqueName,
+                                                          docType: cameraProvider
+                                                              .imageList[
+                                                                  _currentIndex]
+                                                              .docType,
+                                                        ),
+                                                      );
+
+                                                      Navigator.pop(context);
+                                                    }
                                                   } else if (cameraProvider
                                                           .imageList
                                                           .first
