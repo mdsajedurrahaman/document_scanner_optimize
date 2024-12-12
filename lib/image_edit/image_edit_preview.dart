@@ -218,8 +218,27 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                               onPressed: () async {
                                                 if (_formKey.currentState!
                                                     .validate()) {
-                                                  if (cameraProvider.imageList
-                                                          .first.docType ==
+                                                  bool isNameAlreadyExists = cameraProvider
+                                                      .imageList
+                                                      .any((image) =>
+                                                          image.name ==
+                                                              _renameController
+                                                                  .text &&
+                                                          image !=
+                                                              cameraProvider
+                                                                      .imageList[
+                                                                  _currentIndex]);
+
+                                                  if (isNameAlreadyExists) {
+                                                    setState(() {
+                                                      errorMessage =
+                                                          translation(context)
+                                                              .fileAlreadyExists;
+                                                    });
+                                                  } else if (cameraProvider
+                                                          .imageList
+                                                          .first
+                                                          .docType ==
                                                       "ID Card") {
                                                     Directory rootDirectory =
                                                         await getApplicationDocumentsDirectory();
@@ -289,16 +308,6 @@ class _EditImagePreviewState extends State<EditImagePreview> {
                                                       Navigator.pop(context);
                                                     }
                                                   }
-                                                  // cameraProvider.updateImage(
-                                                  //   index: _currentIndex,
-                                                  //   image: ImageModel(
-                                                  //     imageByte: cameraProvider.imageList[_currentIndex].imageByte,
-                                                  //     name: _renameController.text,
-                                                  //     docType: cameraProvider.imageList[_currentIndex].docType,
-                                                  //   ),
-                                                  // );
-                                                  //
-                                                  // Navigator.pop(context);
                                                 }
                                               },
                                               child: Text(

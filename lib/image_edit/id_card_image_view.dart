@@ -28,6 +28,8 @@ class IdCardImagePreview extends StatefulWidget {
 
 class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   bool isLoading = false;
+  bool actionsEnabled = true;
+  bool isSavePdf = false;
   List<Map<String, dynamic>> imageProperties = [];
   String fileName =
       "IDCard_${DateFormat('yyyyMMdd_SSSS').format(DateTime.now())}";
@@ -89,6 +91,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   Future<void> exportToPdf(String fileName) async {
     setState(() {
       isLoading = true;
+      isSavePdf = true;
     });
     try {
       // Capture the widget as an image
@@ -144,17 +147,12 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
       final pdfBytes = await pdf.save();
       await appSpecificFile.writeAsBytes(pdfBytes);
       await externalFile.writeAsBytes(pdfBytes);
-
       setState(() {
         isLoading = false;
+        isSavePdf = false;
       });
-
       // Notify the user of successful save
-      showTopSnackbar(context, "PDF successfully saved");
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       // Notify user of failure
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save PDF: $e')),
@@ -223,6 +221,9 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           actions: [
             GestureDetector(
               onTap: () async {
+                setState(() {
+                  actionsEnabled = false;
+                });
                 await showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -267,6 +268,9 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                       borderRadius: BorderRadius.circular(30),
                                       onTap: () {
                                         Navigator.pop(context);
+                                        setState(() {
+                                          actionsEnabled = true;
+                                        });
                                       },
                                       child: Icon(
                                         Icons.close_rounded,
@@ -427,8 +431,6 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    // final cameProvider =
-                                    //     context.watch<CameraProvider>();
                                     TextEditingController renameController =
                                         TextEditingController();
                                     return StatefulBuilder(
@@ -437,7 +439,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                           title: Text(
                                               translation(context).savePdf),
                                           content: cameraProvider
-                                                  .isSavePDFLoader
+                                                  .isCreatingPDFLoader
                                               ? ConstrainedBox(
                                                   constraints:
                                                       const BoxConstraints(
@@ -484,20 +486,14 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                 ),
                                           actions: [
                                             TextButton(
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 if (renameController
                                                     .text.isNotEmpty) {
-                                                  exportToPdf(renameController
-                                                      .text
-                                                      .trim());
+                                                  await exportToPdf(
+                                                      renameController.text
+                                                          .trim());
                                                   cameraProvider
                                                       .clearIdCardImages();
-
-                                                  setState(() {
-                                                    cameraProvider
-                                                        .isSavePDFLoader = true;
-                                                  });
-
                                                   Navigator.pushAndRemoveUntil(
                                                     context,
                                                     MaterialPageRoute(
@@ -509,9 +505,12 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                       },
                                                     ),
                                                     (route) => false,
-                                                  );
-                                                  // showTopSnackbar(context,
-                                                  //     "PDF successfully saved");
+                                                  ).then((_) {
+                                                    isSavePdf =
+                                                        false; // Set the value of isSavePdf here
+                                                  });
+                                                  showTopSnackbar(context,
+                                                      "PDF successfully saved");
                                                 }
                                               },
                                               child:
@@ -595,11 +594,18 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                             ScaleDirection.bottomLeft,
                             ScaleDirection.topLeft,
                           ],
-                          includedActions: const [
-                            ControlActionType.move,
-                            ControlActionType.scale,
-                            ControlActionType.rotate,
-                          ],
+                          includedActions: actionsEnabled
+                              ? const [
+                                  ControlActionType.move,
+                                  ControlActionType.scale,
+                                  ControlActionType.rotate,
+                                ]
+                              : [],
+                          onTap: () {
+                            setState(() {
+                              actionsEnabled = true;
+                            });
+                          },
                           onActionSelected: (ControlActionType actionType,
                               InteractiveBoxInfo info) {
                             setState(() {
