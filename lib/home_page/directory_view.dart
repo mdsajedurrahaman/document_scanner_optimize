@@ -1715,43 +1715,37 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                         ]);
                                                                       } else if (Platform
                                                                           .isAndroid) {
-                                                                        // await DocumentFileSavePlus()
-                                                                        //     .saveFile(
-                                                                        //         await File(filePath).readAsBytes(),
-                                                                        //         path.basenameWithoutExtension(filePath),
-                                                                        //         "application/pdf")
-                                                                        //     .then(
-                                                                        //       (value) => ScaffoldMessenger.of(context).showSnackBar(
-                                                                        //         SnackBar(
-                                                                        //           content: Text(translation(context).fileSavedDownloadFolder),
-                                                                        //         ),
-                                                                        //       ),
-                                                                        //     );
                                                                         try {
-                                                                          // Get the application's document directory
+                                                                          // Access the public Documents directory
                                                                           Directory
                                                                               directory =
-                                                                              await getExternalStorageDirectory() ?? Directory('/storage/emulated/0');
+                                                                              Directory('/storage/emulated/0/Documents');
 
-                                                                          // Create the file path and file
+                                                                          // Ensure the directory exists
+                                                                          if (!directory
+                                                                              .existsSync()) {
+                                                                            directory.createSync(recursive: true);
+                                                                          }
+
+                                                                          // Create the new file path
                                                                           String
                                                                               fileName =
                                                                               path.basenameWithoutExtension(filePath);
                                                                           String
                                                                               newPath =
                                                                               path.join(directory.path, '$fileName.pdf');
+
+                                                                          // Write the file to the new location
                                                                           File
                                                                               newFile =
                                                                               File(newPath);
-
-                                                                          // Read the original file bytes and write them to the new location
                                                                           await newFile
                                                                               .writeAsBytes(await File(filePath).readAsBytes());
 
                                                                           // Show success message
                                                                           ScaffoldMessenger.of(context)
                                                                               .showSnackBar(
-                                                                            const SnackBar(content: Text('PDF File saved to Documents Folder')),
+                                                                            const SnackBar(content: Text('PDF File saved to Documents folder')),
                                                                           );
                                                                         } catch (e) {
                                                                           // Handle any errors
