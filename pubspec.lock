@@ -98,7 +98,7 @@ packages:
     source: hosted
     version: "3.1.2"
   barcode:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: barcode
       sha256: ab180ce22c6555d77d45f0178a523669db67f95856e3378259ef2ffeb43e6003

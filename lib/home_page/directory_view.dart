@@ -61,6 +61,19 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     super.initState();
   }
 
+  Future<String> generateUniqueFileName(
+      String parentPath, String baseName) async {
+    int counter = 1;
+    String uniqueName = baseName;
+
+    while (File("$parentPath/$uniqueName.pdf").existsSync()) {
+      uniqueName = "$baseName($counter)";
+      counter++;
+    }
+
+    return uniqueName;
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -912,7 +925,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               ),
                                                                               actions: [
                                                                                 TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
-
                                                                                 TextButton(
                                                                                   onPressed: () async {
                                                                                     if (formKey.currentState!.validate()) {
@@ -932,17 +944,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                   },
                                                                                   child: Text(translation(context).save),
                                                                                 ),
-
-                                                                                // TextButton(
-                                                                                //     onPressed: () async {
-                                                                                //       if (_formKey.currentState!.validate()) {
-                                                                                //         String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
-                                                                                //         File(filePath).renameSync(newPath);
-                                                                                //         Navigator.pop(context);
-                                                                                //         allFiles = homePageProvider.getFileList(widget.directoryPath);
-                                                                                //       }
-                                                                                //     },
-                                                                                //     child: Text(translation(context).save)),
                                                                               ],
                                                                             );
                                                                           });
@@ -989,10 +990,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           .grey[
                                                                       200],
                                                                   thickness: 1,
-                                                                  indent: MediaQuery.sizeOf(
-                                                                              context)
-                                                                          .width *
-                                                                      0.15,
                                                                 ),
                                                                 Material(
                                                                   color: Colors
@@ -1628,16 +1625,54 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                                 TextButton(
                                                                                     onPressed: () async {
                                                                                       if (formKey.currentState!.validate()) {
-                                                                                        //  String newPath = filePath.replaceAll(path.basenameWithoutExtension(filePath), _renameController.text);
-
                                                                                         String newName = renameController.text;
                                                                                         String parentPath = Directory(filePath).parent.path;
                                                                                         String newPath = "$parentPath/$newName.pdf";
 
                                                                                         if (File(newPath).existsSync()) {
-                                                                                          setState(() {
-                                                                                            errorMessage = translation(context).fileAlreadyExists;
-                                                                                          });
+                                                                                          // Show a new dialog to confirm auto-generating a unique name
+
+                                                                                          String uniqueName = await generateUniqueFileName(parentPath, newName);
+                                                                                          showDialog(
+                                                                                            context: context,
+                                                                                            builder: (context) {
+                                                                                              return AlertDialog(
+                                                                                                title: Text(
+                                                                                                  translation(context).fileAlreadyExists,
+                                                                                                  style: const TextStyle(
+                                                                                                    color: Colors.black,
+                                                                                                    fontSize: 16,
+                                                                                                    fontWeight: FontWeight.w500,
+                                                                                                  ),
+                                                                                                ),
+                                                                                                content: const Text(
+                                                                                                  "This file already exists. Do you want to create a duplicate file?",
+                                                                                                  style: TextStyle(fontSize: 14),
+                                                                                                ),
+                                                                                                actions: [
+                                                                                                  TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context),
+                                                                                                    child: Text(translation(context).cancel),
+                                                                                                  ),
+                                                                                                  TextButton(
+                                                                                                    onPressed: () {
+                                                                                                      String finalPath = "$parentPath/$uniqueName.pdf";
+                                                                                                      File(filePath).renameSync(finalPath);
+
+                                                                                                      setState(
+                                                                                                        () {
+                                                                                                          Navigator.pop(context); // Close confirmation dialog
+                                                                                                          Navigator.pop(context);
+                                                                                                          allFiles = homePageProvider.getFileList(widget.directoryPath);
+                                                                                                        },
+                                                                                                      );
+                                                                                                    },
+                                                                                                    child: const Text("Allow Duplicate"),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              );
+                                                                                            },
+                                                                                          );
                                                                                         } else {
                                                                                           File(filePath).renameSync(newPath);
                                                                                           Navigator.pop(context);
@@ -1692,10 +1727,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           .grey[
                                                                       200],
                                                                   thickness: 1,
-                                                                  indent: MediaQuery.sizeOf(
-                                                                              context)
-                                                                          .width *
-                                                                      0.15,
                                                                 ),
                                                                 Material(
                                                                   color: Colors
@@ -1745,7 +1776,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           // Show success message
                                                                           ScaffoldMessenger.of(context)
                                                                               .showSnackBar(
-                                                                            const SnackBar(content: Text('PDF File saved to Documents folder')),
+                                                                            const SnackBar(content: Text('PDF File saved to Documents Folder')),
                                                                           );
                                                                         } catch (e) {
                                                                           // Handle any errors
@@ -2363,8 +2394,24 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                 if (renameController
                                                                     .text
                                                                     .isNotEmpty) {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    const SnackBar(
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              4),
+                                                                      content:
+                                                                          Text(
+                                                                        "PDF file save successfully in Documents Folder.",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  );
                                                                   Navigator.pop(
-                                                                      context);
+                                                                      context); // Close the current dialog
                                                                   String
                                                                       targetPath =
                                                                       '/storage/emulated/0/Documents'; // Set target path
@@ -2431,7 +2478,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             false;
                                                                       });
 
-                                                                      // Show success snackbar
+                                                                      // Show success popup
                                                                     }
                                                                   });
                                                                 } else {

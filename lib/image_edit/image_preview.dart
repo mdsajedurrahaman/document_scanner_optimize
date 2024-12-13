@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
-import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/image_edit/widget/image_edit_button.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/helper.dart';
