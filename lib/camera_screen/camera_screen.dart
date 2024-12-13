@@ -13,6 +13,7 @@ import 'package:flutter_flip_card/controllers/flip_card_controllers.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
@@ -487,7 +488,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                                 false;
                                                           });
                                                         },
-                                                        closeTap: () async {
+                                                        opneBrowser: () async {
                                                           setState(() {
                                                             activeDialog =
                                                                 false;
@@ -570,7 +571,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                                 false;
                                                           });
                                                         },
-                                                        closeTap: () async {
+                                                        opneBrowser: () async {
                                                           setState(() {
                                                             activeDialog =
                                                                 false;

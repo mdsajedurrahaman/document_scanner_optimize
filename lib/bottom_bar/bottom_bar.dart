@@ -3,6 +3,8 @@
 import 'dart:io';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:doc_scanner/camera_screen/bar_code_camera_screen.dart';
+import 'package:doc_scanner/camera_screen/qr_code_camera_screen.dart';
 import 'package:doc_scanner/home_page/home_page.dart';
 import 'package:doc_scanner/image_edit/id_card_image_view.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
@@ -601,9 +603,7 @@ class _BottomBarState extends State<BottomBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CameraScreen(
-                        initialPage: 1,
-                      ),
+                      builder: (context) => const BarCodeCameraScreen(),
                     ),
                   );
                 },
@@ -632,9 +632,7 @@ class _BottomBarState extends State<BottomBar> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CameraScreen(
-                        initialPage: 0,
-                      ),
+                      builder: (context) => const QRCodeCameraScreen(),
                     ),
                   );
                 },

@@ -11,7 +11,7 @@ Future<void> showQrAndBarCodeDialogue(
     required String content,
     required VoidCallback onCopy,
     required VoidCallback onSave,
-    required VoidCallback closeTap,
+    required VoidCallback opneBrowser,
     required VoidCallback browserView}) async {
   String text = content;
 
@@ -35,7 +35,7 @@ Future<void> showQrAndBarCodeDialogue(
                 Align(
                   alignment: Alignment.topRight,
                   child: InkWell(
-                      onTap: closeTap,
+                      onTap: opneBrowser,
                       child: const Icon(
                         Icons.cancel,
                         color: Colors.grey,
