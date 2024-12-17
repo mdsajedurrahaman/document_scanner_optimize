@@ -413,57 +413,62 @@ Future<void> showQrAndBarCodeViewDialogue(
                     color: const Color(0xFFC5C7D3),
                   ),
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: text.startsWith('https')
-                        ? Text(text)
-                        : RegExp(r'^[A-Z]').hasMatch(content)
-                            ? Text(content)
-                            : RegExp(r'^[a-z]').hasMatch(text)
-                                ? Text(content)
-                                : RegExp(r'^[0-9]').hasMatch(text)
-                                    ? Text(content)
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: parts
-                                            .where((part) => part
-                                                .isNotEmpty) // Remove empty parts
-                                            .map((part) {
-                                          // Split each part into key and value
-                                          List<String> keyValue =
-                                              part.split(':');
-                                          String key = keyValue[0];
-                                          String value = keyValue.length > 1
-                                              ? keyValue.sublist(1).join(':')
-                                              : '';
+                      scrollDirection: Axis.vertical,
+                      child: content.startsWith('https')
+                          ? Text(content)
+                          : content.startsWith("WIFI") ||
+                                  content.startsWith("Wifi") ||
+                                  content.startsWith("wifi")
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: parts
+                                      .where((part) =>
+                                          part.isNotEmpty) // Remove empty parts
+                                      .map((part) {
+                                    // Split each part into key and value
+                                    List<String> keyValue = part.split(':');
+                                    String key = keyValue[0];
+                                    String value = keyValue.length > 1
+                                        ? keyValue.sublist(1).join(':')
+                                        : '';
 
-                                          // Check if the value starts with 'https'
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  key == "WIFI" ||
-                                                          key == "Wifi" ||
-                                                          key == "wifi"
-                                                      ? "WIFI NAME : "
-                                                      : key == "T"
-                                                          ? "TYPE : "
-                                                          : key == "P"
-                                                              ? "PASSWORD : "
-                                                              : "",
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                Text(value),
-                                              ],
+                                    // Check if the value starts with 'https'
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              key == "WIFI" ||
+                                                      key == "Wifi" ||
+                                                      key == "wifi"
+                                                  ? "WIFI NAME : "
+                                                  : key == "T"
+                                                      ? "TYPE : "
+                                                      : key == "P"
+                                                          ? "PASSWORD : "
+                                                          : "",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                          );
-                                        }).toList(),
+                                            Text(value),
+                                          ],
+                                        ),
                                       ),
-                  ),
+                                    );
+                                  }).toList(),
+                                )
+                              : RegExp(r'^[A-Z]').hasMatch(content)
+                                  ? Text(content)
+                                  : RegExp(r'^[a-z]').hasMatch(text)
+                                      ? Text(content)
+                                      : RegExp(r'^[0-9]').hasMatch(text)
+                                          ? Text(content)
+                                          : RegExp(r'[^\w\s]').hasMatch(text)
+                                              ? Text(content)
+                                              : Text(content)),
                 ),
                 const SizedBox(
                   height: 15,
