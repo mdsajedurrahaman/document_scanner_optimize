@@ -38,6 +38,7 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
     ],
   );
   bool activeDialog = false;
+  final player = AudioPlayer();
   void _openBrowserWithSearch(String query) async {
     // Encode the query to make it URL-safe
     final encodedQuery = Uri.encodeComponent(query);
@@ -91,15 +92,15 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                 if (!activeDialog && barcodes.isNotEmpty) {
                   final barcode =
                       barcodes.first; // Get the first detected barcode
-                  final player = AudioPlayer();
-                  await player.play(AssetSource(
+
+                  player.play(AssetSource(
                       'audio/beep_sound.mp3')); // Place the beep file in assets
 
                   // Trigger vibration
-                  if (await Vibration.hasVibrator() ?? false) {
-                    Vibration.vibrate(
-                        duration: 200); // Vibrate for 200 milliseconds
-                  }
+
+                  Vibration.vibrate(
+                      duration: 200); // Vibrate for 200 milliseconds
+
                   if (barcode.rawValue != null) {
                     setState(() {
                       activeDialog = true;
