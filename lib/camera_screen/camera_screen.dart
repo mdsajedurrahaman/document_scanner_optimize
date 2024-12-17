@@ -6,18 +6,14 @@ import 'package:doc_scanner/core/local_storage.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/app_constant.dart';
-import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_flip_card/controllers/flip_card_controllers.dart';
-import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
-import '../utils/app_assets.dart';
 import 'model/image_model.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -406,240 +402,240 @@ class _CameraScreenState extends State<CameraScreen> {
                                 //             ),
                                 //           )
                                 //         :
-                                activePage == 0 || activePage == 1
-                                    ? Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          QRView(
-                                            key: qrKey,
-                                            onQRViewCreated: (controller) {
-                                              qrController = controller;
-                                              controller.scannedDataStream
-                                                  .listen(
-                                                (event) async {
-                                                  setState(() {
-                                                    result = event;
-                                                  });
-                                                  if (result != null &&
-                                                      activePage == 1 &&
-                                                      barCodeList.contains(
-                                                          result!.format
-                                                              .formatName)) {
-                                                    if (beepValue) {
-                                                      await audioPlayer.play(
-                                                          AssetSource(
-                                                              'audio/beep_sound.mp3'));
-                                                    }
-                                                    if (vibrationValue) {
-                                                      Vibration.vibrate(
-                                                          duration: 100);
-                                                    }
-                                                    await qrController!
-                                                        .pauseCamera();
-                                                    if (activeDialog == false) {
-                                                      setState(() {
-                                                        activeDialog = true;
-                                                      });
-                                                      await showQrAndBarCodeDialogue(
-                                                        context: context,
-                                                        title: translation(
-                                                                context)
-                                                            .barCodeDetected,
-                                                        content: result!.code!,
-                                                        browserView: () {
-                                                          _openBrowserWithSearch(
-                                                              result!.code!);
-                                                        },
-                                                        onCopy: () async {
-                                                          Clipboard.setData(
-                                                              ClipboardData(
-                                                                  text: result!
-                                                                      .code!));
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .clearSnackBars();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(SnackBar(
-                                                                  content: Text(
-                                                                      translation(
-                                                                              context)
-                                                                          .copiedToClipboard)));
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                        },
-                                                        onSave: () async {
-                                                          cameraProvider
-                                                              .saveBarCodeText(
-                                                                  result!.code!,
-                                                                  context);
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                        },
-                                                        cancle: () async {
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                        },
-                                                      );
-                                                    }
-                                                  } else if (result != null &&
-                                                      activePage == 0 &&
-                                                      !barCodeList.contains(
-                                                          result!.format
-                                                              .formatName)) {
-                                                    if (beepValue) {
-                                                      await audioPlayer.play(
-                                                          AssetSource(
-                                                              'audio/beep_sound.mp3'));
-                                                    }
-                                                    if (vibrationValue) {
-                                                      Vibration.vibrate(
-                                                          duration: 100);
-                                                    }
+                                // activePage == 0 || activePage == 1
+                                //     ? Stack(
+                                //         alignment: Alignment.center,
+                                //         children: [
+                                //           QRView(
+                                //             key: qrKey,
+                                //             onQRViewCreated: (controller) {
+                                //               qrController = controller;
+                                //               controller.scannedDataStream
+                                //                   .listen(
+                                //                 (event) async {
+                                //                   setState(() {
+                                //                     result = event;
+                                //                   });
+                                //                   if (result != null &&
+                                //                       activePage == 1 &&
+                                //                       barCodeList.contains(
+                                //                           result!.format
+                                //                               .formatName)) {
+                                //                     if (beepValue) {
+                                //                       await audioPlayer.play(
+                                //                           AssetSource(
+                                //                               'audio/beep_sound.mp3'));
+                                //                     }
+                                //                     if (vibrationValue) {
+                                //                       Vibration.vibrate(
+                                //                           duration: 100);
+                                //                     }
+                                //                     await qrController!
+                                //                         .pauseCamera();
+                                //                     if (activeDialog == false) {
+                                //                       setState(() {
+                                //                         activeDialog = true;
+                                //                       });
+                                //                       await showQrAndBarCodeDialogue(
+                                //                         context: context,
+                                //                         title: translation(
+                                //                                 context)
+                                //                             .barCodeDetected,
+                                //                         content: result!.code!,
+                                //                         browserView: () {
+                                //                           _openBrowserWithSearch(
+                                //                               result!.code!);
+                                //                         },
+                                //                         onCopy: () async {
+                                //                           Clipboard.setData(
+                                //                               ClipboardData(
+                                //                                   text: result!
+                                //                                       .code!));
+                                //                           ScaffoldMessenger.of(
+                                //                                   context)
+                                //                               .clearSnackBars();
+                                //                           ScaffoldMessenger.of(
+                                //                                   context)
+                                //                               .showSnackBar(SnackBar(
+                                //                                   content: Text(
+                                //                                       translation(
+                                //                                               context)
+                                //                                           .copiedToClipboard)));
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                         },
+                                //                         onSave: () async {
+                                //                           cameraProvider
+                                //                               .saveBarCodeText(
+                                //                                   result!.code!,
+                                //                                   context);
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                         },
+                                //                         cancle: () async {
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                         },
+                                //                       );
+                                //                     }
+                                //                   } else if (result != null &&
+                                //                       activePage == 0 &&
+                                //                       !barCodeList.contains(
+                                //                           result!.format
+                                //                               .formatName)) {
+                                //                     if (beepValue) {
+                                //                       await audioPlayer.play(
+                                //                           AssetSource(
+                                //                               'audio/beep_sound.mp3'));
+                                //                     }
+                                //                     if (vibrationValue) {
+                                //                       Vibration.vibrate(
+                                //                           duration: 100);
+                                //                     }
 
-                                                    await qrController!
-                                                        .pauseCamera();
-                                                    if (activeDialog == false) {
-                                                      setState(() {
-                                                        activeDialog = true;
-                                                      });
-                                                      await showQrAndBarCodeDialogue(
-                                                        context: context,
-                                                        title:
-                                                            translation(context)
-                                                                .qrCodeDetected,
-                                                        content: result!.code!,
-                                                        browserView: () {
-                                                          _openBrowserWithSearch(
-                                                              result!.code!);
-                                                        },
-                                                        onCopy: () async {
-                                                          Clipboard.setData(
-                                                              ClipboardData(
-                                                                  text: result!
-                                                                      .code!));
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .clearSnackBars();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  SnackBar(
-                                                                      content:
-                                                                          Text(
-                                                            translation(context)
-                                                                .copiedToClipboard,
-                                                          )));
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                        },
-                                                        onSave: () async {
-                                                          cameraProvider
-                                                              .saveQRCodeText(
-                                                                  result!.code!,
-                                                                  context);
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                        },
-                                                        cancle: () async {
-                                                          setState(() {
-                                                            activeDialog =
-                                                                false;
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                          await controller
-                                                              .resumeCamera();
-                                                        },
-                                                      );
-                                                    }
-                                                  }
-                                                },
-                                                onError: (error) {
-                                                  log("Error: $error");
-                                                },
-                                              );
-                                            },
-                                            overlay: QrScannerOverlayShape(
-                                              borderColor: Colors.red,
-                                              borderLength: 30,
-                                              borderWidth: 3,
-                                              cutOutWidth: activePage == 1
-                                                  ? MediaQuery.sizeOf(context)
-                                                          .width *
-                                                      0.95
-                                                  : MediaQuery.sizeOf(context)
-                                                          .width *
-                                                      0.72,
-                                              cutOutHeight: activePage == 1
-                                                  ? MediaQuery.sizeOf(context)
-                                                          .width *
-                                                      0.66
-                                                  : MediaQuery.sizeOf(context)
-                                                          .width *
-                                                      0.72,
-                                            ),
-                                            onPermissionSet: (ctrl, p) {},
-                                          ),
-                                          !activeDialog
-                                              ? Lottie.asset(
-                                                  AppAssets.scanning,
-                                                  width: activePage == 1
-                                                      ? MediaQuery.sizeOf(
-                                                                  context)
-                                                              .width *
-                                                          0.95
-                                                      : MediaQuery.sizeOf(
-                                                                  context)
-                                                              .width *
-                                                          0.72,
-                                                  height: activePage == 1
-                                                      ? MediaQuery.sizeOf(
-                                                                  context)
-                                                              .width *
-                                                          0.66
-                                                      : MediaQuery.sizeOf(
-                                                                  context)
-                                                              .width *
-                                                          0.72,
-                                                  fit: BoxFit.fill,
-                                                )
-                                              : const SizedBox.shrink(),
-                                        ],
-                                      )
-                                    : Container(
-                                        color: Colors.blue,
-                                      ),
+                                //                     await qrController!
+                                //                         .pauseCamera();
+                                //                     if (activeDialog == false) {
+                                //                       setState(() {
+                                //                         activeDialog = true;
+                                //                       });
+                                //                       await showQrAndBarCodeDialogue(
+                                //                         context: context,
+                                //                         title:
+                                //                             translation(context)
+                                //                                 .qrCodeDetected,
+                                //                         content: result!.code!,
+                                //                         browserView: () {
+                                //                           _openBrowserWithSearch(
+                                //                               result!.code!);
+                                //                         },
+                                //                         onCopy: () async {
+                                //                           Clipboard.setData(
+                                //                               ClipboardData(
+                                //                                   text: result!
+                                //                                       .code!));
+                                //                           ScaffoldMessenger.of(
+                                //                                   context)
+                                //                               .clearSnackBars();
+                                //                           ScaffoldMessenger.of(
+                                //                                   context)
+                                //                               .showSnackBar(
+                                //                                   SnackBar(
+                                //                                       content:
+                                //                                           Text(
+                                //                             translation(context)
+                                //                                 .copiedToClipboard,
+                                //                           )));
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                         },
+                                //                         onSave: () async {
+                                //                           cameraProvider
+                                //                               .saveQRCodeText(
+                                //                                   result!.code!,
+                                //                                   context);
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                         },
+                                //                         cancle: () async {
+                                //                           setState(() {
+                                //                             activeDialog =
+                                //                                 false;
+                                //                           });
+                                //                           Navigator.pop(
+                                //                               context);
+                                //                           await controller
+                                //                               .resumeCamera();
+                                //                         },
+                                //                       );
+                                //                     }
+                                //                   }
+                                //                 },
+                                //                 onError: (error) {
+                                //                   log("Error: $error");
+                                //                 },
+                                //               );
+                                //             },
+                                //             overlay: QrScannerOverlayShape(
+                                //               borderColor: Colors.red,
+                                //               borderLength: 30,
+                                //               borderWidth: 3,
+                                //               cutOutWidth: activePage == 1
+                                //                   ? MediaQuery.sizeOf(context)
+                                //                           .width *
+                                //                       0.95
+                                //                   : MediaQuery.sizeOf(context)
+                                //                           .width *
+                                //                       0.72,
+                                //               cutOutHeight: activePage == 1
+                                //                   ? MediaQuery.sizeOf(context)
+                                //                           .width *
+                                //                       0.66
+                                //                   : MediaQuery.sizeOf(context)
+                                //                           .width *
+                                //                       0.72,
+                                //             ),
+                                //             onPermissionSet: (ctrl, p) {},
+                                //           ),
+                                //           !activeDialog
+                                //               ? Lottie.asset(
+                                //                   AppAssets.scanning,
+                                //                   width: activePage == 1
+                                //                       ? MediaQuery.sizeOf(
+                                //                                   context)
+                                //                               .width *
+                                //                           0.95
+                                //                       : MediaQuery.sizeOf(
+                                //                                   context)
+                                //                               .width *
+                                //                           0.72,
+                                //                   height: activePage == 1
+                                //                       ? MediaQuery.sizeOf(
+                                //                                   context)
+                                //                               .width *
+                                //                           0.66
+                                //                       : MediaQuery.sizeOf(
+                                //                                   context)
+                                //                               .width *
+                                //                           0.72,
+                                //                   fit: BoxFit.fill,
+                                //                 )
+                                //               : const SizedBox.shrink(),
+                                //         ],
+                                //       )
+                                //     : Container(
+                                //         color: Colors.blue,
+                                //       ),
                                 gridview
                                     ? const Stack(
                                         children: [

@@ -142,7 +142,7 @@ class ToggleFlashlightButton extends StatelessWidget {
           case TorchState.auto:
             return IconButton(
               color: Colors.white,
-              iconSize: 32.0,
+              iconSize: 25.0,
               icon: const Icon(Icons.flash_auto),
               onPressed: () async {
                 await controller.toggleTorch();
@@ -151,7 +151,7 @@ class ToggleFlashlightButton extends StatelessWidget {
           case TorchState.off:
             return IconButton(
               color: Colors.white,
-              iconSize: 32.0,
+              iconSize: 25.0,
               icon: const Icon(Icons.flash_off),
               onPressed: () async {
                 await controller.toggleTorch();
@@ -160,7 +160,7 @@ class ToggleFlashlightButton extends StatelessWidget {
           case TorchState.on:
             return IconButton(
               color: Colors.white,
-              iconSize: 32.0,
+              iconSize: 25.0,
               icon: const Icon(Icons.flash_on),
               onPressed: () async {
                 await controller.toggleTorch();
@@ -171,7 +171,7 @@ class ToggleFlashlightButton extends StatelessWidget {
               dimension: 48.0,
               child: Icon(
                 Icons.no_flash,
-                size: 32.0,
+                size: 25.0,
                 color: Colors.grey,
               ),
             );

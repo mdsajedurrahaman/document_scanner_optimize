@@ -56,30 +56,30 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     final scanWindow = Rect.fromCenter(
-      center: MediaQuery.sizeOf(context).center(const Offset(0, -55)),
+      center: MediaQuery.sizeOf(context).center(const Offset(0, -5)),
       width: 350,
-      height: 250,
+      height: 230,
     );
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: const Color(0xff1E1F20),
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Color(0xffffffff),
-            )),
-        title: const Text(
-          'Bar Code Scanner',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: const Color(0xff1E1F20),
+      //   centerTitle: true,
+      //   leading: IconButton(
+      //       onPressed: () {
+      //         Navigator.pop(context);
+      //       },
+      //       icon: const Icon(
+      //         Icons.arrow_back,
+      //         color: Color(0xffffffff),
+      //       )),
+      //   title: const Text(
+      //     'Bar Code Scanner',
+      //     style: TextStyle(
+      //         fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+      //   ),
+      // ),
       body: Stack(
         children: [
           Center(
@@ -91,16 +91,16 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                 if (!activeDialog && barcodes.isNotEmpty) {
                   final barcode =
                       barcodes.first; // Get the first detected barcode
-                  if (barcode.rawValue != null) {
-                    final player = AudioPlayer();
-                    await player.play(AssetSource(
-                        'audio/beep_sound.mp3')); // Place the beep file in assets
+                  final player = AudioPlayer();
+                  await player.play(AssetSource(
+                      'audio/beep_sound.mp3')); // Place the beep file in assets
 
-                    // Trigger vibration
-                    if (await Vibration.hasVibrator() ?? false) {
-                      Vibration.vibrate(
-                          duration: 200); // Vibrate for 200 milliseconds
-                    }
+                  // Trigger vibration
+                  if (await Vibration.hasVibrator() ?? false) {
+                    Vibration.vibrate(
+                        duration: 200); // Vibrate for 200 milliseconds
+                  }
+                  if (barcode.rawValue != null) {
                     setState(() {
                       activeDialog = true;
                     });
@@ -132,13 +132,10 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                             barcode.rawValue.toString(), context);
                         Navigator.pop(context);
                         await _resumeCamera();
-                        setState(() {
-                          activeDialog = false;
-                        });
                       },
-                      cancle: () {
+                      cancle: () async {
                         Navigator.pop(context);
-                        _resumeCamera();
+                        await _resumeCamera();
                       },
                     );
                   }
@@ -164,12 +161,20 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
             },
           ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xffffffff),
+                      )),
                   ToggleFlashlightButton(controller: controller),
                   // AnalyzeImageFromGalleryButton(controller: controller),
                 ],

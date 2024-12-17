@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:doc_scanner/camera_screen/bar_code_camera_screen.dart';
-import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/camera_screen/qr_code_camera_screen.dart';
 import 'package:doc_scanner/home_page/directory_create_page.dart';

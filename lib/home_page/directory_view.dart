@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
@@ -2367,7 +2369,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                           context)
                                                                       .showSnackBar(
                                                                     const SnackBar(
-                                                                      duration: const Duration(
+                                                                      duration: Duration(
                                                                           seconds:
                                                                               4),
                                                                       content:
