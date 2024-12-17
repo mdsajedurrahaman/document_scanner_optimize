@@ -220,8 +220,8 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                   if (cameraProvider.imageList.isNotEmpty) {
                     await AppHelper.handlePermissions().then((_) async {
                       await CunningDocumentScanner.getPictures(
-                        isGalleryImportAllowed: true,
-                      ).then((pictures) {
+                              isGalleryImportAllowed: true, noOfPages: 1)
+                          .then((pictures) {
                         if (pictures!.isNotEmpty) {
                           pictures.forEach((element) async {
                             String imageName = DateFormat('yyyyMMdd_SSSS')
@@ -231,7 +231,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                                     docType: 'Document',
                                     imageByte: File(element).readAsBytesSync(),
                                     name: "Document-$imageName"),
-                                index: 1);
+                                index: currentIndex);
                           });
 
                           if (cameraProvider.imageList.isNotEmpty) {
@@ -293,106 +293,6 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
                                 curve: Curves.easeIn);
                             Navigator.of(context);
                           }
-                          // await showModalBottomSheet(
-                          //   context: context,
-                          //   shape: const RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.only(
-                          //           topLeft: Radius.circular(20),
-                          //           topRight: Radius.circular(20))),
-                          //   builder: (context) {
-                          //     return Container(
-                          //       width: MediaQuery.of(context).size.width,
-                          //       padding: const EdgeInsets.symmetric(
-                          //           horizontal: 5, vertical: 30),
-                          //       child: Row(
-                          //         mainAxisAlignment:
-                          //             MainAxisAlignment.spaceAround,
-                          //         children: [
-                          //           InkWell(
-                          //             onTap: () async {
-                          //               Navigator.pop(context);
-                          //               var result = await Navigator.push(
-                          //                 context,
-                          //                 MaterialPageRoute(
-                          //                   builder: (context) => CameraScreen(
-                          //                     isComeFromAdd: true,
-                          //                     initialPage: 0,
-                          //                     imageIndex: currentIndex,
-                          //                   ),
-                          //                 ),
-                          //               );
-
-                          //               pageController.animateToPage(result,
-                          //                   duration:
-                          //                       const Duration(milliseconds: 1),
-                          //                   curve: Curves.easeIn);
-                          //             },
-                          //             child: Container(
-                          //               height: 100,
-                          //               width: 160,
-                          //               decoration: BoxDecoration(
-                          //                 color: Colors.white,
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(10),
-                          //               ),
-                          //               alignment: Alignment.center,
-                          //               child: Column(
-                          //                 mainAxisAlignment:
-                          //                     MainAxisAlignment.center,
-                          //                 crossAxisAlignment:
-                          //                     CrossAxisAlignment.center,
-                          //                 children: [
-                          //                   SvgPicture.asset(AppAssets.camera),
-                          //                   Text(
-                          //                     translation(context).camera,
-                          //                     style: const TextStyle(
-                          //                         color: Colors.black,
-                          //                         fontWeight: FontWeight.w500,
-                          //                         fontSize: 20),
-                          //                   )
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           InkWell(
-                          //             onTap: () async {
-
-                          //             },
-                          //             child: Container(
-                          //               height: 100,
-                          //               width: 160,
-                          //               decoration: BoxDecoration(
-                          //                 color: Colors.white,
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(10),
-                          //               ),
-                          //               alignment: Alignment.center,
-                          //               child: Column(
-                          //                 mainAxisAlignment:
-                          //                     MainAxisAlignment.center,
-                          //                 crossAxisAlignment:
-                          //                     CrossAxisAlignment.center,
-                          //                 children: [
-                          //                   SvgPicture.asset(
-                          //                     AppAssets.gallery,
-                          //                     color: Colors.white,
-                          //                   ),
-                          //                   Text(
-                          //                     translation(context).gallery,
-                          //                     style: const TextStyle(
-                          //                         color: Colors.white,
-                          //                         fontWeight: FontWeight.w500,
-                          //                         fontSize: 20),
-                          //                   )
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     );
-                          //   },
-                          // );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),

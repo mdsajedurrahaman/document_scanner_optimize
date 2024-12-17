@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:doc_scanner/camera_screen/bar_code_camera_screen.dart';
 import 'package:doc_scanner/camera_screen/camera_screen.dart';
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
+import 'package:doc_scanner/camera_screen/qr_code_camera_screen.dart';
 import 'package:doc_scanner/home_page/directory_create_page.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/home_page/search_page.dart';
@@ -260,18 +262,14 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  const CameraScreen(
-                                                initialPage: 0,
-                                              ),
+                                                  const QRCodeCameraScreen(),
                                             ),
                                           )
                                         : Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  const CameraScreen(
-                                                initialPage: 1,
-                                              ),
+                                                  const BarCodeCameraScreen(),
                                             ),
                                           );
                           },

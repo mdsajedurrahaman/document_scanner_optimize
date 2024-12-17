@@ -12,8 +12,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -42,15 +40,18 @@ class _SplashScreenState extends State<SplashScreen> {
               const Text(""),
               Image.asset(
                 AppAssets.splashLogo,
-                height: 200,
-                width: 200,
+                height: 160,
+                width: 160,
               ),
-              const Text(
-                "Scan faster, Work smarter.",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 20.0),
+                child: Text(
+                  "SCAN FASTER, WORK SMARTER.",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
+                ),
               ),
             ],
           ),

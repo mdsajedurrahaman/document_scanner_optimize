@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:doc_scanner/camera_screen/provider/camera_provider.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_button_widget.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_error_widget.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vibration/vibration.dart';
 
 class BarCodeCameraScreen extends StatefulWidget {
   const BarCodeCameraScreen({super.key});
@@ -30,7 +32,9 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
       BarcodeFormat.itf,
       BarcodeFormat.pdf417,
       BarcodeFormat.upcA,
-      BarcodeFormat.upcE
+      BarcodeFormat.upcE,
+      BarcodeFormat.unknown,
+      BarcodeFormat.all,
     ],
   );
   bool activeDialog = false;
@@ -82,12 +86,21 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
             child: MobileScanner(
               controller: controller,
               scanWindow: scanWindow,
-              onDetect: (capture) {
+              onDetect: (capture) async {
                 final List<Barcode> barcodes = capture.barcodes;
                 if (!activeDialog && barcodes.isNotEmpty) {
                   final barcode =
                       barcodes.first; // Get the first detected barcode
                   if (barcode.rawValue != null) {
+                    final player = AudioPlayer();
+                    await player.play(AssetSource(
+                        'audio/beep_sound.mp3')); // Place the beep file in assets
+
+                    // Trigger vibration
+                    if (await Vibration.hasVibrator() ?? false) {
+                      Vibration.vibrate(
+                          duration: 200); // Vibrate for 200 milliseconds
+                    }
                     setState(() {
                       activeDialog = true;
                     });
@@ -108,7 +121,8 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                         ));
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Copied to Clipboard')));
+                            const SnackBar(
+                                content: Text('Copied to Clipboard')));
                         Navigator.pop(context);
                         await _resumeCamera();
                       },
@@ -122,9 +136,9 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                           activeDialog = false;
                         });
                       },
-                      opneBrowser: () async {
+                      cancle: () {
                         Navigator.pop(context);
-                        await _resumeCamera();
+                        _resumeCamera();
                       },
                     );
                   }
@@ -157,7 +171,7 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ToggleFlashlightButton(controller: controller),
-                  SwitchCameraButton(controller: controller),
+                  // AnalyzeImageFromGalleryButton(controller: controller),
                 ],
               ),
             ),

@@ -258,7 +258,8 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
     var status = await Permission.storage.request();
     if (status.isGranted) {
       // Get Downloads directory path
-      Directory? downloadsDirectory = Directory('/storage/emulated/0/Download');
+      Directory? downloadsDirectory =
+          Directory('/storage/emulated/0/Documents');
       if (downloadsDirectory.existsSync()) {
         String downloadFilePath = '${downloadsDirectory.path}/$fileName.pdf';
 

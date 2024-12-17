@@ -378,6 +378,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                       Uint8List imageBytes =
                                           await captureWidgetToImage();
                                       await saveImageToFile(imageBytes);
+                                      cameraProvider.clearIdCardImages();
+
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(
                                         builder: (context) {

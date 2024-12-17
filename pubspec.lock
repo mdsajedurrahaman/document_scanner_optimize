@@ -1293,10 +1293,10 @@ packages:
     dependency: "direct main"
     description:
       name: vibration
-      sha256: "06588a845a4ebc73ab7ff7da555c2b3dbcd9676164b5856a38bf0b2287f1045d"
+      sha256: f0af02af2d63132135ae0332a3e54d5de718e214ee94c4f082176ef6ce624a4b
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "2.0.1"
   vibration_platform_interface:
     dependency: transitive
     description:

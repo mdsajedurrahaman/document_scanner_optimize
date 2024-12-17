@@ -488,7 +488,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                                 false;
                                                           });
                                                         },
-                                                        opneBrowser: () async {
+                                                        cancle: () async {
                                                           setState(() {
                                                             activeDialog =
                                                                 false;
@@ -571,7 +571,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                                 false;
                                                           });
                                                         },
-                                                        opneBrowser: () async {
+                                                        cancle: () async {
                                                           setState(() {
                                                             activeDialog =
                                                                 false;
