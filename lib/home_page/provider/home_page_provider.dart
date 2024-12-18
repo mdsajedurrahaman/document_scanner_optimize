@@ -103,18 +103,38 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeBarCode(String barCode) {
-    int index = _barCodeFiles
-        .indexWhere((file) => file.split("/").last == barCode.split("/").last);
-    _barCodeFiles.removeAt(index);
-    notifyListeners();
+  void removeBarCode(String filePath) {
+    // int index = _barCodeFiles
+    //     .indexWhere((file) => file.split("/").last == barCode.split("/").last);
+    // _barCodeFiles.removeAt(index);
+    // notifyListeners();
+    int index = _barCodeFiles.indexOf(filePath);
+    if (index != -1) {
+      // Check if the file exists in the list.
+      _barCodeFiles.removeAt(index);
+      notifyListeners();
+    } else {
+      // Handle the case where the file is not found.
+      print("File not found in the list: $filePath");
+    }
   }
 
-  void removeQrCode(String qrCode) {
-    int index = _qrCodeFiles
-        .indexWhere((file) => file.split("/").last == qrCode.split("/").last);
-    _qrCodeFiles.removeAt(index);
-    notifyListeners();
+  // void removeQrCode(String qrCode) {
+  //   int index = _qrCodeFiles
+  //       .indexWhere((file) => file.split("/").last == qrCode.split("/").last);
+  //   _qrCodeFiles.removeAt(index);
+  //   notifyListeners();
+  // }
+  void removeQrCode(String filePath) {
+    int index = _qrCodeFiles.indexOf(filePath);
+    if (index != -1) {
+      // Check if the file exists in the list.
+      _qrCodeFiles.removeAt(index);
+      notifyListeners();
+    } else {
+      // Handle the case where the file is not found.
+      print("File not found in the list: $filePath");
+    }
   }
 
   void addQrCodeFile(String qrCode) {

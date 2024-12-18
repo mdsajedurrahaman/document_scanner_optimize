@@ -150,7 +150,7 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
 
                                           // Save the PDF to Downloads folder
                                           await saveToDownloadsFolder(
-                                              renameController.text,
+                                              uniqueSavePath,
                                               textEditingController.text);
 
                                           ScaffoldMessenger.of(context)
@@ -180,16 +180,6 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
                               // Save the PDF to Downloads folder
                               await saveToDownloadsFolder(renameController.text,
                                   textEditingController.text);
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "PDF file saved at $initialSavePath",
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
                             }
                           } else {
                             // Show an error message if the file name is empty
@@ -257,23 +247,42 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
     // Request storage permission
     var status = await Permission.storage.request();
     if (status.isGranted) {
+      final pdf = pw.Document();
       // Get Downloads directory path
-      Directory? downloadsDirectory =
+
+      // Directory? downloadsDirectory =
+      //     Directory('/storage/emulated/0/Documents');
+
+      //   String downloadFilePath = '${downloadsDirectory.path}/$fileName.pdf';
+
+      //   // Generate PDF content
+      //   Uint8List pdfBytes = await generatePdfContent(content);
+
+      //   // Save the PDF
+      //   File file = File(downloadFilePath);
+      //   await file.writeAsBytes(pdfBytes);
+      final externalStorageDirectory =
           Directory('/storage/emulated/0/Documents');
-      if (downloadsDirectory.existsSync()) {
-        String downloadFilePath = '${downloadsDirectory.path}/$fileName.pdf';
-
-        // Generate PDF content
-        Uint8List pdfBytes = await generatePdfContent(content);
-
-        // Save the PDF
-        File file = File(downloadFilePath);
-        await file.writeAsBytes(pdfBytes);
-
-        debugPrint("PDF saved to Downloads: $downloadFilePath");
-      } else {
-        debugPrint("Downloads folder not found");
+      if (!await externalStorageDirectory.exists()) {
+        await externalStorageDirectory.create(recursive: true);
       }
+      File externalFile =
+          File("${externalStorageDirectory.path}/$fileName.pdf");
+
+      // Write to both locations
+      final pdfBytes = await pdf.save();
+      await externalFile.writeAsBytes(pdfBytes);
+      await externalFile.writeAsBytes(pdfBytes);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "PDF file saved at successFully in Documents Folder",
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      debugPrint("PDF saved to Downloads: $externalStorageDirectory");
     } else {
       debugPrint("Permission denied to access external storage");
     }

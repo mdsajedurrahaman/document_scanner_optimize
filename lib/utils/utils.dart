@@ -485,8 +485,39 @@ Future<void> showQrAndBarCodeViewDialogue(
                             minimumSize: const Size(90, 50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
-                        onPressed: () async {
-                          Clipboard.setData(ClipboardData(text: text));
+                        onPressed: () {
+                          StringBuffer formattedContent = StringBuffer();
+
+                          List<String> parts = text.split(';');
+                          for (var part in parts.where((p) => p.isNotEmpty)) {
+                            List<String> keyValue = part.split(':');
+                            String key = keyValue[0];
+                            String value = keyValue.length > 1
+                                ? keyValue.sublist(1).join(':')
+                                : '';
+
+                            // Format keys into labels
+                            if (key == "WIFI" ||
+                                key == "Wifi" ||
+                                key == "wifi") {
+                              formattedContent.writeln("WIFI NAME : $value");
+                            } else if (key == "T") {
+                              formattedContent.writeln("TYPE : $value");
+                            } else if (key == "P") {
+                              formattedContent.writeln("PASSWORD : $value");
+                            } else {
+                              formattedContent.writeln("$key : $value");
+                            }
+                          }
+
+                          // Copy the formatted content to the clipboard
+                          content.startsWith("WIFI") ||
+                                  content.startsWith("Wifi") ||
+                                  content.startsWith("wifi")
+                              ? Clipboard.setData(ClipboardData(
+                                  text: formattedContent.toString()))
+                              : Clipboard.setData(ClipboardData(text: text));
+
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(

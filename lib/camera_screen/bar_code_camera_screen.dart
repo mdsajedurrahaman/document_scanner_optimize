@@ -33,8 +33,6 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
       BarcodeFormat.pdf417,
       BarcodeFormat.upcA,
       BarcodeFormat.upcE,
-      BarcodeFormat.unknown,
-      BarcodeFormat.all,
     ],
   );
   bool activeDialog = false;

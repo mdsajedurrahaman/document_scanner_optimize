@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/home_page/provider/home_page_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
@@ -38,6 +39,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
   bool isDeleteLoading = false;
   bool isShareIng = false;
   late Directory rootDirectory;
+  String subFilePath = "";
 
   void _openBrowserWithSearch(String query) async {
     // Encode the query to make it URL-safe
@@ -55,6 +57,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
 
   @override
   void initState() {
+    print("Hello Matching == ${widget.directoryPath.split('/').last}");
     allFiles = Provider.of<HomePageProvider>(context, listen: false)
         .getFileList(widget.directoryPath);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -235,7 +238,25 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             children: [
                                               IconButton(
                                                   onPressed: () {
-                                                    Navigator.pop(context);
+                                                    widget.directoryPath
+                                                                    .split('/')
+                                                                    .last ==
+                                                                "QR Code" ||
+                                                            widget.directoryPath
+                                                                    .split('/')
+                                                                    .last ==
+                                                                "Bar Code"
+                                                        ? Navigator.pushAndRemoveUntil(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const BottomBar()),
+                                                            (route) {
+                                                            return false;
+                                                          })
+                                                        : Navigator.pop(
+                                                            context);
                                                   },
                                                   style: IconButton.styleFrom(
                                                     padding: EdgeInsets.zero,
@@ -330,6 +351,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                   ),
                                   itemBuilder: (context, index) {
                                     String filePath = fileList[index];
+                                    subFilePath = filePath;
                                     final isSelected =
                                         _selectedItems.contains(filePath);
                                     if (Directory(filePath).existsSync()) {
@@ -2184,7 +2206,17 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                     ),
                                     widget.directoryPath.endsWith("QR Code") ||
                                             widget.directoryPath
-                                                .endsWith("Bar Code")
+                                                .endsWith("Bar Code") ||
+                                            subFilePath.split("/").last !=
+                                                ".txt" ||
+                                            subFilePath.split("/").last !=
+                                                ".pdf" ||
+                                            subFilePath.split("/").last !=
+                                                ".jpg" ||
+                                            subFilePath.split("/").last !=
+                                                ".png" ||
+                                            subFilePath.split("/").last !=
+                                                ".jpeg"
                                         ? GestureDetector(
                                             onTap: () async {
                                               if (_selectedItems.isNotEmpty) {
@@ -2585,28 +2617,34 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         item);
                                                 if (fileSystemEntity ==
                                                     FileSystemEntityType.file) {
-                                                  File file = File(item);
-                                                  if (item
-                                                      .split("/")
-                                                      .contains("Document")) {
-                                                    homePageProvider
-                                                        .removeDocumentImage(
-                                                            item);
-                                                  } else if (item
-                                                      .split("/")
-                                                      .contains("ID Card")) {
-                                                    homePageProvider
-                                                        .removeIdCarImage(item);
-                                                  } else if (item
-                                                      .split("/")
-                                                      .contains("QR Code")) {
-                                                    homePageProvider
-                                                        .removeQrCode(item);
-                                                  } else {
-                                                    homePageProvider
-                                                        .removeBarCode(item);
+                                                  try {
+                                                    File file = File(item);
+                                                    if (item
+                                                        .split("/")
+                                                        .contains("Document")) {
+                                                      homePageProvider
+                                                          .removeDocumentImage(
+                                                              item);
+                                                    } else if (item
+                                                        .split("/")
+                                                        .contains("ID Card")) {
+                                                      homePageProvider
+                                                          .removeIdCarImage(
+                                                              item);
+                                                    } else if (item
+                                                        .split("/")
+                                                        .contains("QR Code")) {
+                                                      homePageProvider
+                                                          .removeQrCode(item);
+                                                    } else {
+                                                      homePageProvider
+                                                          .removeBarCode(item);
+                                                    }
+                                                    file.deleteSync();
+                                                  } catch (e) {
+                                                    print(
+                                                        "Error deleting file $item: $e");
                                                   }
-                                                  file.delete();
                                                 } else if (fileSystemEntity ==
                                                     FileSystemEntityType
                                                         .directory) {
@@ -2616,7 +2654,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                       entities =
                                                       directory.listSync();
                                                   if (entities.isEmpty) {
-                                                    await directory.delete(
+                                                    directory.deleteSync(
                                                         recursive: true);
                                                   } else {
                                                     for (var entity
@@ -2648,7 +2686,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                 entity.path);
                                                       }
                                                     }
-                                                    await directory.delete(
+                                                    directory.deleteSync(
                                                         recursive: true);
                                                   }
                                                 }
