@@ -284,6 +284,63 @@ Future<void> showNormalAlertDialogue({
   );
 }
 
+Future<void> showGoogleAlertDialogue({
+  required BuildContext context,
+  required String title,
+  required String content,
+  required String onOkText,
+  required String onCancelText,
+  required VoidCallback onOk,
+  required VoidCallback onCancel,
+}) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xff282A2C),
+        title: Center(
+          child: Text(
+            title,
+            style: const TextStyle(color: Color(0xffDADADA)),
+          ),
+        ),
+        content: Text(
+          content,
+          style: const TextStyle(color: Color(0xffDADADA)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: onCancel,
+            child: Text(
+              onCancelText,
+              style: const TextStyle(color: Color(0xffA8C7FA)),
+            ),
+          ),
+          TextButton(
+            onPressed: onOk,
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white, // Text color
+              backgroundColor:
+                  const Color(0xffA8C7FA), // Button background color
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 20, vertical: 10), // Padding
+              // Text style
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25), // Rounded corners
+              ),
+            ),
+            child: Text(
+              onOkText,
+              style: const TextStyle(color: Color(0xff042B6D)),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class TopSnackbar extends StatelessWidget {
   final String message;
 

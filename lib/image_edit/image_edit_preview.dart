@@ -78,8 +78,20 @@ class _EditImagePreviewState extends State<EditImagePreview> {
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
-              cameraProvider.clearImageList();
+              showGoogleAlertDialogue(
+                  context: context,
+                  title: 'Discard document?',
+                  content: 'If you leave now, your progress will be lost',
+                  onOkText: 'Discard',
+                  onCancelText: 'keep editing',
+                  onOk: () {
+                    cameraProvider.clearImageList();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  onCancel: () {
+                    Navigator.pop(context);
+                  });
             },
             icon: const Icon(
               Icons.arrow_back,
