@@ -317,7 +317,6 @@ class _HomePageState extends State<HomePage> {
                                     directoryPath: directory.path,
                                   ),
                                 ));
-                            print("Hogar bal${directory.path}");
                           },
                           child: Container(
                             width: size.width >= 600 ? 90 : 70,
@@ -615,7 +614,56 @@ class _HomePageState extends State<HomePage> {
                                             text: await homePageProvider
                                                 .readTxtFile(qrCode),
                                             browserView: () {
-                                              _openBrowserWithSearch(urlLink);
+                                              StringBuffer formattedContent =
+                                                  StringBuffer();
+
+                                              List<String> parts =
+                                                  urlLink.toString().split(';');
+                                              for (var part in parts
+                                                  .where((p) => p.isNotEmpty)) {
+                                                List<String> keyValue =
+                                                    part.split(':');
+                                                String key = keyValue[0];
+                                                String value =
+                                                    keyValue.length > 1
+                                                        ? keyValue
+                                                            .sublist(1)
+                                                            .join(':')
+                                                        : '';
+
+                                                // Format keys into labels
+                                                if (key == "WIFI" ||
+                                                    key == "Wifi" ||
+                                                    key == "wifi") {
+                                                  formattedContent.writeln(
+                                                      "WIFI NAME : $value");
+                                                } else if (key == "T") {
+                                                  formattedContent
+                                                      .writeln("TYPE : $value");
+                                                } else if (key == "P") {
+                                                  formattedContent.writeln(
+                                                      "PASSWORD : $value");
+                                                } else {
+                                                  formattedContent
+                                                      .writeln("$key : $value");
+                                                }
+                                              }
+
+                                              // Copy the formatted content to the clipboard
+                                              urlLink
+                                                          .toString()
+                                                          .startsWith("WIFI") ||
+                                                      urlLink
+                                                          .toString()
+                                                          .startsWith("Wifi") ||
+                                                      urlLink
+                                                          .toString()
+                                                          .startsWith("wifi")
+                                                  ? _openBrowserWithSearch(
+                                                      formattedContent
+                                                          .toString())
+                                                  : _openBrowserWithSearch(
+                                                      urlLink);
                                             });
                                       },
                                       child: Padding(
@@ -675,7 +723,56 @@ class _HomePageState extends State<HomePage> {
                                             text: await homePageProvider
                                                 .readTxtFile(barCode),
                                             browserView: () {
-                                              _openBrowserWithSearch(urlLink);
+                                              StringBuffer formattedContent =
+                                                  StringBuffer();
+
+                                              List<String> parts =
+                                                  urlLink.toString().split(';');
+                                              for (var part in parts
+                                                  .where((p) => p.isNotEmpty)) {
+                                                List<String> keyValue =
+                                                    part.split(':');
+                                                String key = keyValue[0];
+                                                String value =
+                                                    keyValue.length > 1
+                                                        ? keyValue
+                                                            .sublist(1)
+                                                            .join(':')
+                                                        : '';
+
+                                                // Format keys into labels
+                                                if (key == "WIFI" ||
+                                                    key == "Wifi" ||
+                                                    key == "wifi") {
+                                                  formattedContent.writeln(
+                                                      "WIFI NAME : $value");
+                                                } else if (key == "T") {
+                                                  formattedContent
+                                                      .writeln("TYPE : $value");
+                                                } else if (key == "P") {
+                                                  formattedContent.writeln(
+                                                      "PASSWORD : $value");
+                                                } else {
+                                                  formattedContent
+                                                      .writeln("$key : $value");
+                                                }
+                                              }
+
+                                              // Copy the formatted content to the clipboard
+                                              urlLink
+                                                          .toString()
+                                                          .startsWith("WIFI") ||
+                                                      urlLink
+                                                          .toString()
+                                                          .startsWith("Wifi") ||
+                                                      urlLink
+                                                          .toString()
+                                                          .startsWith("wifi")
+                                                  ? _openBrowserWithSearch(
+                                                      formattedContent
+                                                          .toString())
+                                                  : _openBrowserWithSearch(
+                                                      urlLink);
                                             });
                                       },
                                       child: Padding(

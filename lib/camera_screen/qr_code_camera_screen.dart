@@ -2,7 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:doc_scanner/camera_screen/provider/camera_provider.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_button_widget.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_error_widget.dart';
+import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -95,17 +97,79 @@ class _QRCodeCameraScreenState extends State<QRCodeCameraScreen> {
                     // _showQrAndBarCodeDialogue(context, barcode.rawValue!);
                     showQrAndBarCodeDialogue(
                       context: context,
-                      title: 'QR Code Detected',
+                      title: translation(context).qrCodeDetected,
                       content: barcode.rawValue.toString(),
                       browserView: () {
-                        _openBrowserWithSearch(
-                          barcode.rawValue.toString(),
-                        );
+                        StringBuffer formattedContent = StringBuffer();
+
+                        List<String> parts =
+                            barcode.rawValue.toString().split(';');
+                        for (var part in parts.where((p) => p.isNotEmpty)) {
+                          List<String> keyValue = part.split(':');
+                          String key = keyValue[0];
+                          String value = keyValue.length > 1
+                              ? keyValue.sublist(1).join(':')
+                              : '';
+
+                          // Format keys into labels
+                          if (key == "WIFI" || key == "Wifi" || key == "wifi") {
+                            formattedContent.writeln("WIFI NAME : $value");
+                          } else if (key == "T") {
+                            formattedContent.writeln("TYPE : $value");
+                          } else if (key == "P") {
+                            formattedContent.writeln("PASSWORD : $value");
+                          } else {
+                            formattedContent.writeln("$key : $value");
+                          }
+                        }
+
+                        // Copy the formatted content to the clipboard
+                        barcode.rawValue.toString().startsWith("WIFI") ||
+                                barcode.rawValue
+                                    .toString()
+                                    .startsWith("Wifi") ||
+                                barcode.rawValue.toString().startsWith("wifi")
+                            ? _openBrowserWithSearch(
+                                formattedContent.toString())
+                            : _openBrowserWithSearch(
+                                barcode.rawValue.toString(),
+                              );
                       },
                       onCopy: () async {
-                        Clipboard.setData(ClipboardData(
-                          text: barcode.rawValue.toString(),
-                        ));
+                        StringBuffer formattedContent = StringBuffer();
+
+                        List<String> parts =
+                            barcode.rawValue.toString().split(';');
+                        for (var part in parts.where((p) => p.isNotEmpty)) {
+                          List<String> keyValue = part.split(':');
+                          String key = keyValue[0];
+                          String value = keyValue.length > 1
+                              ? keyValue.sublist(1).join(':')
+                              : '';
+
+                          // Format keys into labels
+                          if (key == "WIFI" || key == "Wifi" || key == "wifi") {
+                            formattedContent.writeln("WIFI NAME : $value");
+                          } else if (key == "T") {
+                            formattedContent.writeln("TYPE : $value");
+                          } else if (key == "P") {
+                            formattedContent.writeln("PASSWORD : $value");
+                          } else {
+                            formattedContent.writeln("$key : $value");
+                          }
+                        }
+
+                        // Copy the formatted content to the clipboard
+                        barcode.rawValue.toString().startsWith("WIFI") ||
+                                barcode.rawValue
+                                    .toString()
+                                    .startsWith("Wifi") ||
+                                barcode.rawValue.toString().startsWith("wifi")
+                            ? Clipboard.setData(ClipboardData(
+                                text: formattedContent.toString()))
+                            : Clipboard.setData(ClipboardData(
+                                text: barcode.rawValue.toString(),
+                              ));
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
