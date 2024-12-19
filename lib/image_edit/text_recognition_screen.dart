@@ -276,7 +276,7 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            "PDF file saved at successFully in Documents Folder",
+            "PDF file saved as successFully in Documents Folder",
             style: TextStyle(color: Colors.white),
           ),
           duration: Duration(seconds: 1),

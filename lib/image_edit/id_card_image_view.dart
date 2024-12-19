@@ -31,7 +31,6 @@ class IdCardImagePreview extends StatefulWidget {
 class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   bool isLoading = false;
   bool actionsEnabled = true;
-  bool isSavePdf = false;
   List<Map<String, dynamic>> imageProperties = [];
   String fileName =
       "IDCard_${DateFormat('yyyyMMdd_SSSS').format(DateTime.now())}";
@@ -90,20 +89,14 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
     }
   }
 
-  Future<void> exportToPdf(String fileName) async {
+  Future<void> exportToPdf(String fileName, Uint8List imageBytes) async {
     setState(() {
       isLoading = true;
-      isSavePdf = true;
     });
     try {
-      // Capture the widget as an image
-      Uint8List imageBytes = await captureWidgetToImage();
-
-      // Create a PDF document
       final pdf = pw.Document();
       final image = pw.MemoryImage(imageBytes);
 
-      // Define A4 dimensions with zero margins
       final pageFormat = PdfPageFormat.a4.copyWith(
         marginLeft: 0,
         marginRight: 0,
@@ -111,7 +104,6 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
         marginBottom: 0,
       );
 
-      // Add an A4 page with the captured image
       pdf.addPage(
         pw.Page(
           pageFormat: pageFormat,
@@ -119,46 +111,112 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
             return pw.Center(
               child: pw.Image(
                 image,
-                fit: pw.BoxFit.contain, // Ensures full fit without cropping
+                fit: pw.BoxFit.contain,
               ),
             );
           },
         ),
       );
 
-      // Save the PDF in the app-specific directory
       final rootDirectory = await getApplicationDocumentsDirectory();
       String appSpecificPath = "${rootDirectory.path}/Doc Scanner/ID Card";
-      File appSpecificFile = File("$appSpecificPath/$fileName.pdf");
+      Directory directory = Directory(appSpecificPath);
 
-      // Create directories if they don't exist
-      if (!await appSpecificFile.parent.exists()) {
-        await appSpecificFile.parent.create(recursive: true);
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
       }
 
-      // Save the PDF in the general "Documents" folder
-      final externalStorageDirectory =
-          Directory('/storage/emulated/0/Documents');
-      if (!await externalStorageDirectory.exists()) {
-        await externalStorageDirectory.create(recursive: true);
-      }
-      File externalFile =
-          File("${externalStorageDirectory.path}/$fileName.pdf");
+      String fullFilePath = "$appSpecificPath/$fileName.pdf";
+      File pdfFile = File(fullFilePath);
 
-      // Write to both locations
-      final pdfBytes = await pdf.save();
-      await appSpecificFile.writeAsBytes(pdfBytes);
-      await externalFile.writeAsBytes(pdfBytes);
-      setState(() {
-        isLoading = false;
-        isSavePdf = false;
-      });
-      // Notify the user of successful save
+      // Check if file already exists
+      if (await pdfFile.exists()) {
+        String newFileName = fileName;
+        int counter = 1;
+
+        // Loop to find a unique name
+        while (await File("$appSpecificPath/$newFileName.pdf").exists()) {
+          newFileName = "$fileName($counter)";
+          counter++;
+        }
+        final externalStorageDirectory =
+            Directory('/storage/emulated/0/Documents');
+        if (!await externalStorageDirectory.exists()) {
+          await externalStorageDirectory.create(recursive: true);
+        }
+        File externalFile =
+            File("${externalStorageDirectory.path}/$newFileName.pdf");
+        // Show popup dialog
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("File Already Exists"),
+              content: const Text(
+                  "This file already exists. Do you want to create a duplicate file?"),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    // Save with new name
+                    pdfFile = File("$appSpecificPath/$newFileName.pdf");
+                    await pdfFile.writeAsBytes(await pdf.save());
+                    // Save the PDF in the general "Documents" folder
+
+                    // Write to both locations
+                    final pdfBytes = await pdf.save();
+                    await externalFile.writeAsBytes(pdfBytes);
+
+                    setState(() {
+                      isLoading = false;
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: const Text("Create Duplicate"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Cancel action
+                    Navigator.pop(context); // Close dialog
+                    setState(() {
+                      isLoading = false;
+                    });
+                  },
+                  child: const Text("Cancel"),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Save directly if file does not exist
+        await pdfFile.writeAsBytes(await pdf.save());
+
+        // Save the PDF in the general "Documents" folder
+        final externalStorageDirectory =
+            Directory('/storage/emulated/0/Documents');
+        if (!await externalStorageDirectory.exists()) {
+          await externalStorageDirectory.create(recursive: true);
+        }
+        File externalFile =
+            File("${externalStorageDirectory.path}/$fileName.pdf");
+
+        // Write to both locations
+        final pdfBytes = await pdf.save();
+        await externalFile.writeAsBytes(pdfBytes);
+
+        setState(() {
+          isLoading = false;
+          Navigator.pop(context);
+        });
+      }
     } catch (e) {
-      // Notify user of failure
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save PDF: $e')),
       );
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -437,13 +495,15 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                   builder: (context) {
                                     TextEditingController renameController =
                                         TextEditingController();
+                                    bool isSaving =
+                                        false; // State to track saving progress
+
                                     return StatefulBuilder(
                                       builder: (context, setState) {
                                         return AlertDialog(
                                           title: Text(
                                               translation(context).savePdf),
-                                          content: cameraProvider
-                                                  .isCreatingPDFLoader
+                                          content: isSaving
                                               ? ConstrainedBox(
                                                   constraints:
                                                       const BoxConstraints(
@@ -451,10 +511,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                           maxWidth: 40),
                                                   child: const Center(
                                                     child:
-                                                        CircularProgressIndicator(
-                                                      color:
-                                                          AppColor.primaryColor,
-                                                    ),
+                                                        CircularProgressIndicator(),
                                                   ),
                                                 )
                                               : TextFormField(
@@ -489,44 +546,53 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                   ),
                                                 ),
                                           actions: [
-                                            TextButton(
-                                              onPressed: () async {
-                                                if (renameController
-                                                    .text.isNotEmpty) {
-                                                  await exportToPdf(
-                                                      renameController.text
-                                                          .trim());
-                                                  cameraProvider
-                                                      .clearIdCardImages();
-                                                  Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return const BottomBar(
-                                                          shouldShowReview:
-                                                              true,
-                                                        );
-                                                      },
-                                                    ),
-                                                    (route) => false,
-                                                  ).then((_) {
-                                                    isSavePdf =
-                                                        false; // Set the value of isSavePdf here
-                                                  });
-                                                  showTopSnackbar(context,
-                                                      "PDF successfully saved");
-                                                }
-                                              },
-                                              child:
-                                                  Text(translation(context).ok),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                  translation(context).cancel),
-                                            )
+                                            if (!isSaving) // Only show buttons when not saving
+                                              TextButton(
+                                                onPressed: () async {
+                                                  if (renameController
+                                                      .text.isNotEmpty) {
+                                                    setState(() {
+                                                      isSaving =
+                                                          true; // Show progress indicator
+                                                    });
+                                                    Uint8List imageBytes =
+                                                        await captureWidgetToImage();
+                                                    await exportToPdf(
+                                                        renameController.text
+                                                            .trim(),
+                                                        imageBytes);
+                                                    setState(() {
+                                                      isSaving =
+                                                          false; // Hide progress indicator
+                                                    });
+                                                    cameraProvider
+                                                        .clearIdCardImages();
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return const BottomBar();
+                                                        },
+                                                      ),
+                                                      (route) => false,
+                                                    );
+                                                    showTopSnackbar(context,
+                                                        "PDF file saved as successFully in Documents Folder");
+                                                  }
+                                                },
+                                                child: Text(
+                                                    translation(context).ok),
+                                              ),
+                                            if (!isSaving)
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context); // Close dialog
+                                                },
+                                                child: Text(translation(context)
+                                                    .cancel),
+                                              ),
                                           ],
                                         );
                                       },
