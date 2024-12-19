@@ -127,48 +127,28 @@ class CameraProvider extends ChangeNotifier {
       final List<Uint8List> images =
           _imageList.map((e) => e.imageByte).toList();
       final Directory appDirectory = await getApplicationDocumentsDirectory();
-      if (_imageList.every((element) => element.docType == 'ID Card')) {
-        directoryPath = '${appDirectory.path}/Doc Scanner/ID Card';
-      } else {
-        directoryPath = '${appDirectory.path}/Doc Scanner/Document';
-      }
+
+      directoryPath = '${appDirectory.path}/Doc Scanner/Document';
+
       final pdf = pw.Document();
-      if (_imageList.length == 1 && _imageList.first.docType == 'ID Card') {
-        final pdfImage = pw.MemoryImage(images.first);
+
+      for (var imageData in images) {
+        final pdfImage = pw.MemoryImage(imageData);
         pdf.addPage(
           pw.Page(
+            clip: false,
             pageFormat: PdfPageFormat.a4,
-            margin: const pw.EdgeInsets.all(20),
+            margin: const pw.EdgeInsets.all(0),
             build: (pw.Context context) {
-              return pw.Container(
-                color: PdfColors.white,
-                alignment: pw.Alignment.center,
-                child: pw.Center(
-                  child: pw.Image(pdfImage),
+              return pw.Center(
+                child: pw.Image(
+                  pdfImage,
+                  fit: pw.BoxFit.fill,
                 ),
               );
             },
           ),
         );
-      } else {
-        for (var imageData in images) {
-          final pdfImage = pw.MemoryImage(imageData);
-          pdf.addPage(
-            pw.Page(
-              clip: false,
-              pageFormat: PdfPageFormat.a4,
-              margin: const pw.EdgeInsets.all(0),
-              build: (pw.Context context) {
-                return pw.Center(
-                  child: pw.Image(
-                    pdfImage,
-                    fit: pw.BoxFit.fill,
-                  ),
-                );
-              },
-            ),
-          );
-        }
       }
       int index = 1;
       String newFileName = fileName;
@@ -179,6 +159,18 @@ class CameraProvider extends ChangeNotifier {
       final File file = File('$directoryPath/$newFileName.pdf');
       final bytes = await pdf.save();
       final pdfFile = await file.writeAsBytes(bytes, flush: true);
+
+      final externalStorageDirectory =
+          Directory('/storage/emulated/0/Documents/Doc');
+      if (!await externalStorageDirectory.exists()) {
+        await externalStorageDirectory.create(recursive: true);
+      }
+      File externalFile =
+          File("${externalStorageDirectory.path}/$newFileName.pdf");
+
+      // Write to both locations
+      final pdfBytes = await pdf.save();
+      await externalFile.writeAsBytes(pdfBytes);
 
       _isCreatingPDFLoader = false;
       notifyListeners();

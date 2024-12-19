@@ -66,6 +66,16 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
     super.initState();
   }
 
+  bool isSubfolderOfQRCode(String directoryPath) {
+    List<String> parts = directoryPath.split('/');
+    int qrCodeIndex = parts.indexOf("QR Code");
+    int barCodeIndex = parts.indexOf("Bar Code");
+
+    // If "QR Code" exists in the path and it's not the last part (indicating a subfolder), return true
+    return qrCodeIndex != -1 && qrCodeIndex < parts.length - 1 ||
+        barCodeIndex != -1 && barCodeIndex < parts.length - 1;
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -366,6 +376,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                               ),
                                             ),
                                           );
+                                          print("Hogar bal${filePath}");
                                         },
                                         child: Stack(
                                           alignment: Alignment.topRight,
@@ -2207,16 +2218,8 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                     widget.directoryPath.endsWith("QR Code") ||
                                             widget.directoryPath
                                                 .endsWith("Bar Code") ||
-                                            subFilePath.split("/").last !=
-                                                ".txt" ||
-                                            subFilePath.split("/").last !=
-                                                ".pdf" ||
-                                            subFilePath.split("/").last !=
-                                                ".jpg" ||
-                                            subFilePath.split("/").last !=
-                                                ".png" ||
-                                            subFilePath.split("/").last !=
-                                                ".jpeg"
+                                            isSubfolderOfQRCode(
+                                                widget.directoryPath)
                                         ? GestureDetector(
                                             onTap: () async {
                                               if (_selectedItems.isNotEmpty) {

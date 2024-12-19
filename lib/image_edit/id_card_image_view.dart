@@ -140,7 +140,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           counter++;
         }
         final externalStorageDirectory =
-            Directory('/storage/emulated/0/Documents');
+            Directory('/storage/emulated/0/Documents/IDCard');
         if (!await externalStorageDirectory.exists()) {
           await externalStorageDirectory.create(recursive: true);
         }
@@ -194,7 +194,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
 
         // Save the PDF in the general "Documents" folder
         final externalStorageDirectory =
-            Directory('/storage/emulated/0/Documents');
+            Directory('/storage/emulated/0/Documents/IDCard');
         if (!await externalStorageDirectory.exists()) {
           await externalStorageDirectory.create(recursive: true);
         }

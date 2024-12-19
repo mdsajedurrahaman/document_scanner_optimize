@@ -317,6 +317,7 @@ class _HomePageState extends State<HomePage> {
                                     directoryPath: directory.path,
                                   ),
                                 ));
+                            print("Hogar bal${directory.path}");
                           },
                           child: Container(
                             width: size.width >= 600 ? 90 : 70,
