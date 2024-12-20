@@ -31,6 +31,7 @@ class IdCardImagePreview extends StatefulWidget {
 class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   bool isLoading = false;
   bool actionsEnabled = true;
+  bool isSaving = false;
   List<Map<String, dynamic>> imageProperties = [];
   String fileName =
       "IDCard_${DateFormat('yyyyMMdd_SSSS').format(DateTime.now())}";
@@ -207,7 +208,6 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
 
         setState(() {
           isLoading = false;
-          Navigator.pop(context);
         });
       }
     } catch (e) {
@@ -231,14 +231,58 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
         directory.createSync(recursive: true);
       }
 
-      // Save the file as JPG
-      File file = File('$path/$fileName.jpg');
+      // Check if a file with the same name already exists
+      String filePath = '$path/$fileName.jpg';
+      File file = File(filePath);
+
+      if (file.existsSync()) {
+        bool shouldCreateDuplicate = await showDuplicateFileDialog();
+        if (!shouldCreateDuplicate) {
+          print('User canceled the save operation.');
+          return;
+        }
+
+        // Modify the file name to create a duplicate
+        String baseName = fileName;
+        int counter = 1;
+        while (file.existsSync()) {
+          filePath = '$path/${baseName}_$counter.jpg';
+          file = File(filePath);
+          counter++;
+        }
+      }
+
+      // Save the file
       await file.writeAsBytes(imageBytes);
       Gal.putImage(file.path);
       print('Image saved at ${file.path}');
     } catch (e) {
       print("Error saving image: $e");
     }
+  }
+
+  Future<bool> showDuplicateFileDialog() async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("File Already exists"),
+              content: const Text(
+                  "A file with the same name already exists. Do you want to create a duplicate file?"),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Create Duplicate"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; // Return false if dialog is dismissed without selection
   }
 
   @override
@@ -422,6 +466,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                             thickness: 1,
                             // indent: MediaQuery.sizeOf(context).width * 0.15,
                           ),
+                          //export image
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
@@ -495,8 +540,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                   builder: (context) {
                                     TextEditingController renameController =
                                         TextEditingController();
-                                    bool isSaving =
-                                        false; // State to track saving progress
+                                    // State to track saving progress
 
                                     return StatefulBuilder(
                                       builder: (context, setState) {
@@ -561,10 +605,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                         renameController.text
                                                             .trim(),
                                                         imageBytes);
-                                                    setState(() {
-                                                      isSaving =
-                                                          false; // Hide progress indicator
-                                                    });
+
                                                     cameraProvider
                                                         .clearIdCardImages();
                                                     Navigator
@@ -576,6 +617,13 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                         },
                                                       ),
                                                       (route) => false,
+                                                    ).then(
+                                                      (value) {
+                                                        setState(() {
+                                                          isSaving =
+                                                              false; // Hide progress indicator
+                                                        });
+                                                      },
                                                     );
                                                     showTopSnackbar(context,
                                                         "PDF file saved as successFully in Documents Folder");

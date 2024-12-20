@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:doc_scanner/image_edit/image_edit_preview.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -112,7 +113,12 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
                             String initialSavePath =
                                 '$baseSavePath/${renameController.text}.pdf';
 
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const EditImagePreview(),
+                                ));
 
                             // Check if file exists
                             File file = File(initialSavePath);
@@ -140,9 +146,12 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
                                       ),
                                       TextButton(
                                         onPressed: () async {
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const EditImagePreview(),
+                                              ));
 
                                           // Save the PDF with a unique name
                                           await savePdfFile(uniqueSavePath,
@@ -271,7 +280,6 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
 
       // Write to both locations
       final pdfBytes = await pdf.save();
-      await externalFile.writeAsBytes(pdfBytes);
       await externalFile.writeAsBytes(pdfBytes);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

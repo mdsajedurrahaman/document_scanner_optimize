@@ -375,6 +375,22 @@ class HomePageProvider extends ChangeNotifier {
       final File file = File('$directoryPath/$newFileName.pdf');
       final bytes = await pdf.save();
       File pdfFile = await file.writeAsBytes(bytes, flush: true);
+
+      //Save pdf file as documents folder
+
+      final externalStorageDirectory =
+          directoryPath.split('/').last == 'Document'
+              ? Directory('/storage/emulated/0/Documents/Document')
+              : Directory('/storage/emulated/0/Documents/IDCard');
+      if (!await externalStorageDirectory.exists()) {
+        await externalStorageDirectory.create(recursive: true);
+      }
+      File externalFile =
+          File("${externalStorageDirectory.path}/$newFileName.pdf");
+
+      // Write to both locations
+      final pdfBytes = await pdf.save();
+      await externalFile.writeAsBytes(pdfBytes);
       _isCreatingPDF = false;
       notifyListeners();
       return pdfFile;

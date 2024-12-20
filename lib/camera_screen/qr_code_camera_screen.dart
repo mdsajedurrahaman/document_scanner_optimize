@@ -2,7 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:doc_scanner/camera_screen/provider/camera_provider.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_button_widget.dart';
 import 'package:doc_scanner/camera_screen/widget/scanner_error_widget.dart';
+import 'package:doc_scanner/core/local_storage.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
+import 'package:doc_scanner/utils/app_constant.dart';
 import 'package:doc_scanner/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -78,16 +80,17 @@ class _QRCodeCameraScreenState extends State<QRCodeCameraScreen> {
                 if (!activeDialog && barcodes.isNotEmpty) {
                   final barcode =
                       barcodes.first; // Get the first detected barcode
-
-                  player.play(
-                    AssetSource('audio/beep_sound.mp3'),
-                  ); // Place the beep file in assets
+                  LocalStorage().getBool(AppConstant.BEEP_KEY) == true
+                      ? player.play(
+                          AssetSource('audio/beep_sound.mp3'),
+                        )
+                      : null; // Place the beep file in assets
 
                   // Trigger vibration
-                  if (await Vibration.hasVibrator() ?? false) {
-                    Vibration.vibrate(
-                        duration: 200); // Vibrate for 200 milliseconds
-                  }
+                  LocalStorage().getBool(AppConstant.VIBRATION_KEY) == true
+                      ? Vibration.vibrate(
+                          duration: 200) // Vibrate for 200 milliseconds
+                      : null;
 
                   if (barcode.rawValue != null) {
                     setState(() {

@@ -2467,9 +2467,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                   );
                                                                   Navigator.pop(
                                                                       context); // Close the current dialog
-                                                                  String
-                                                                      targetPath =
-                                                                      '/storage/emulated/0/Documents'; // Set target path
+                                                                  // Set target path
                                                                   String
                                                                       fileName =
                                                                       renameController
@@ -2494,13 +2492,6 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                     if (value !=
                                                                         null) {
                                                                       // Save the PDF in the target folder
-                                                                      File
-                                                                          pdfFile =
-                                                                          File(
-                                                                              '$targetPath/$fileName.pdf');
-                                                                      await pdfFile
-                                                                          .writeAsBytes(
-                                                                              await value.readAsBytes());
 
                                                                       // Update the UI or perform any additional actions
                                                                       allFiles =
@@ -2514,16 +2505,15 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               .last ==
                                                                           "ID Card") {
                                                                         homePageProvider
-                                                                            .addIdCardImage(pdfFile);
+                                                                            .addIdCardImage(value);
                                                                       } else if (widget
                                                                               .directoryPath
                                                                               .split("/")
                                                                               .last ==
                                                                           "Document") {
                                                                         homePageProvider
-                                                                            .addDocumentImage(pdfFile);
+                                                                            .addDocumentImage(value);
                                                                       }
-
                                                                       // Clear selections and update state
                                                                       setState(
                                                                           () {

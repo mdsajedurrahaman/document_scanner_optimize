@@ -161,7 +161,7 @@ class CameraProvider extends ChangeNotifier {
       final pdfFile = await file.writeAsBytes(bytes, flush: true);
 
       final externalStorageDirectory =
-          Directory('/storage/emulated/0/Documents/Doc');
+          Directory('/storage/emulated/0/Documents/Document');
       if (!await externalStorageDirectory.exists()) {
         await externalStorageDirectory.create(recursive: true);
       }
