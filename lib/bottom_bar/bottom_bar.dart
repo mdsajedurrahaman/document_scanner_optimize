@@ -23,7 +23,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import '../camera_screen/camera_screen.dart';
 import '../camera_screen/model/image_model.dart';
 import '../camera_screen/provider/camera_provider.dart';
 import '../image_edit/image_preview.dart';

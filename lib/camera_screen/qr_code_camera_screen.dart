@@ -6,7 +6,6 @@ import 'package:doc_scanner/core/local_storage.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/app_constant.dart';
 import 'package:doc_scanner/utils/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
