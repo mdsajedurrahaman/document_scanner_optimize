@@ -655,10 +655,10 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                             width:
                                                                                 20,
                                                                           ),
-                                                                          Text(
-                                                                            translation(context).renameFile,
+                                                                          const Text(
+                                                                            "Rename Folder",
                                                                             style:
-                                                                                const TextStyle(
+                                                                                TextStyle(
                                                                               color: Colors.black,
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w400,
