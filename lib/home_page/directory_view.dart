@@ -248,25 +248,14 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                             children: [
                                               IconButton(
                                                   onPressed: () {
-                                                    widget.directoryPath
-                                                                    .split('/')
-                                                                    .last ==
-                                                                "QR Code" ||
-                                                            widget.directoryPath
-                                                                    .split('/')
-                                                                    .last ==
-                                                                "Bar Code"
-                                                        ? Navigator.pushAndRemoveUntil(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        const BottomBar()),
-                                                            (route) {
-                                                            return false;
-                                                          })
-                                                        : Navigator.pop(
-                                                            context);
+                                                    Navigator.pushAndRemoveUntil(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const BottomBar()),
+                                                        (route) {
+                                                      return false;
+                                                    });
                                                   },
                                                   style: IconButton.styleFrom(
                                                     padding: EdgeInsets.zero,
@@ -946,7 +935,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                                               ),
                                                                               actions: [
                                                                                 TextButton(onPressed: () => Navigator.pop(context), child: Text(translation(context).cancel)),
-
+                                                                                ////ID Card Image File Rename
                                                                                 TextButton(
                                                                                   onPressed: () async {
                                                                                     if (formKey.currentState!.validate()) {
@@ -2671,7 +2660,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                         .split("/")
                                                         .contains("ID Card")) {
                                                       homePageProvider
-                                                          .removeIdCarImage(
+                                                          .removeIdCardImage(
                                                               item);
                                                     } else if (item
                                                         .split("/")
@@ -2713,7 +2702,7 @@ class _DirectoryDetailsPageState extends State<DirectoryDetailsPage> {
                                                           .contains(
                                                               "ID Card")) {
                                                         homePageProvider
-                                                            .removeIdCarImage(
+                                                            .removeIdCardImage(
                                                                 entity.path);
                                                       } else if (entity.path
                                                           .split("/")

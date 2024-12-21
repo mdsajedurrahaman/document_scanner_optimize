@@ -257,19 +257,14 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
     var status = await Permission.storage.request();
     if (status.isGranted) {
       final pdf = pw.Document();
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) => pw.Center(
+            child: pw.Text(content),
+          ),
+        ),
+      );
       // Get Downloads directory path
-
-      // Directory? downloadsDirectory =
-      //     Directory('/storage/emulated/0/Documents');
-
-      //   String downloadFilePath = '${downloadsDirectory.path}/$fileName.pdf';
-
-      //   // Generate PDF content
-      //   Uint8List pdfBytes = await generatePdfContent(content);
-
-      //   // Save the PDF
-      //   File file = File(downloadFilePath);
-      //   await file.writeAsBytes(pdfBytes);
       final externalStorageDirectory =
           Directory('/storage/emulated/0/Documents');
       if (!await externalStorageDirectory.exists()) {
@@ -280,6 +275,7 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
 
       // Write to both locations
       final pdfBytes = await pdf.save();
+
       await externalFile.writeAsBytes(pdfBytes);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -297,17 +293,4 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
   }
 
 // Method to generate PDF content
-  Future<Uint8List> generatePdfContent(String textContent) async {
-    final pdf = pw.Document();
-
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) => pw.Center(
-          child: pw.Text(textContent),
-        ),
-      ),
-    );
-
-    return pdf.save();
-  }
 }

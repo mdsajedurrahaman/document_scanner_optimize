@@ -59,11 +59,12 @@ class _AddSignatureState extends State<AddSignature> {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               setState(() {
                 initialShowActionIcons = false;
               });
-              Future.delayed(const Duration(seconds: 1), () async {
+
+              Future.delayed(const Duration(milliseconds: 500), () async {
                 var image = await captureImage();
                 if (image != null) {
                   cameraProvider.updateImage(

@@ -96,12 +96,12 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeIdCarImage(String imagePath) {
-    int index = _idCardImageFiles.indexWhere(
-        (file) => file.path.split("/").last == imagePath.split("/").last);
-    _idCardImageFiles.removeAt(index);
-    notifyListeners();
-  }
+  // void removeIdCarImage(String imagePath) {
+  //   int index = _idCardImageFiles.indexWhere(
+  //       (file) => file.path.split("/").last == imagePath.split("/").last);
+  //   _idCardImageFiles.removeAt(index);
+  //   notifyListeners();
+  // }
 
   void removeBarCode(String filePath) {
     // int index = _barCodeFiles

@@ -77,23 +77,26 @@ class CameraProvider extends ChangeNotifier {
     final Directory appDirectory = await getApplicationDocumentsDirectory();
     final String documentDirectoryPath =
         '${appDirectory.path}/Doc Scanner/Document';
-    final String idCardDirectoryPath =
-        '${appDirectory.path}/Doc Scanner/ID Card';
+
     for (int i = 0; i < _imageList.length; i++) {
       final Uint8List bytes = _imageList[i].imageByte;
-      if (_imageList[i].docType == 'ID Card') {
-        final String imagePath =
-            '$idCardDirectoryPath/${_imageList[i].name}.jpg';
-        final File imageFile = File(imagePath);
-        await imageFile.writeAsBytes(bytes);
-        Gal.putImage(imageFile.path);
-      } else {
-        final String imagePath =
-            '$documentDirectoryPath/${_imageList[i].name}.jpg';
-        final File imageFile = File(imagePath);
-        await imageFile.writeAsBytes(bytes);
-        Gal.putImage(imageFile.path);
+
+      // Base file path
+      String imagePath = '$documentDirectoryPath/${_imageList[i].name}.jpg';
+      File imageFile = File(imagePath);
+
+      // Check if file exists and generate a unique file name
+      int duplicateCount = 1;
+      while (await imageFile.exists()) {
+        imagePath =
+            '$documentDirectoryPath/${_imageList[i].name}_$duplicateCount.jpg';
+        imageFile = File(imagePath);
+        duplicateCount++;
       }
+
+      // Write the file and add to the gallery
+      await imageFile.writeAsBytes(bytes);
+      Gal.putImage(imageFile.path);
     }
   }
 
