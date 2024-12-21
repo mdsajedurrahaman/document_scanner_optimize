@@ -58,8 +58,8 @@ class _BarCodeCameraScreenState extends State<BarCodeCameraScreen> {
     final cameraProvider = context.watch<CameraProvider>();
     final scanWindow = Rect.fromCenter(
       center: MediaQuery.sizeOf(context).center(const Offset(0, -5)),
-      width: 350,
-      height: 230,
+      width: 320,
+      height: 220,
     );
 
     return Scaffold(

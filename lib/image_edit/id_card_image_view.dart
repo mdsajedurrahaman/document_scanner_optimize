@@ -289,15 +289,41 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     final size = MediaQuery.sizeOf(context);
+    // return PopScope(
+    //   canPop: true,
+    // onPopInvoked: (didPop) async {
+    // await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+    //   builder: (context) {
+    //     return const BottomBar();
+    //   },
+    // ), (route) => false)
+    //     .then((value) => cameraProvider.clearIdCardImages());
+    // },
+    //   child:
     return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) async {
-        await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-          builder: (context) {
-            return const BottomBar();
-          },
-        ), (route) => false)
-            .then((value) => cameraProvider.clearIdCardImages());
+      canPop: false,
+      onPopInvoked: (didPop) {
+        showGoogleAlertDialogue(
+            context: context,
+            title: 'Discard document?',
+            content: 'If you leave now, your progress will be lost',
+            onOkText: 'Discard',
+            onCancelText: 'keep editing',
+            onOk: () {
+              cameraProvider.clearImageList();
+              setState(() {
+                didPop = true;
+              });
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) {
+                  return const BottomBar();
+                },
+              ), (route) => false)
+                  .then((value) => cameraProvider.clearIdCardImages());
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            });
       },
       child: Scaffold(
         appBar: AppBar(
@@ -309,12 +335,26 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
               color: Colors.white,
             ),
             onPressed: () async {
-              cameraProvider.clearIdCardImages();
-              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder: (context) {
-                  return const BottomBar();
-                },
-              ), (route) => false);
+              showGoogleAlertDialogue(
+                  context: context,
+                  title: 'Discard document?',
+                  content: 'If you leave now, your progress will be lost',
+                  onOkText: 'Discard',
+                  onCancelText: 'keep editing',
+                  onOk: () async {
+                    cameraProvider.clearImageList();
+
+                    cameraProvider.clearIdCardImages();
+                    await Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(
+                      builder: (context) {
+                        return const BottomBar();
+                      },
+                    ), (route) => false);
+                  },
+                  onCancel: () {
+                    Navigator.pop(context);
+                  });
             },
           ),
           title: Text(

@@ -183,8 +183,8 @@ class _HomePageState extends State<HomePage> {
                                 ? await AppHelper.handlePermissions()
                                     .then((_) async {
                                     await CunningDocumentScanner.getPictures(
-                                            isGalleryImportAllowed: true)
-                                        .then((pictures) {
+                                      isGalleryImportAllowed: true,
+                                    ).then((pictures) {
                                       if (pictures!.isNotEmpty) {
                                         pictures.forEach((element) async {
                                           String imageName =
@@ -215,9 +215,11 @@ class _HomePageState extends State<HomePage> {
                                     ? await AppHelper.handlePermissions()
                                         .then((_) async {
                                         await CunningDocumentScanner
-                                            .getPictures(
-                                          isGalleryImportAllowed: true,
-                                        ).then((pictures) {
+                                                .getPictures(
+                                                    isGalleryImportAllowed:
+                                                        true,
+                                                    noOfPages: 2)
+                                            .then((pictures) {
                                           // if (pictures!.isNotEmpty) {
                                           //   if (pictures.length == 1) {
                                           //     String imageName =
