@@ -55,7 +55,7 @@ dependencies:
   image_editor: ^1.5.1
   hand_signature: ^3.0.2
   interactive_box: ^0.4.0
-  google_mlkit_text_recognition: ^0.13.0
+  google_mlkit_text_recognition: ^0.14.0
   pdf: ^3.10.8
   open_filex: ^4.4.0
   share_plus: ^10.1.2
@@ -71,8 +71,8 @@ dependencies:
   file_picker: ^8.0.5
   pdf_render: ^1.0.10
   gal: ^2.3.0
-  firebase_core: ^3.1.0
-  firebase_crashlytics: ^4.0.1
+  firebase_core: ^3.8.1
+  firebase_crashlytics: ^4.2.0
   in_app_review: ^2.0.9
   flutter_speed_dial: ^7.0.0
   cunning_document_scanner: ^1.2.3
