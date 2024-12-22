@@ -115,7 +115,11 @@ class _DirectoryCreatePageState extends State<DirectoryCreatePage> {
                   translation(context).createDirectory,
                   style: const TextStyle(color: Colors.white),
                 ),
-              )
+              ),
+              if (Platform.isIOS)
+                const SizedBox(
+                  height: 20,
+                )
             ],
           ),
         ),

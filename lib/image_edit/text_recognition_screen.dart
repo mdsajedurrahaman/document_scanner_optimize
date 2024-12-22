@@ -265,18 +265,31 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
         ),
       );
       // Get Downloads directory path
-      final externalStorageDirectory =
-          Directory('/storage/emulated/0/Documents');
-      if (!await externalStorageDirectory.exists()) {
-        await externalStorageDirectory.create(recursive: true);
+      if (Platform.isIOS) {
+        Directory iosDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        File iOSExternalFile =
+            File("${iosDocumentsDirectory.path}/$fileName.pdf");
+
+        final pdfBytes = await pdf.save();
+        await iOSExternalFile.writeAsBytes(pdfBytes);
+        debugPrint("PDF saved to iOS: ${iOSExternalFile.path}");
+      } else {
+        final externalStorageDirectory =
+            Directory('/storage/emulated/0/Documents');
+        if (!await externalStorageDirectory.exists()) {
+          await externalStorageDirectory.create(recursive: true);
+        }
+        File externalFile =
+            File("${externalStorageDirectory.path}/$fileName.pdf");
+
+        // Write to both locations
+        final pdfBytes = await pdf.save();
+
+        await externalFile.writeAsBytes(pdfBytes);
+        debugPrint("PDF saved to Downloads: $externalStorageDirectory");
       }
-      File externalFile =
-          File("${externalStorageDirectory.path}/$fileName.pdf");
 
-      // Write to both locations
-      final pdfBytes = await pdf.save();
-
-      await externalFile.writeAsBytes(pdfBytes);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -286,7 +299,6 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
           duration: Duration(seconds: 1),
         ),
       );
-      debugPrint("PDF saved to Downloads: $externalStorageDirectory");
     } else {
       debugPrint("Permission denied to access external storage");
     }

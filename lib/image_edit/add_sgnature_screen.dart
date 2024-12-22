@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:doc_scanner/camera_screen/model/image_model.dart';
 import 'package:doc_scanner/image_edit/widget/image_edit_button.dart';
@@ -140,8 +141,8 @@ class _AddSignatureState extends State<AddSignature> {
       ),
       bottomNavigationBar: Container(
         color: const Color(0xff1E1F20),
-        height: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        height: Platform.isIOS ? 85 : 70,
+        padding: const EdgeInsets.only(left: 10.0, bottom: 12.0, right: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
