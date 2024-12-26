@@ -264,12 +264,12 @@ class _TextRecognitionScreenState extends State<TextRecognitionScreen> {
           ),
         ),
       );
-      // Get Downloads directory path
+      //  Get Downloads directory path
       if (Platform.isIOS) {
         Directory iosDocumentsDirectory =
             await getApplicationDocumentsDirectory();
-        File iOSExternalFile =
-            File("${iosDocumentsDirectory.path}/$fileName.pdf");
+        File iOSExternalFile = File(
+            "${iosDocumentsDirectory.path}/Doc Scanner/Document/$fileName.pdf");
 
         final pdfBytes = await pdf.save();
         await iOSExternalFile.writeAsBytes(pdfBytes);

@@ -162,18 +162,28 @@ class CameraProvider extends ChangeNotifier {
       final File file = File('$directoryPath/$newFileName.pdf');
       final bytes = await pdf.save();
       final pdfFile = await file.writeAsBytes(bytes, flush: true);
+      if (Platform.isIOS) {
+        Directory iosDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        File iOSExternalFile = File(
+            "${iosDocumentsDirectory.path}/Doc Scanner/Document/$fileName.pdf");
 
-      final externalStorageDirectory =
-          Directory('/storage/emulated/0/Documents/Document');
-      if (!await externalStorageDirectory.exists()) {
-        await externalStorageDirectory.create(recursive: true);
+        final pdfBytes = await pdf.save();
+        await iOSExternalFile.writeAsBytes(pdfBytes);
+        debugPrint("PDF saved to iOS: ${iOSExternalFile.path}");
+      } else if (Platform.isAndroid) {
+        final externalStorageDirectory =
+            Directory('/storage/emulated/0/Documents/Document');
+        if (!await externalStorageDirectory.exists()) {
+          await externalStorageDirectory.create(recursive: true);
+        }
+        File externalFile =
+            File("${externalStorageDirectory.path}/$newFileName.pdf");
+
+        // Write to both locations
+        final pdfBytes = await pdf.save();
+        await externalFile.writeAsBytes(pdfBytes);
       }
-      File externalFile =
-          File("${externalStorageDirectory.path}/$newFileName.pdf");
-
-      // Write to both locations
-      final pdfBytes = await pdf.save();
-      await externalFile.writeAsBytes(pdfBytes);
 
       _isCreatingPDFLoader = false;
       notifyListeners();

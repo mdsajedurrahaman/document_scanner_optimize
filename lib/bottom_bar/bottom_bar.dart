@@ -282,8 +282,9 @@ class _BottomBarState extends State<BottomBar> {
                 onTap: () async {
                   await AppHelper.handlePermissions().then((_) async {
                     await CunningDocumentScanner.getPictures(
-                            isGalleryImportAllowed: true, noOfPages: 2)
-                        .then((pictures) {
+                      noOfPages: 2,
+                      isGalleryImportAllowed: true,
+                    ).then((pictures) {
                       pictures?.forEach((element) async {
                         cameraProvider.addIdCardImage(element);
                       });

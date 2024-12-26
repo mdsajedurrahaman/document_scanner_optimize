@@ -215,29 +215,10 @@ class _HomePageState extends State<HomePage> {
                                     ? await AppHelper.handlePermissions()
                                         .then((_) async {
                                         await CunningDocumentScanner
-                                                .getPictures(
-                                                    isGalleryImportAllowed:
-                                                        true,
-                                                    noOfPages: 2)
-                                            .then((pictures) {
-                                          // if (pictures!.isNotEmpty) {
-                                          //   if (pictures.length == 1) {
-                                          //     String imageName =
-                                          //         DateFormat('yyyyMMdd_SSSS')
-                                          //             .format(DateTime.now());
-                                          //     cameraProvider.addImage(ImageModel(
-                                          //         docType: 'ID Card',
-                                          //         imageByte:
-                                          //             File(pictures.first)
-                                          //                 .readAsBytesSync(),
-                                          //         name: "ID card-$imageName"));
-                                          //     Navigator.pushAndRemoveUntil(
-                                          //         context, MaterialPageRoute(
-                                          //       builder: (context) {
-                                          //         return const EditImagePreview();
-                                          //       },
-                                          //     ), (route) => true);
-                                          //   } else {
+                                            .getPictures(
+                                          noOfPages: 2,
+                                          isGalleryImportAllowed: true,
+                                        ).then((pictures) {
                                           pictures?.forEach((element) async {
                                             cameraProvider
                                                 .addIdCardImage(element);

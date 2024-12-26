@@ -377,21 +377,33 @@ class HomePageProvider extends ChangeNotifier {
       File pdfFile = await file.writeAsBytes(bytes, flush: true);
 
       //Save pdf file as documents folder
+      if (Platform.isIOS) {
+        Directory iosDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        File iOSExternalFile = File(
+            "${iosDocumentsDirectory.path}/Doc Scanner/Document/$fileName.pdf");
 
-      final externalStorageDirectory =
-          directoryPath.split('/').last == 'Document'
-              ? Directory('/storage/emulated/0/Documents/Document')
-              : Directory('/storage/emulated/0/Documents/IDCard');
-      if (!await externalStorageDirectory.exists()) {
-        await externalStorageDirectory.create(recursive: true);
+        final pdfBytes = await pdf.save();
+        await iOSExternalFile.writeAsBytes(pdfBytes);
+        debugPrint("PDF saved to iOS: ${iOSExternalFile.path}");
+        _isCreatingPDF = false;
+      } else if (Platform.isAndroid) {
+        final externalStorageDirectory =
+            directoryPath.split('/').last == 'Document'
+                ? Directory('/storage/emulated/0/Documents/Document')
+                : Directory('/storage/emulated/0/Documents/IDCard');
+        if (!await externalStorageDirectory.exists()) {
+          await externalStorageDirectory.create(recursive: true);
+        }
+        File externalFile =
+            File("${externalStorageDirectory.path}/$newFileName.pdf");
+
+        // Write to both locations
+        final pdfBytes = await pdf.save();
+        await externalFile.writeAsBytes(pdfBytes);
+        _isCreatingPDF = false;
       }
-      File externalFile =
-          File("${externalStorageDirectory.path}/$newFileName.pdf");
 
-      // Write to both locations
-      final pdfBytes = await pdf.save();
-      await externalFile.writeAsBytes(pdfBytes);
-      _isCreatingPDF = false;
       notifyListeners();
       return pdfFile;
     } catch (e) {
