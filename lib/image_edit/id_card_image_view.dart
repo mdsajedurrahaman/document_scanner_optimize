@@ -310,17 +310,6 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     final size = MediaQuery.sizeOf(context);
-    // return PopScope(
-    //   canPop: true,
-    // onPopInvoked: (didPop) async {
-    // await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-    //   builder: (context) {
-    //     return const BottomBar();
-    //   },
-    // ), (route) => false)
-    //     .then((value) => cameraProvider.clearIdCardImages());
-    // },
-    //   child:
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
