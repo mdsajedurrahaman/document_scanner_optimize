@@ -4,29 +4,29 @@ import 'package:flutter/cupertino.dart';
 
 class ImageEditProvider extends ChangeNotifier {
   List<Uint8List> _history = [];
-  int _currentIndex = -1;
-  Uint8List get currentState => _history[_currentIndex];
+  int currentIndex = -1;
+  Uint8List get currentState => _history[currentIndex];
 
   void addState(Uint8List imageData) {
-    if (_currentIndex < _history.length - 1) {
-      _history = _history.sublist(0, _currentIndex + 1);
+    if (currentIndex < _history.length - 1) {
+      _history = _history.sublist(0, currentIndex + 1);
     }
     _history.add(imageData);
-    _currentIndex++;
+    currentIndex++;
     notifyListeners();
   }
 
   void undo() {
-    if (_currentIndex > 0) {
-      _currentIndex--;
+    if (currentIndex > 0) {
+      currentIndex--;
       notifyListeners();
     }
   }
 
   void clearState() {
     _history.clear();
-    _currentIndex = -1;
+    currentIndex = -1;
   }
 
-  bool get canUndo => _currentIndex > 0;
+  bool get canUndo => currentIndex > 0;
 }

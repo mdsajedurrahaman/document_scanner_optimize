@@ -8,7 +8,6 @@ import 'package:doc_scanner/camera_screen/qr_code_camera_screen.dart';
 import 'package:doc_scanner/home_page/home_page.dart';
 import 'package:doc_scanner/image_edit/id_card_image_view.dart';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
-import 'package:doc_scanner/image_edit/provider/image_edit_provider.dart';
 import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/settings_page/settings_page.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
