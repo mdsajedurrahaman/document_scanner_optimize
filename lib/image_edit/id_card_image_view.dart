@@ -753,59 +753,71 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
             ),
           ],
         ),
+        backgroundColor: Colors.grey,
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
-            : RepaintBoundary(
-                key: _globalKey, // Assign the global key
-                child: Center(
-                  child: Container(
-                    color: Colors.white,
-                    child: Stack(
-                      children: imageProperties.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final imageProps = entry.value;
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RepaintBoundary(
+                      key: _globalKey, // Assign the global key
+                      child: Center(
+                        child: Container(
+                          height: 600,
+                          color: Colors.white,
+                          child: Stack(
+                            children:
+                                imageProperties.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final imageProps = entry.value;
 
-                        return InteractiveBox(
-                          initialPosition: imageProps['position'],
-                          initialSize: imageProps['size'],
-                          includedScaleDirections: const [
-                            ScaleDirection.topRight,
-                            ScaleDirection.bottomRight,
-                            ScaleDirection.bottomLeft,
-                            ScaleDirection.topLeft,
-                          ],
-                          includedActions: actionsEnabled
-                              ? const [
-                                  ControlActionType.move,
-                                  ControlActionType.scale,
-                                  ControlActionType.rotate,
-                                ]
-                              : [],
-                          onTap: () {
-                            setState(() {
-                              actionsEnabled = true;
-                            });
-                          },
-                          onActionSelected: (ControlActionType actionType,
-                              InteractiveBoxInfo info) {
-                            setState(() {
-                              if (actionType == ControlActionType.delete) {
-                                imageProperties.removeAt(index);
-                              } else {
-                                imageProperties[index]['position'] =
-                                    info.position;
-                                imageProperties[index]['size'] = info.size;
-                              }
-                            });
-                          },
-                          child: Image.file(
-                            File(imageProps['path']),
-                            fit: BoxFit.contain,
+                              return InteractiveBox(
+                                initialPosition: imageProps['position'],
+                                initialSize: imageProps['size'],
+                                includedScaleDirections: const [
+                                  ScaleDirection.topRight,
+                                  ScaleDirection.bottomRight,
+                                  ScaleDirection.bottomLeft,
+                                  ScaleDirection.topLeft,
+                                ],
+                                includedActions: actionsEnabled
+                                    ? const [
+                                        ControlActionType.move,
+                                        ControlActionType.scale,
+                                        ControlActionType.rotate,
+                                      ]
+                                    : [],
+                                onTap: () {
+                                  setState(() {
+                                    actionsEnabled = true;
+                                  });
+                                },
+                                onActionSelected: (ControlActionType actionType,
+                                    InteractiveBoxInfo info) {
+                                  setState(() {
+                                    if (actionType ==
+                                        ControlActionType.delete) {
+                                      imageProperties.removeAt(index);
+                                    } else {
+                                      imageProperties[index]['position'] =
+                                          info.position;
+                                      imageProperties[index]['size'] =
+                                          info.size;
+                                    }
+                                  });
+                                },
+                                child: Image.file(
+                                  File(imageProps['path']),
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
       ),

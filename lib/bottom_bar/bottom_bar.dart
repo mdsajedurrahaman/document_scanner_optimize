@@ -97,8 +97,6 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final imageEditProvider = context.watch<ImageEditProvider>();
-
     final cameraProvider = context.watch<CameraProvider>();
     final size = MediaQuery.sizeOf(context);
     return PopScope(
