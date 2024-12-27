@@ -760,6 +760,11 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    if (Platform.isIOS)
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        color: Colors.grey,
+                      ),
                     RepaintBoundary(
                       key: _globalKey, // Assign the global key
                       child: Center(
