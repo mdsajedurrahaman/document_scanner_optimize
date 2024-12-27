@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
+import 'dart:ui';
 import 'package:doc_scanner/bottom_bar/bottom_bar.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:doc_scanner/utils/utils.dart';
@@ -69,25 +69,6 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
     });
   }
 
-  Future<Uint8List?> captureRepaintBoundary(GlobalKey globalKey) async {
-    try {
-      RenderRepaintBoundary boundary =
-          globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-      if (boundary.debugNeedsPaint) {
-        await Future.delayed(
-            const Duration(milliseconds: 20)); // Wait for repaint
-      }
-      ui.Image image = await boundary.toImage(
-          pixelRatio: 3.0); // Adjust pixel ratio for quality
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      return byteData?.buffer.asUint8List();
-    } catch (e) {
-      print("Error capturing RepaintBoundary: $e");
-      return null;
-    }
-  }
-
   Future<Uint8List> captureWidgetToImage() async {
     try {
       RenderRepaintBoundary boundary = _globalKey.currentContext!
@@ -99,8 +80,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
       var image = await boundary.toImage(
         pixelRatio: pixelRatio,
       );
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
       if (byteData == null) {
         throw Exception("Failed to capture widget to image.");
       }
@@ -110,18 +90,11 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
     }
   }
 
-  Future<void> exportToPdf(String fileName, GlobalKey repaintKey) async {
+  Future<void> exportToPdf(String fileName, Uint8List imageBytes) async {
     setState(() {
       isLoading = true;
     });
-
     try {
-      final imageBytes = await captureRepaintBoundary(repaintKey);
-
-      if (imageBytes == null) {
-        throw Exception("Failed to capture RepaintBoundary");
-      }
-
       final pdf = pw.Document();
       final image = pw.MemoryImage(imageBytes);
 
@@ -162,20 +135,19 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
         String newFileName = fileName;
         int counter = 1;
 
+        // Loop to find a unique name
         while (await File("$appSpecificPath/$newFileName.pdf").exists()) {
           newFileName = "$fileName($counter)";
           counter++;
         }
-
         final externalStorageDirectory =
             Directory('/storage/emulated/0/Documents/IDCard');
         if (!await externalStorageDirectory.exists()) {
           await externalStorageDirectory.create(recursive: true);
         }
-
         File externalFile =
             File("${externalStorageDirectory.path}/$newFileName.pdf");
-
+        // Show popup dialog
         await showDialog(
           context: context,
           builder: (context) {
@@ -186,8 +158,12 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
               actions: [
                 TextButton(
                   onPressed: () async {
+                    // Save with new name
                     pdfFile = File("$appSpecificPath/$newFileName.pdf");
                     await pdfFile.writeAsBytes(await pdf.save());
+                    // Save the PDF in the general "Documents" folder
+
+                    // Write to both locations
                     final pdfBytes = await pdf.save();
                     await externalFile.writeAsBytes(pdfBytes);
 
@@ -201,7 +177,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    // Cancel action
+                    Navigator.pop(context); // Close dialog
                     setState(() {
                       isLoading = false;
                     });
@@ -213,17 +190,19 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           },
         );
       } else {
+        // Save directly if file does not exist
         await pdfFile.writeAsBytes(await pdf.save());
 
+        // Save the PDF in the general "Documents" folder
         final externalStorageDirectory =
             Directory('/storage/emulated/0/Documents/IDCard');
         if (!await externalStorageDirectory.exists()) {
           await externalStorageDirectory.create(recursive: true);
         }
-
         File externalFile =
             File("${externalStorageDirectory.path}/$fileName.pdf");
 
+        // Write to both locations
         final pdfBytes = await pdf.save();
         await externalFile.writeAsBytes(pdfBytes);
 
@@ -310,6 +289,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
   Widget build(BuildContext context) {
     final cameraProvider = context.watch<CameraProvider>();
     final size = MediaQuery.sizeOf(context);
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -649,11 +629,12 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                                                       isSaving =
                                                           true; // Show progress indicator
                                                     });
-
+                                                    Uint8List imageBytes =
+                                                        await captureWidgetToImage();
                                                     await exportToPdf(
                                                         renameController.text
                                                             .trim(),
-                                                        _globalKey);
+                                                        imageBytes);
 
                                                     cameraProvider
                                                         .clearIdCardImages();
@@ -740,59 +721,71 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
             ),
           ],
         ),
+        backgroundColor: Colors.grey,
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
-            : RepaintBoundary(
-                key: _globalKey, // Assign the global key
-                child: Center(
-                  child: Container(
-                    color: Colors.white,
-                    child: Stack(
-                      children: imageProperties.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final imageProps = entry.value;
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RepaintBoundary(
+                      key: _globalKey, // Assign the global key
+                      child: Center(
+                        child: Container(
+                          height: 600,
+                          color: Colors.white,
+                          child: Stack(
+                            children:
+                                imageProperties.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final imageProps = entry.value;
 
-                        return InteractiveBox(
-                          initialPosition: imageProps['position'],
-                          initialSize: imageProps['size'],
-                          includedScaleDirections: const [
-                            ScaleDirection.topRight,
-                            ScaleDirection.bottomRight,
-                            ScaleDirection.bottomLeft,
-                            ScaleDirection.topLeft,
-                          ],
-                          includedActions: actionsEnabled
-                              ? const [
-                                  ControlActionType.move,
-                                  ControlActionType.scale,
-                                  ControlActionType.rotate,
-                                ]
-                              : [],
-                          onTap: () {
-                            setState(() {
-                              actionsEnabled = true;
-                            });
-                          },
-                          onActionSelected: (ControlActionType actionType,
-                              InteractiveBoxInfo info) {
-                            setState(() {
-                              if (actionType == ControlActionType.delete) {
-                                imageProperties.removeAt(index);
-                              } else {
-                                imageProperties[index]['position'] =
-                                    info.position;
-                                imageProperties[index]['size'] = info.size;
-                              }
-                            });
-                          },
-                          child: Image.file(
-                            File(imageProps['path']),
-                            fit: BoxFit.contain,
+                              return InteractiveBox(
+                                initialPosition: imageProps['position'],
+                                initialSize: imageProps['size'],
+                                includedScaleDirections: const [
+                                  ScaleDirection.topRight,
+                                  ScaleDirection.bottomRight,
+                                  ScaleDirection.bottomLeft,
+                                  ScaleDirection.topLeft,
+                                ],
+                                includedActions: actionsEnabled
+                                    ? const [
+                                        ControlActionType.move,
+                                        ControlActionType.scale,
+                                        ControlActionType.rotate,
+                                      ]
+                                    : [],
+                                onTap: () {
+                                  setState(() {
+                                    actionsEnabled = true;
+                                  });
+                                },
+                                onActionSelected: (ControlActionType actionType,
+                                    InteractiveBoxInfo info) {
+                                  setState(() {
+                                    if (actionType ==
+                                        ControlActionType.delete) {
+                                      imageProperties.removeAt(index);
+                                    } else {
+                                      imageProperties[index]['position'] =
+                                          info.position;
+                                      imageProperties[index]['size'] =
+                                          info.size;
+                                    }
+                                  });
+                                },
+                                child: Image.file(
+                                  File(imageProps['path']),
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
       ),
