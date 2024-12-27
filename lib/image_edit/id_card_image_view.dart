@@ -140,13 +140,8 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
           newFileName = "$fileName($counter)";
           counter++;
         }
-        final externalStorageDirectory =
-            Directory('/storage/emulated/0/Documents/IDCard');
-        if (!await externalStorageDirectory.exists()) {
-          await externalStorageDirectory.create(recursive: true);
-        }
-        File externalFile =
-            File("${externalStorageDirectory.path}/$newFileName.pdf");
+        print("NewFile $newFileName");
+
         // Show popup dialog
         await showDialog(
           context: context,
@@ -169,6 +164,13 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                       await iOSExternalFile.writeAsBytes(pdfBytes);
                       debugPrint("PDF saved to iOS: ${iOSExternalFile.path}");
                     } else if (Platform.isAndroid) {
+                      final externalStorageDirectory =
+                          Directory('/storage/emulated/0/Documents/IDCard');
+                      if (!await externalStorageDirectory.exists()) {
+                        await externalStorageDirectory.create(recursive: true);
+                      }
+                      File externalFile = File(
+                          "${externalStorageDirectory.path}/$newFileName.pdf");
                       pdfFile = File("$appSpecificPath/$newFileName.pdf");
                       await pdfFile.writeAsBytes(await pdf.save());
                       // Save the PDF in the general "Documents" folder
@@ -768,7 +770,7 @@ class _IdCardImagePreviewState extends State<IdCardImagePreview> {
                       key: _globalKey, // Assign the global key
                       child: Center(
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.67,
+                          height: MediaQuery.of(context).size.height * 0.665,
                           color: Colors.white,
                           child: Stack(
                             children:
