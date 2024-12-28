@@ -37,7 +37,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   camera: ^0.10.5+9
   # qr_code_scanner: ^1.0.1
-  qr_code_scanner_plus: ^2.0.6
+  # qr_code_scanner_plus: ^2.0.6
   mobile_scanner: ^6.0.2
   flutter_flip_card: ^0.0.6
   merge_image:

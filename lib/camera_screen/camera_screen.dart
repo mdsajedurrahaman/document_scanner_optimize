@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/controllers/flip_card_controllers.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+// import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
@@ -48,8 +48,8 @@ class _CameraScreenState extends State<CameraScreen> {
   bool isCameraReady = false;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   FlipCardController flipCardController = FlipCardController();
-  QRViewController? qrController;
-  Barcode? result;
+  // QRViewController? qrController;
+  // Barcode? result;
   late AudioPlayer audioPlayer;
   bool beepValue = false;
   bool vibrationValue = false;
@@ -130,7 +130,7 @@ class _CameraScreenState extends State<CameraScreen> {
   void dispose() {
     cameraController.dispose();
     _pageController.dispose();
-    qrController?.dispose();
+    // qrController?.dispose();
     // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -284,9 +284,9 @@ class _CameraScreenState extends State<CameraScreen> {
                                       }
                                     } else {
                                       if (flash) {
-                                        qrController!.toggleFlash();
+                                        // qrController!.toggleFlash();
                                       } else {
-                                        qrController!.toggleFlash();
+                                        // qrController!.toggleFlash();
                                       }
                                     }
                                   },
