@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   String getCameraModeName(String name, BuildContext context) {
     switch (name) {
-      case "Documents":
+      case "Document":
         return translation(context).documents;
       case "ID Card":
         return translation(context).idCard;
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                         final cameraItem = cameraItems[index];
                         return GestureDetector(
                           onTap: () async {
-                            cameraItem.name == "Documents"
+                            cameraItem.name == "Document"
                                 ? await AppHelper.handlePermissions()
                                     .then((_) async {
                                     await CunningDocumentScanner.getPictures(
@@ -265,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                                     width: size.width >= 600 ? 30 : 25),
                               ),
                               SizedBox(
-                                width: size.width >= 600 ? 100 : 60,
+                                width: size.width >= 600 ? 100 : 67,
                                 child: Text(
                                   getCameraModeName(cameraItem.name, context),
                                   style: const TextStyle(fontSize: 12),
@@ -808,7 +808,7 @@ class _HomePageState extends State<HomePage> {
 
   List<CameraItem> cameraItems = [
     CameraItem(
-      name: 'Documents',
+      name: 'Document',
       color: const Color(0xFFFFF7EB),
       icon: AppAssets.documents,
     ),
