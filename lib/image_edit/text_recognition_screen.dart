@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:doc_scanner/image_edit/image_edit_preview.dart';
 import 'package:doc_scanner/utils/app_color.dart';
 import 'package:flutter/material.dart';
