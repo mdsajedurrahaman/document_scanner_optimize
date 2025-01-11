@@ -50,7 +50,7 @@ dependencies:
   shared_preferences: ^2.2.3
   image_picker: ^1.1.1
   path_provider: ^2.1.5
-  image: ^4.1.7
+  # image: ^4.1.7
   extended_image: ^8.2.0
   image_editor: ^1.5.1
   hand_signature: ^3.0.2
@@ -68,7 +68,7 @@ dependencies:
   flutter_image_compress: ^2.2.0
   device_info_plus: ^10.1.0
   flutter_launcher_icons: ^0.13.1
-  lottie: ^3.1.2
+  # lottie: ^3.1.2
   file_picker: ^8.0.5
   pdf_render: ^1.0.10
   gal: ^2.3.0

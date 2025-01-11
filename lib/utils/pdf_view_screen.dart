@@ -16,7 +16,7 @@ class PDFScreen extends StatefulWidget {
 class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   final Completer<PDFViewController> _controller =
       Completer<PDFViewController>();
-  int? pages = 0;
+  int? totalPages = 0;
   int? currentPage = 0;
   bool isReady = false;
   String errorMessage = '';
@@ -25,6 +25,7 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(widget.fileName!),
       ),
       body: Stack(
@@ -32,8 +33,9 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
           PDFView(
             filePath: widget.path,
             enableSwipe: true,
-            swipeHorizontal: true,
-            autoSpacing: false,
+            swipeHorizontal: false,
+            autoSpacing: true,
+            backgroundColor: Colors.grey,
             pageFling: true,
             pageSnap: true,
             defaultPage: currentPage!,
@@ -42,7 +44,7 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 false, // if set to true the link is handled in flutter
             onRender: (pages) {
               setState(() {
-                pages = pages;
+                totalPages = pages;
                 isReady = true;
               });
             },
@@ -65,10 +67,10 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               print('goto uri: $uri');
             },
             onPageChanged: (int? page, int? total) {
-              print('page change: ${page ?? 0 + 1}/$total');
               setState(() {
                 currentPage = page;
               });
+              print('page change: ${page ?? 0 + 1}/$total');
             },
           ),
           errorMessage.isEmpty
@@ -82,21 +84,16 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 )
         ],
       ),
-      // floatingActionButton: FutureBuilder<PDFViewController>(
-      //   future: _controller.future,
-      //   builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-      //     if (snapshot.hasData) {
-      //       return FloatingActionButton.extended(
-      //         label: Text("Go to ${pages! ~/ 2}"),
-      //         onPressed: () async {
-      //           await snapshot.data!.setPage(pages! ~/ 2);
-      //         },
-      //       );
-      //     }
-
-      //     return Container();
-      //   },
-      // ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Page ${currentPage! + 1} of $totalPages",
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      ),
     );
   }
 }
