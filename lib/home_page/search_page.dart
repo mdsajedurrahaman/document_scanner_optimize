@@ -4,7 +4,6 @@ import 'package:doc_scanner/localaization/language_constant.dart';
 import 'package:doc_scanner/utils/app_assets.dart';
 import 'package:doc_scanner/utils/pdf_view_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../utils/app_color.dart';
