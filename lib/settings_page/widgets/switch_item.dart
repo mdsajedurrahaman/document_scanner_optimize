@@ -43,7 +43,7 @@ class _SwitchItemState extends State<SwitchItem> {
         CupertinoSwitch(
           value: widget.value,
           onChanged: widget.onChanged,
-          activeTrackColor: AppColor.primaryColor,
+          activeColor: AppColor.primaryColor,
         )
       ],
     );
